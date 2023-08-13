@@ -148,7 +148,11 @@ wandb/
 *mlartifacts/
 *mlflow/
 
+# MacOS
+*.DS_Store
+
 # IGNORED TEMPORARILY (TO DO)
+temp/
 *.pdf
 paper/
 *.log
