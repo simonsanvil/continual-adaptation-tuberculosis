@@ -1,0 +1,122 @@
+version: '2'
+services:
+  labeling-platform:
+    environment:
+      - ANNOTATIONS_DIR=/app/data/annotations/
+      - IMG_DIR=/app/data/images/
+      - STREAMLIT_PORT=8502
+      - STREAMLIT_SERVER_HOST=0.0.0.0
+      - MLFLOW_TRACKING_URI=http://mlflow-server:5000
+      - MODEL_NAME=rcnn_MNasNet_2
+      - MODEL_URI=models:/sputum_detector/13
+      - MODEL_INVOCATIONS_URI=http://sputum-served-model:8000/predict
+      - DB_CONNECTION_STRING=postgresql://postgres:postgres@annotations-database:5432/annotations
+      - PROJECT_NAME=Sputum Detection Project
+      - ANNOTATOR_EMAIL=simsanch@inf.uc3m.es
+      - WORKING_DIR=/app/
+    image: "labeling-platform:latest"
+    container_name: labeling-platform
+    build:
+      context: ./labeling-platform
+      dockerfile: Dockerfile
+    depends_on:
+      - sputum-served-model
+      - annotations-database
+    ports:
+        - "8502:8502"
+    volumes:
+        - ./data:/app/data
+        - ./common_packages:/app/common_packages
+    networks:
+      - default
+    command: >
+      sh -c "pip install -e /app/common_packages/annotations && 
+            streamlit run app.py --server.port 8502 --server.headless true --server.enableCORS false --server.address 0.0.0.0"
+  mlflow-server:
+    image: "mlflow:latest"
+    container_name: mlflow-server
+    environment:
+        - MLFLOW_PORT=5000
+        - MLFLOW_SERVER_HOST=0.0.0.0
+        - MLFLOW_DEFAULT_ARTIFACT_ROOT=/usr/src/app/mlflow/mlartifacts
+        - MLFLOW_BACKEND_STORE_URI=/usr/src/app/mlflow/mlruns
+    ports: 
+      - "9999:5000"
+    volumes:
+      - ./model-store/mlflow:/usr/src/app/mlflow
+    command: "mlflow server --backend-store-uri $MLFLOW_BACKEND_STORE_URI --default-artifact-root $MLFLOW_DEFAULT_ARTIFACT_ROOT --host $MLFLOW_SERVER_HOST --port $MLFLOW_PORT"
+    networks:
+      - default
+  sputum-served-model:
+    image: "sputum_detector:latest"
+    container_name: sputum-model-server
+    build:
+      context: ./ml-models/sputum_detector
+      dockerfile: Dockerfile
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow-server:5000
+      - CONFIG_PATH=/usr/src/app/configs/config.yaml
+      - SERVED_MODEL_PORT=8000
+    env_file:
+      - ml-models/sputum_detector/configs/.env
+    ports:
+      - "8888:8000"
+    working_dir: /usr/src/app
+    volumes:
+      - ./ml-models/sputum_detector/configs:/usr/src/app/configs
+    networks:
+      - default
+    command: "python inference.py --port 8000 --host 0.0.0.0"
+    depends_on:
+      - mlflow-server
+  annotations-database:
+    image: "postgres:14"
+    container_name: annotations-database
+    environment:
+      - POSTGRES_DB=annotations
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    networks:
+      - default
+    command: "postgres"
+  dbdashboard:
+    image: metabase/metabase:latest
+    platform: linux/amd64
+    container_name: dbdashboard
+    environment:
+      - MB_DB_TYPE=postgres
+      - MB_DB_DBNAME=annotations
+      - MB_DB_PORT=5432
+      - MB_DB_USER=postgres
+      - MB_DB_PASS=postgres
+      - MB_DB_HOST=annotations-database
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data/metabase:/metabase-data
+    networks:
+      - default
+    depends_on:
+      - annotations-database
+    command: "java -jar /app/metabase.jar reset-password"
+  file-server:
+    image: nginx:latest
+    container_name: file-server
+    ports:
+      - "7777:80"
+    volumes:
+      - ./data/:/usr/share/nginx/html
+    networks:
+      - default
+    command: "nginx -g 'daemon off;'"
+
+
+# networking to share the mlflow server with the sputum-served-model and labeling-platform
+
+networks:
+  default:
+    name: mlflow-network

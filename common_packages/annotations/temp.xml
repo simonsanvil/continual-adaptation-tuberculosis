@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<annotation>
+  <filename>val-tuberculosis-phone-0016.jpg</filename>
+  <path>../data/images/val-tuberculosis-phone-0016.jpg</path>
+  <size>
+    <width>None</width>
+    <height>None</height>
+  </size>
+  <object>
+    <label>Sputum</label>
+    <xmin>784.0</xmin>
+    <ymin>697.0</ymin>
+    <xmax>867.0</xmax>
+    <ymax>860.0</ymax>
+  </object>
+  <object>
+    <label>Sputum</label>
+    <xmin>620.0</xmin>
+    <ymin>420.0</ymin>
+    <xmax>703.0</xmax>
+    <ymax>463.0</ymax>
+  </object>
+  <object>
+    <label>Sputum</label>
+    <xmin>620.0</xmin>
+    <ymin>620.0</ymin>
+    <xmax>703.0</xmax>
+    <ymax>663.0</ymax>
+  </object>
+  <object>
+    <label>Sputum</label>
+    <xmin>659.0</xmin>
+    <ymin>940.0</ymin>
+    <xmax>702.0</xmax>
+    <ymax>983.0</ymax>
+  </object>
+</annotation>

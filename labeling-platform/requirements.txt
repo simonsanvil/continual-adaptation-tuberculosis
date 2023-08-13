@@ -1,0 +1,7 @@
+pascal_voc_writer
+streamlit
+python-dotenv
+pillow
+sqlalchemy
+psycopg2-binary
+# -e streamlit_img_label

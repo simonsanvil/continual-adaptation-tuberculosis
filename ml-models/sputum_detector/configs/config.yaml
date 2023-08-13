@@ -1,0 +1,20 @@
+# configuration file for inference
+
+environment:
+  # path to the environment
+  dotenv_path: ./configs/.env
+  variables:
+    MLFLOW_TRACKING_URI: http://mlflow-server:5000
+    # MLFLOW_TRACKING_URI: http://localhost:9999
+
+# path to the model
+model: 
+  source: mlflow
+  uri: runs:/334b0d6db2494f0ab2a53fd87fe755f5/sputum_detection_model
+  params:
+    chunk_size: 80
+    stride: 40
+    verbose: true
+
+inference_port: 7890
+inference_host: 0.0.0.0

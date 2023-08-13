@@ -1,0 +1,21 @@
+FROM mlflow:latest
+
+ENV MLFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI:-http://localhost:5000}
+ENV SERVED_MODEL_URI=${SERVED_MODEL_URI:-models:/}
+ENV SERVED_MODEL_NAME=${SERVED_MODEL_NAME}
+ENV SERVED_MODEL_VERSION=${SERVED_MODEL_VERSION}
+ENV SERVED_MODEL_PORT=${SERVED_MODEL_PORT:-8000}
+ENV PYENV_ROOT=${PYENV_ROOT:-/root/.pyenv}
+
+# Set the working directory
+WORKDIR /usr/src/app
+
+ADD sputum_detection/ /usr/src/app/sputum_detection
+
+# ADD PYENV TO PATH
+ENV PATH="$PYENV_ROOT/bin:$PATH"
+
+EXPOSE ${SERVED_MODEL_PORT}
+
+# Run the mlflow model server
+ENTRYPOINT mlflow models serve -m "${SERVED_MODEL_URI}${SERVED_MODEL_NAME}${SERVED_MODEL_VERSION}" -p ${SERVED_MODEL_PORT}

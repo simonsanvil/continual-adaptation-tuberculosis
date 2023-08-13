@@ -1,0 +1,5 @@
+sqlalchemy
+pydantic
+python-dotenv
+pandas
+shapely
