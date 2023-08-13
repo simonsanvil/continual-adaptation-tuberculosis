@@ -19,6 +19,8 @@ Description of a continual adaption system for the detection of Mycobacterial Tu
 
 `#TODO`
 
+![System Architecture](./reports/figures/system_design_drawing.png)
+
 ## Installation
 
 `#TODO`
