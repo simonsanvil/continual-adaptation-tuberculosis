@@ -154,7 +154,7 @@ wandb/
 # IGNORED TEMPORARILY (TO DO)
 temp/
 *.pdf
-paper/
+paper/*
 !paper/main.tex
 !paper/header.tex
 !paper/main.pdf
