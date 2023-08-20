@@ -138,7 +138,7 @@ class ImageForObjectDetection(BaseModel):
             self.to_db(session)
         annotation.to_db(self.artifact, session=session)
     
-    def display(self, *, ax=None, labels: bool = True, **kwargs):
+    def display(self, *, ax=None, labels: bool = True, axis='off', **kwargs):
         """
         Display the image along with the bounding boxes (annotations)
         """
@@ -165,7 +165,7 @@ class ImageForObjectDetection(BaseModel):
                 linewidth=0.6, edgecolor='r', facecolor='none')
             ax.add_patch(patch)
             if labels: ax.legend([patch], [rect.label])
-        ax.axis('off')
+        ax.axis(axis)
         plt.tight_layout()
         
         return ax

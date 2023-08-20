@@ -96,8 +96,15 @@ class Rect(BaseModel):
     def xyxy(self) -> Tuple[float, float, float, float]:
         return (self.left, self.top, self.right, self.bottom)
     
+    @property
+    def center(self) -> Tuple[float, float]:
+        return (self.left + self.width/2, self.top + self.height/2)
+    
+    def intersects(self, other: "Rect") -> bool:
+        return self.shapely().intersects(other.shapely())
+    
     def __getattr__(self, key):
-        if key not in ["left", "top", "width", "height", "label", "meta", "right", "bottom", "area"]:
+        if key not in ["left", "top", "width", "height", "label", "meta", "right", "bottom", "area", "xywh", "xyxy", "center"]:
             if key in self.meta:
                 return self.meta[key]
         return self.__getattribute__(key)
