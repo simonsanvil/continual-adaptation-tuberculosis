@@ -1,0 +1,74 @@
+%----------
+%   IMPORTANTE
+%----------
+
+% Si nunca has utilizado LaTeX es conveniente que aprendas una serie de conceptos básicos antes de utilizar esta plantilla. Te aconsejamos que leas previamente algún tutorial (puedes encontar muchos en Internet).
+
+% Esta plantilla está basada en las recomendaciones de la guía "Trabajo fin de Grado: Escribir el TFG", que encontrarás en http://uc3m.libguides.com/TFG/escribir
+% contiene recomendaciones de la Biblioteca basadas principalmente en estilos APA e IEEE, pero debes seguir siempre las orientaciones de tu Tutor de TFG y la normativa de TFG para tu titulación.
+
+% Encontrarás un ejemplo de TFG realizado con esta misma plantilla en la carpeta "_ejemplo_TFG_2019". Consúltalo porque contiene ejemplos útiles para incorporar tablas, figuras, listados de código, bibliografía, etc.
+
+\documentclass[12pt]{report} %fuente a 12pt
+
+\input{header.tex}
+
+
+\begin{document}
+\renewcommand{\dobib}{} % Un-define the command
+\pagenumbering{roman} % Se utilizan cifras romanas en la numeración de las páginas previas al cuerpo del trabajo 
+	
+
+% PRELIMINARIES ===============
+\subfile{sections/1-cover}
+% \blankpage % pagina en blanco o de cortesia
+
+\subfile{sections/2-preliminaries} % Abstract and Dedication
+
+% INDICES
+% %Índice general %-
+\tableofcontents \thispagestyle{fancy}
+\blankpage% pagina en blanco o de cortesian 7
+
+% Índice de figuras. Si no se incluyen, comenta las líneas siguientes%
+\listoffigures \thispagestyle{fancy}
+\blankpage% pagina en blanco o de cortesia
+
+% Índice de tablas. Si no se incluyen, comenta las líneas siguientes
+\listoftables \thispagestyle{fancy}
+\blankpage% pagina en blanco o de cortesia
+
+% MAIN BODY ==============
+
+\clearpage
+\pagenumbering{arabic} % Arabic numeration for the rest of the work
+
+\clearpage
+\subfile{sections/4-introduction}
+
+\clearpage
+\subfile{sections/5-state-of-the-art}
+
+\clearpage
+\subfile{sections/6-solution-design}
+
+\clearpage
+\subfile{sections/7-results}
+
+\clearpage
+\subfile{sections/8-conclusions}
+
+\clearpage
+\subfile{sections/9-post-conclusions}
+
+\clearpage
+\subfile{sections/10-appendix}
+
+% END MATTERS ===================
+% Bibliography
+\clearpage
+\addcontentsline{toc}{chapter}{Bibliography}
+\printbibliography%
+% Appendix
+% \subfile{sections/9-appendix} 
+\end{document}
