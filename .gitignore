@@ -155,5 +155,12 @@ wandb/
 temp/
 *.pdf
 paper/
+!paper/main.tex
+!paper/header.tex
+!paper/main.pdf
+!paper/images/
+!paper/sections/*.tex
+!paper/Makefile
+
 *.log
 *.onnx
