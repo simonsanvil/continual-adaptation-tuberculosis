@@ -30,11 +30,8 @@ count: ## Count the number of words in the paper, display the result, and save i
 	texcount -inc -incbib -sum $(TEX_FILE).tex | tee -a wordcount.txt
 
 push: ## Push the paper to the repository
-	make clean-aux
-	git add .
-	git add $(OUT_PDF)
-	git commit -m "Updated paper"
-	git push
+	make clean
+	cd .. && git add paper && git commit -m "Updated paper" && git push
 
 help: ## self documenting Makefile based on http: marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
