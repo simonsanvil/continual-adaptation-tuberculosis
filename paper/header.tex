@@ -120,7 +120,7 @@ hmargin=3cm
 	labelfont=small,
 	font=small,
 }
-
+\usepackage{lscape} %para girar las tablas y que ocupen la página completa en horizontal
 %Diseño de tabla para ciencias sociales y humanidades
 %\captionsetup[table]{
 %	justification=raggedright,
@@ -134,7 +134,7 @@ hmargin=3cm
 % DISEÑO DE FIGURAS. Puedes elegir entre el estilo para ingeniería o para cienciaheads sociales y humanidades. Por defecto, está activado el estilo de ingeniería. Si deseas utilizar el otro, comenta las líneas del diseño de ingeniería y descomenta las del diseño de ciencias sociales y humanidades
 \usepackage{graphicx}
 
-\graphicspath{{imagenes/}} %ruta a la carpeta de imágenes
+\graphicspath{{figures/}} %ruta a la carpeta de imágenes
 
 % Diseño de figuras para ingeniería
 \captionsetup[figure]{
@@ -241,6 +241,18 @@ hmargin=3cm
 
 \newcommand{\dobib}{\printbibliography}
 
+% to add TODO NOTES
+% \usepackage[pdftex,dvipsnames]{xcolor} % Coloured text etc.
+\usepackage{xargs}
+\usepackage[colorinlistoftodos,prependcaption,textsize=footnotesize]{todonotes}
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+\newcommandx{\improvement}[2][1=]{\todo[linecolor=green,backgroundcolor=green!25,bordercolor=green,#1]{#2}}
+\newcommandx{\thiswillnotshow}[2][1=]{\todo[disable,#1]{#2}}
+
+\input{snippets/usetikz.tex}
+
 % \makeatletter
 
 % \newrobustcmd*{\nobibliography}{%
@@ -257,4 +269,8 @@ hmargin=3cm
 %%% Default start and end for each subfile
 \AtBeginDocument{}
 
-\AtEndDocument{\dobib}
+\AtEndDocument{
+	\newpage
+	\listoftodos[Notes]
+	\newpage
+	\dobib}
