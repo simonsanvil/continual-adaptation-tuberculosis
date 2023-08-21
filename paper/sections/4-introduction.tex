@@ -1,0 +1,138 @@
+% \providecommand{\main}{..} 
+
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{../figures/}}}
+\usepackage{bbm}
+% \usepackage{tikz}
+% \usetikzlibrary{shapes,arrows,positioning,calc}
+
+\addbibresource{../bibliography/bibliography.bib} % 
+
+\begin{document}
+\chapter{Introduction}
+\label{chap:intro}
+
+	% COMENZAR A ESCRIBIR EL TRABAJO
+	% \section{Background} \label{background}
+% @ts-ignore
+ As health information becomes increasingly digitized, machine learning (ML) algorithms play a crucial role in deriving meaningful insights from complex, multi-modal data that is often difficult to interpret by humans. 
+ Conventional machine-learning approaches, however, may be inadequate in the face of rapidly evolving health technology, shifting patient needs, and the increasing availability of large amounts of uncertain and noisy data that is deemed too unreliable for use in clinical settings.
+
+ Modern techniques aim to address these limitations by refining models in a continual loop, prioritizing data acquisition, labeling, and feedback from experts to dynamically adapt to the data stream reliably. This work explores the potential of these techniques in the context of healthcare applications.
+ 
+ In particular, we incorporate the use of continual and active learning methods in the design of an end-to-end platform for the diagnosis of \textit{tuberculosis} using computer vision techniques. Tuberculosis (TB) is an infectious pulmonary disease that has affected humankind for well over 4,000 years \cite{cdctb_world_2023} and still affects millions of people worldwide. According to the World Health Organization, until the arrival of the Covid-19 pandemic, TB was the leading cause of widespread death from a single infectious agent, ranking even above HIV/AIDS \cite{who_global_2022}.
+
+ The platform is meant to be integrated into a Healthcare and Data Portal that is being developed as part of an ongoing European project for the research of Tuberculosis, and it will serve as a tool to test and validate the use of machine-learning models for the diagnosis of Tuberculosis. 
+
+ As such, in an effort to research the competence of continual adaptation methods in that context, the platform incorporates a system that is designed to continually adapt to new data as it becomes available and to ease labeling efforts by prioritizing the acquisition of the most informative data samples. Including a front-end interface for the visualization of the detection, labeling, and interaction with the models.
+ 
+ We evaluate the system's performance on a real dataset and compare it to a baseline model that doesn't use adaptation techniques.  Our results show that the use of these methods outperforms the baseline in terms of robustness and sample efficiency while maintaining a similar level of accuracy on the test set. Furthermore, the system proposed can automatically adapt to new data and improve its performance over time. 
+ 
+ These results demonstrate the potential of incorporating these techniques into the design of real-world systems for healthcare applications and other high-stake domains. The final chapter of this work includes a lengthy discussion about possible future work and improvements to the system that might facilitate its integration into other projects and applications.
+    
+ \section{Context and Motivation} \label{sec:motivation}
+%  \section{An ML Platform to aid on the research of Mycobacterial Tuberculosis (TB)}
+%  drug discovery and early detection of
+
+    This work is done in the context of the European Regimen Accelerator for Tuberculosis (ERA4TB). ERA4TB is a public-private initiative that started in 2020 and aims to create an open European platform to accelerate the development of new treatment regimens for tuberculosis (TB). The project is integrated by over 31 organizations from the European Union and the United States, including academic institutions, research centers, non-profit organizations, and other public and private entities \cite{noauthor_era4tb}.
+    
+    ERA4TB's mission statement aligns itself with (and is in response to) the United Nation's (UN) Sustainable Development Goals (SGD). The project's website reads `The goal of ERA4TB is to deliver an innovative and differentiated combination regimen for the treatment of TB, which can play a key role in the TB elimination agenda' \cite{noauthor_era4tb}. This is in line with the UN's SGD target to end the TB epidemic by 2030 \cite{world_health_organization_regional_office_for_europe_tuberculosis_2017}.
+
+    To address some of the challenges of TB drug development and clinical trial design, one of the project's objectives from deliverable 1.15 of ERA4TB's agenda is the development of a data-science-specific platform to enable the efficient use of machine learning methods from the collaborative platform. The platform is meant to be used by researchers and other project stakeholders to facilitate the use, development, and evaluation of machine-learning models that can aid in the research of TB.
+
+    Thus, the motivation behind this work comes from the idea of incorporating novel methods into this data-science-specific platform to support researchers and collaborators in their mission to end TB by 2030. The techniques described in this work are designed to improve the performance of supervised models while prioritizing their overall robustness and reliability, aspects that are crucial in the context of healthcare applications.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\textwidth]{figures/ERA4TB_map.png}
+        \caption{ERA4TB's Consortium of Partners and Collaborators. Source: \cite{noauthor_era4tb}}
+        \label{fig:era4tb}
+    \end{figure}
+
+    \section{Objectives} \label{sec:objectives}
+
+    \subsection*{Main objective} \label{sec:main_goal}
+
+    The main objective of this work is to research the most relevant techniques on continual adaptation methods in Machine Learning, make a comparative analysis of the most relevant techniques, and their relevance for health applications, and design and implement a system for the diagnosis of tuberculosis that incorporates these techniques into its design that can be integrated into the ERA4TB platform. The platform should allow its users to incorporate test machine-learning models into the platform and facilitate the use and collaboration between researchers and other stakeholders.
+
+    \subsection*{Specific objectives} \label{sec:specific_objectives}
+
+    Auxiliary to the main objective, the following specific objectives have been defined to guide the development of the work and evaluate its success:
+
+    \begin{enumerate}
+        \item The system should be capable of automatically triggering the continual learning process when new data is available or when the model's performance degrades based on a predefined metric.
+        \item The platform must implement a feedback loop between the data annotation process and model training that prioritizes the acquisition of the most informative data samples to improve the model's performance (Active Learning).
+        \item Develop a front-end interface that allows users to interact with the machine-learning models by selecting or submitting new data samples and visualizing the model's predictions.
+        \item Consider the limitations of the proposed system and the ethical implications of its use and present a well-founded outline of necessary future work to address these limitations or improve the system in a way that aligns with the project's mission statement.
+        \item Evaluate possible future research directions that could be explored in the area of continual and dynamic adaptation in Machine Learning, highlighting the contributions that have a higher potential for impact in healthcare or other high-stake domains.
+    \end{enumerate}
+
+    \clearpage
+
+    \section{Background Concepts} \label{sec:background}
+    
+    The following section provides a brief introduction to some of the concepts and techniques that are relevant to this work. It is meant to provide the reader with the necessary high-level information to understand the context and motivation behind the ideas proposed that were used to inform every design decision and experiment conducted. For a more in-depth overview of the same concepts, the reader is referred to the literature review in Chapter \ref{chap:state_of_the_art}.
+    
+    \subsection{Supervised Machine-Learning} \label{sec:supervised_ml}
+
+    Machine Learning (ML) is a subfield of Artificial Intelligence (AI) that studies the design of algorithms that can learn from data and make predictions based on it. ML algorithms are fed a set of data samples (often called the training set) and learn a function that maps the input data to a desired output. The goal is to learn a function that can generalize well to unseen data and make accurate predictions. 
+
+    Supervised learning is a machine-learning paradigm where the goal is to fit a function $f: x \rightarrow \hat{y}$ that maps a given input, $x$, to a `prediction' output, $\hat{y}$, based on an available (finite) set of input-output pairs $(x_i, y_i)$ that are passed to a learnable model as `training' data. The function is learned by minimizing a loss function $L(y, \hat{y})$ that measures the difference between the `predicted' output and the actual one and returns a value that represents the error of the prediction, which is then used to update the model's parameters.
+
+    The most common supervised learning tasks are classification and regression, where the goal is to predict discrete and continuous outputs, respectively. Conversely, the aforementioned loss function is often defined based on the task at hand and the type of data available (e.g., cross-entropy loss for classification tasks, mean squared error for regression tasks, etc.).
+
+    The presence of a known output (or label) for each input is what makes this paradigm `supervised'. For example, in healthcare, supervised learning might be used to predict the presence of a disease or condition based on a set of features extracted (or learned) from the patient's data. A model can be trained to predict the presence or severity of a disease based on a set of symptoms, clinical history, or imaging data (like the case described in this work).
+
+    Besides its many benefits, the most significant disadvantage of supervised learning is that it often needs large amounts of labeled data to produce accurate and robust results \cite{lecun_deep_2015}, which is especially challenging in the healthcare field where the data is scarce, expensive to obtain, or difficult to label.
+
+     Approaches such as \textit{semi-supervised learning} aims to address this issue by leveraging both labeled and unlabeled data to train the model. It often works by using unlabeled data to learn an intermediary representation of the data from which features can be extracted and used to train a supervised model. 
+    
+     \begin{figure}
+        \centering
+        \resizebox*{1.1\columnwidth}{!}{
+            \hspace*{-0.5cm}
+            \input{../figures/supervised_learning_tikz.tex}
+        }
+        \caption{Illustrative example of a supervised machine-learning pipeline}
+        \label{fig:supervised_learning}
+    \end{figure}
+
+    % Semi-supervised learning is especially useful when the unlabeled data is abundant and easy to obtain, but the labeled data is scarce and expensive.  In this work, we analyze techniques that have been shown to be effective in these two paradigms, especially regarding their accuracy and sample efficiency (how much data is needed to produce good results).
+
+    \subsection{Machine Learning for Clinical Diagnosis}
+
+
+    \subsection{Tuberculosis Treatment and Diagnosis} \label{sec:tuberculosis_data}
+
+    Tuberculosis is caused by the bacillus (bacteria) \textit{Mycobacterium tuberculosis} (MTB), which is transmitted through the air when people who are sick with TB expel the bacteria into the air by coughing, sneezing, or spitting. The disease is preventable with the administration of a vaccine, and curable with the use of antibiotics over a significant period of time (although drug-resistant strains of the bacteria are becoming increasingly common) \cite{who_tuberculosis_2023}.
+    
+    Nevertheless, the disease is often underdiagnosed and undertreated, especially in low-resource settings (i.e., developing countries, rural areas, and marginalized/impoverished communities), where the disease is more prevalent, calling for the development of more efficient and cost-effective methodologies to diagnose and treat the disease \cite{who_global_2022, imi_era4tb_2020,  who_tuberculosis_2023}.
+
+    Some of the diagnosis techniques to detect TB include chest X-rays, sputum smear microscopy, and molecular tests. \textit{Chest X-rays} are a common procedure to diagnose any signs of tuberculosis due to the wide availability of radiology devices, but they are often inconclusive and require expert radiologists to interpret the results \cite{escalante_tuberculosis_2009}.
+    
+    \textit{Sputum smear microscopy} is another widely-available technique that requires a trained clinician to identify the bacteria under images taken with a microscope of a patient's sputum (a mixture of saliva and mucus from the respiratory tract). This technique is relatively inexpensive but requires a high concentration of bacteria in the sample to be effective \cite{desikan_sputum_2013}. Additionally, studies argue that in conditions with limited resources and a large number of samples, there have been reports of poor sample observation and quality control measures, which can result in false-negative results \cite{desikan_sputum_2013}.
+    
+    Molecular tests based on \textit{nucleic acid amplification} (NAATs), similar to the ones popularized to detect Covid-19, are another technique to diagnose TB \cite{cdc_tb_2016}. These tests identify the presence of bacilli by amplifying the genetic material of the bacteria in a patient's sputum sample (if any is present) and using a chemical solution to react to the material. NAATs are by far the most reliable method to diagnose TB and have the advantage of being rapid and fully automated. However, they are also the most expensive to produce and require specialized equipment, making them less accessible in low-resource settings \cite{albert_development_2016, maclean_advances_2020}. A study conducted in 2018 showed that the ratio of smear microscopy tests to NAATs in countries with a high burden of TB was 6:1 \cite{cazabon_market_2018, maclean_advances_2020}.
+
+    Each of these techniques presents its own benefits and limitations. Recently, there have been efforts to develop machine-learning models that can aid in the diagnosis of TB by reducing the need for expert clinicians in the process (or providing a first/second opinion) and improving the speed and/or accuracy of the diagnosis \footnote{An in-depth literature review on this topic is presented in section \ref{sec:ml_tuberculosis_detection}}.
+
+    \subsection{Continually Adaptive Systems} \label{sec:continually_adaptive_systems}
+
+
+    \section{Main Contributions} \label{sec:main_contributions}
+
+    \section{Structure of the Work} \label{sec:structure_of_the_work}
+
+    This work is divided into five chapters, including this introduction. Chapter \ref{chap:intro} describes the context and motivation of this work and objectives, and provides the necessary background information to understand the concepts and techniques used. 
+    
+    Chapter \ref{chap:state_of_the_art} describes relevant work and state-of-the-art techniques. It also provides a literature review of related work in the field of machine learning methods for continual systems and their applications, highlighting the most important contributions and what their limitations are.
+
+    Chapter \ref{chap:methodology} describes the methodology used to design and implement the proposed system.  It gives a detailed description of the data, models, techniques, and specific tools used in the implementation of the platform, experiments conducted, and relevant metrics to evaluate the system's performance.
+    
+    Chapter \ref{chap:results} presents the results of the experiments, analyzes the performance of the system, and compares the results with the baseline metrics. Finally, Chapter \ref{chap:conclusions} presents the conclusions and future work. It also discusses the limitations of the proposed system and the implications of the results obtained in the context of the project.
+
+    
+    
+
+% \dobib
+\end{document}

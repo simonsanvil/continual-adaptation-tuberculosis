@@ -1,0 +1,36 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{../imagenes/}}}
+
+\begin{document}
+
+\chapter{Conclusions} \label{chap:conclusions}
+    
+
+    Discussion about the results obtained and implications in the context of the project, limitations of the proposed system, future work, etc.
+    
+
+    \section{Main Implications} \label{conclusions:implications}
+
+    \section{Limitations of the System} \label{conclusions:limitations}
+    
+    \section{Future Work} \label{conclusions:future_work}
+    % \addcontentsline{toc}{section}{Future Work}
+
+    \section{Further Research Directions} \label{conclusions:research_directions}
+    
+    \subsection{Self-Improving and Self-Learning Systems} \label{conclusions:research_directions:l2l}
+
+    Much like the human brain, which can learn new concepts and skills by building upon previous knowledge, an old but upcoming area of research in machine learning concerns the design of programs/systems that can efficiently learn and improve themselves without the need for explicit human intervention. This is known as \textit{self-improving} or \textit{self-learning} AI systems, and it is a very active area of research in the field of artificial intelligence.
+
+    We can envision the design of a system that integrates and builds upon concepts from meta-learning, knowledge distillation, and transfer learning \footnote{These concepts were briefly described in section \ref{sec:relevant_techniques}}, to create machine learning systems that can more sophisticatedly adapt when encountering new problems. Much like the design presented in this work, the self-adaptive process of such a system would necessarily be based on the evaluation of the model's performance and the `necessity' of adaptation, but rather than relying on simple heuristics and a model-agnostic approach, the system would target the model's learning process by building from itself in a self-referential fashion.
+
+    This idea is not new and goes back as far as 1987 with Schmidhuber's Learning to Learn (L2L) concept from Meta-Learning \cite{schmidhuber_evolutionary_1987}. In his work, Schmidhuber proposes a system that can learn to learn new concepts and skills by recursively applying genetic programming to itself in a framework that ensures that only `useful' modifications (made by the program to itself) `survive', just like in an evolutionary fashion.
+
+    \subsection{Scalable Adaptability and Multimodality through Mixtures of Experts} \label{conclusions:research_directions:moes}
+
+    \section{Final Remarks} \label{conclusions:final_remarks}
+
+    \dots unlike many scientific advances, breakthroughs such as that will have immediate applications in every domain, from healthcare to education, to economics, to scientific discovery itself \dots 
+
+% \printbibliography
+\end{document}
