@@ -121,7 +121,18 @@
 
     \improvement[inline]{Add a full-page figure detailing the different techniques. You can use Matcha (https://matcha.io/) to create a pretty image and export it as a tikz figure.}
 
-       
+    \newpage
+
+    \begin{figure}
+        \centering
+        \caption{Relevant Machine Learning System Designs and Techniques}
+        \resizebox*{1.1\columnwidth}{!}{
+            \hspace*{-3cm}
+            \input{../figures/adaptive_techniques_tikz.tex}
+        }
+        \label{fig:supervised_learning}
+    \end{figure}
+    \clearpage
     
     % \section{Goals} \label{goals}
     
