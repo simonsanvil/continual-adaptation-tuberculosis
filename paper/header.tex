@@ -15,7 +15,9 @@ a4paper,
 vmargin=2.5cm,
 hmargin=3cm
 ]{geometry}
-\usepackage{subfig}
+% \usepackage{subfig}
+\usepackage{caption}
+\usepackage{subcaption}
 \usepackage{mathtools}% Loads amsmath
 % \usepackage[subtle]{savetrees}
 
@@ -24,7 +26,7 @@ hmargin=3cm
 \parskip=6pt
 
 % DEFINICIÓN DE COLORES para portada y listados de código
-\usepackage[table]{xcolor}
+\usepackage[rgb,dvipsnames,table]{xcolor}
 \definecolor{azulUC3M}{RGB}{0,0,102}
 \definecolor{gray97}{gray}{.97}
 \definecolor{gray75}{gray}{.75}
@@ -244,6 +246,7 @@ hmargin=3cm
 % to add TODO NOTES
 % \usepackage[pdftex,dvipsnames]{xcolor} % Coloured text etc.
 \usepackage{xargs}
+\marginparwidth=2cm
 \usepackage[colorinlistoftodos,prependcaption,textsize=footnotesize]{todonotes}
 \newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
 \newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
