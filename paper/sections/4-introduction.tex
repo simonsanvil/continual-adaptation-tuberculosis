@@ -126,23 +126,63 @@
         \label{fig:supervised_learning}
     \end{figure}
     
-    In the last decade two decades, one set of algorithms that have enabled significant advances in Machine Learning, allowing to solve very difficult problems, is \textbf{deep learning}. Deep learning is a subfield of ML that studies the design of algorithms that can learn complex representations of data by hierarchically composing simpler functions in an architecture inspired by the structure of the human brain known as `Deep Neural Networks' (DNN)  \cite{lecun_deep_2015}. Figure \ref{fig:deep_learning} shows an example of a DNN architecture.
+    In the two decades, one set of algorithms that have enabled significant advances in Machine Learning, allowing to solve very difficult problems, is \textbf{deep learning}. Deep learning is a subfield of ML that studies the design of algorithms that can learn complex representations of data by hierarchically composing simpler functions in an architecture inspired by the structure of the human brain known as `Deep Neural Networks' (DNN)  \cite{lecun_deep_2015}. Figure \ref{fig:dnn_example} shows an example of a DNN architecture.
     
-    % Semi-supervised learning is especially useful when the unlabeled data is abundant and easy to obtain, but the labeled data is scarce and expensive.  In this work, we analyze techniques that have been shown to be effective in these two paradigms, especially regarding their accuracy and sample efficiency (how much data is needed to produce good results).
-    % \subsection{Computer Vision} \label{sec:computer_vision}
+    \begin{figure}[H]
+        \centering
+        \resizebox*{0.5\columnwidth}{!}{
+            % \hspace*{-0.5cm}
+            \includegraphics{dnn_example_topol}
+        }
+        \caption{Example of a simplified neural network architecture taken from \cite{topol_high-performance_2019}.}
+        \label{fig:dnn_example}
+    \end{figure}
+
     \clearpage
-    \subsection{Machine Learning Applications in Healthcare}
+    \subsection{Challenges and Potential of Adopting ML-enabled Systems in Healthcare}
 
-    ML techniques have seen their adoption in many applications, from malware and spam detection to self-driving cars and environmental modeling. The healthcare field is no exception. The recent availability to store and process ever larger amounts of data through the use of Big Data technologies and the development of more powerful hardware and algorithmic techniques have made it possible to train models that can perform complex medical tasks with high accuracy and robustness \cite{topol_high-performance_2019}.
-
-    Of such techniques, some that have very recently disrupted the medical field are those based on \textbf{computer vision}  (CV). CV methods try to develop algorithms that enable computers to solve visual tasks. It is a broad field that has been applied to problems like image classification, object detection, and image segmentation and has seen significant advances in the last decade thanks to the adoption of Deep Learning algorithms \cite{lecun_deep_2015}.
-
-    In the context of healthcare, CV techniques have been used to aid in the diagnosis of diseases, drug discovery, and other tasks through the analysis of medical images (e.g., X-rays, CT scans, MRIs, microscopy, etc.) \cite{esteva_deep_2021}. 
+    ML techniques have seen their adoption in many applications, from malware and spam detection to self-driving cars and environmental modeling. The healthcare field is no exception. In the 20 years between 1995 and 2015, the FDA had approved fewer than 30 algorithms for medical use. In contrast, only in the last 5 years, the number of new approvals has reached over \textit{10 times} that amount (see Figure \ref{fig:fda_approved_ml_apps}). 
     
-    One study made in 2018 tried to compare the performance of  \textit{Convolutional Neural Networks} (CNNs), a common DL-based model, to that of four expert radiologists in the task of detecting pneumonia from X-ray images. The study concluded that the algorithm was comparable, and sometimes even \textit{outperformed}, the radiologist in most cases \cite{wang_chestx-ray8_2017}.
+    Indeed, the recent availability to store and process ever larger amounts of data through the use of Big Data technologies and the development of more powerful hardware and algorithmic techniques have made it possible to train models that can perform complex medical tasks with enough high accuracy and robustness to be considered for use
+    \cite{topol_high-performance_2019}.
 
+    Of such techniques, some that have recently disrupted the medical field are those based on \textbf{computer vision}  (CV). CV methods try to develop algorithms that enable computers to solve visual tasks. It is a broad field that has been applied to problems like image classification, object detection, and image segmentation and has seen significant advances in the last decade thanks to the adoption of Deep Learning algorithms \cite{lecun_deep_2015}.
+
+    In the context of healthcare, CV techniques have been primarily used in radiology to aid with the diagnosis of diseases and other tasks through the analysis of medical images (e.g., X-rays, CT scans, MRIs, microscopy, etc.) \cite{esteva_deep_2021}. Indeed, over 75\% of all FDA-cleared AI applications have been for radiology use cases \cite{health_artificial_2022}.
     
-    % ML techniques have been used to aid in the diagnosis of diseases, drug discovery, and other tasks.
+    One study made in 2018 trained a \textit{Convolutional Neural Network} (CNN), a common DL model popular for computer vision tasks, to detect pneumonia from X-ray images at an Indian hospital. The researchers compared the performance of the algorithm with the findings of four expert radiologists and concluded that the algorithm was comparable to (sometimes even \textit{outperformed}) the radiologist in most cases \cite{wang_chestx-ray8_2017}.
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{fda_approved_ml_apps}
+        \caption{Number of FDA-approved AI applications per year since 2005. Data Source: \cite{health_artificial_2022}}
+        \label{fig:fda_approved_ml_apps}
+    \end{figure}
+
+    Other AI systems such as Google Deepmind's \textit{AlphaFold} \cite{yang_alphafold2_2023} have been shown to predict the 3D structure of proteins with high accuracy, solving a problem that had been considered to be one of the most challenging in computational biology for over 50 years. Such breakthrough is thought to have a significant impact in applications like drug discovery in the near future \cite{jumper_highly_2021}.
+    
+    Results such as these shine a light on the potential that AI techniques have in the medical field. However, the adoption of such technologies doesn't come with new challenges. Experts have emphasized the importance of improving aspects of these models like their lack of interpretability, robustness to unseen data, and the difficulty of integrating them into existing workflows before they can be widely adopted in clinical settings \cite{esteva_deep_2021, topol_high-performance_2019}.
+    
+    Thus, the design of ml-enabled systems must be mindful of the limitations of such models. Research in the healthcare and AI fields must pave the way to develop workflows that can be trusted by clinicians, patients, lawmakers, and other researchers alike to improve the quality of care/research, reduce costs, and overall increase the efficiency of the healthcare system.
+
+     \begin{table}[h]
+        \resizebox{0.9\textwidth}{!}{
+            \begin{tabular}{lrll}
+                \toprule
+                Company &  Year & Usecase & Panel \\
+                \midrule
+                Apple &  2022 & Atrial Fibrillation Detection via Apple Watch & Cardiovascular \\
+                Arterys &  2022 & Liver and Lung Cancer Detection & Radiology \\
+                Philips Healthcare &  2022 & Philips Incisive CT Reconstruction & Radiology \\ 
+                GE Healthcare &  2021 & Deep Learning Image Reconstruction &  Radiology \\
+                Siemens &  2021 & AI-Rad Companion for CT Interpretation & Radiology \\
+                Icometrix &  2018 & Brain MRI Analysis & Radiology \\ 
+                23\&Me &  2017 & Genetic Testing for Hereditary Thrombophilia & Hematology \\
+                \bottomrule
+            \end{tabular}
+            \caption{Examples of FDA-approved AI applications for medical use. S\lowercase{ource: \cite{health_artificial_2022}}}
+        }
+    \end{table}
 
     \subsection{Continually Adaptive Systems} \label{sec:continually_adaptive_systems}
 
@@ -164,9 +204,8 @@
             \cline{2-3} & \footnotesize
             \textbf{Label shift:} When the distribution  $P(Y)$ at inference time differs from the one the model was trained with, i.e. the model is trained on a dataset whose class proportions are substantially different from the ones in the inference environment. &
             \footnotesize
-            A model trained on a dataset where the proportion of positive cases is deployed in a hospital where the proportion of positives is 10\%.
+            A model trained on a dataset where the proportion of positive cases is 50\% is deployed in a hospital where the proportion is 10\%.
             \footnotesize
-
             \\
             \cline{2-3} & \footnotesize
             \textbf{Concept shift:} \footnotesize The relationship between the input and output changes over time. That is, the model is trained on a dataset whose relationship between the input and output differs from the one in the inference environment. &  \\

@@ -7,9 +7,9 @@
 
 \begin{document}
 
-    \chapter{State of the Art} \label{chap:state_of_the_art}
+    \chapter{State of the Art} \label{chap:state_of_the_art} \info{10-12 pgs}
 
-    \section{Relevant Techniques} \label{sec:relevant_techniques}
+    \section{Relevant Techniques} \label{sec:relevant_techniques} \info{6-7 pages}
 
     While it is important to consider the design of robust machine learning models from their training phase, and part of this work will discuss techniques to optimize for that goal, our primary concern is to provide a model-agnostic framework for maintaining reliability \textit{after} a model has been already deployed.
     % That is, during the inference phase of deployed models.
@@ -24,14 +24,14 @@
     % \textit{"Everything is related to everything else, but near things are more related than distant things."} \cite{tobler_computer_1970}
     % \mbox{}\hfill \textit{- Waldo Tobler (1970)}
 
-    \subsection{Transfer Learning and Domain Adaptation} \label{sec:transfer_learning}
+    \subsection{Transfer Learning and Domain Adaptation} \label{sec:transfer_learning} \info{1 page}
 
     Transfer learning is a technique that aims to improve the performance of a model by transferring the knowledge of a pre-trained model to a new task. This is achieved by training the model on a large dataset and then fine-tuning it on a smaller dataset for the new task. The model is trained on a large dataset to learn general features that can be applied to a wide range of tasks. The model is then `fine-tuned' on the smaller dataset to learn task-specific features that are relevant to the new task \cite{pan_survey_2010}.
 
 
     
 	
-	\subsection{Continual Learning} \label{sec:continual_learning}
+	\subsection{Continual Learning} \label{sec:continual_learning} \info{1.25 pages}
 	
 	 Continual learning refers to the concept of constantly updating a model as new information arrives, allowing them to adapt to changing data \cite{huyen_designing_2022}. This constant change in the data distribution requires models to be updated periodically to maintain their accuracy and relevance, prevent model stagnation and extend their relevance to the application.
 
@@ -44,20 +44,20 @@
     Continual learning is well-suited for healthcare applications where data arrives in a stream (e.g., wearable health monitors, electronic medical records, and imaging systems). It is also useful in terms of 
 
 
-    \subsection{Active Learning} \label{sec:active_learning}
+    \subsection{Active Learning} \label{sec:active_learning} \info{1.25 pages}
  
      Active learning strategies selectively acquire data based on their informativeness or uncertainty to the model. Its value comes from allowing the model to guide its own data acquisition process, thus potentially reducing the need for vast - or unnecessary - amounts of pre-labeled data before a model is trained or updated \cite{huyen_designing_2022, chen_study_2015, figueroa_predicting_2012}. 
      This is particularly important in health applications, as the availability of annotated medical data is often limited due to privacy concerns, expert time constraints, and the complexity of pathological findings.
      
      Active learning enables the development of accurate models using significantly less labeled data, paving the way for more efficient and cost-effective machine-learning platforms. Some of the most common active learning strategies include uncertainty sampling, query by committee, and expected model change. 
 
-     \subsection{Knowledge Distillation} \label{sec:knowledge_distillation}
+     \subsection{Knowledge Distillation} \label{sec:knowledge_distillation} \info{0.5 pages}
 
     Knowledge distillation is a technique that aims to improve the performance of a model by transferring the knowledge of a larger model (teacher) to a smaller model (student). This is achieved by training the student model to mimic the predictions of the teacher model. The student model is trained on the same data as the teacher model, but it is trained to predict the probabilities of the teacher model's predictions instead of the actual labels. This allows the student model to learn from the teacher model's mistakes and improve its performance on the given task \cite{hinton_distilling_2015}.
     
     \todo[inline]{Modify description, add more details, references \dots}
 
-    \subsection{Dynamic Quantization and Network Pruning} \label{sec:dynamic_quantization_pruning_sparsification}
+    \subsection{Dynamic Quantization and Network Pruning} \label{sec:dynamic_quantization_pruning_sparsification} \info{0.5 pages}
 
     Quantization and network pruning are techniques that aim to reduce the size of a model by removing redundant parameters\dots
 
@@ -101,7 +101,7 @@
 
     % \todo[inline]{Modify description, add more details, references \dots}
 
-    \subsection{Federated Learning} \label{sec:federated_learning}
+    \subsection{Federated Learning} \label{sec:federated_learning} \info{1 page}
 
     Federated learning is the concept of training a model using data from multiple sources without having to share the data itself. This is achieved by training the model on each source separately and then combining the results to obtain a final model. This technique is particularly useful in healthcare applications, where data privacy is a major concern. It allows us to train models on data from multiple sources without having to share the data itself, thus preserving the privacy of the patients \cite{joshi_federated_2022}.
     \todo[inline]{Modify this description and add more details, references \dots}
@@ -132,15 +132,15 @@
 
     \section{Related Work} \label{related_work}
 
-    \subsection{Computer Vision} \label{sec:computer_vision_sota}
+    \subsection{Computer Vision in Healthcare} \label{sec:computer_vision_sota} \todo{2 pages}
 
     SOTA methods in computer vision with an emphasis on object detection techniques (CNN, YOLO, Faster R-CNN, etc.)
 
-    \subsection{Tuberculosis Detection using Machine Learning Methods} \label{sec:ml_tuberculosis_detection}
+    \subsection{Tuberculosis Detection using Machine Learning Methods} \label{sec:ml_tuberculosis_detection} \todo{1-1.5 pages}
 
     Visuña et al. (2023) \cite{visuna_novel_2023} presented a deep-learning-based technique to detect tuberculosis from sputum smear microscopy images. The author used a one-stage object detection method with a Convolutional Neural Network (CNN) backbone to detect the presence of bacilli in the images, first fragmenting the image into patches of 80x80 pixels. The model was trained on a dataset of 200 microscopy stain images, achieving a 99.49\% precision and 92.86\% recall on the test set. 
     
-    \subsection{Continually Adaptive Systems} \label{sec:continually_adaptive_systems_sota}
+    \subsection{Continually Adaptive Systems} \label{sec:continually_adaptive_systems_sota} \todo{1-1.5 pages}
 
     \improvement[inline]{Include a full-page table with a summary of each reference and their exact contribution to this work, use different columns to highlight the differences between them and the techniques used. Only include those whose techniques are implemented in the proposed solution (continual, active learning, tuberculosis detection, adaptive systems, etc.). If you are unsure about how well the table fits here, perhaps consider moving it to the appendix.}
     
