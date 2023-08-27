@@ -184,12 +184,31 @@
         }
     \end{table}
 
-    \subsection{Continually Adaptive Systems} \label{sec:continually_adaptive_systems}
+    \subsection{Lifelong Learning and Self-Adaptive Systems} \label{sec:lifelong_adaptive_systems}
 
-    Table \ref{tab:causes_of_ml_degradation} lists some of the most common causes of degradation of a learning system and the techniques that can be used to address them. The causes and descriptions in the table were sourced from Casmiro et al.'s work on self-adaptive machine-learning \cite{casimiro_self-adaptive_2022} and Chip Huyen's book about Machine-Learning systems \cite{huyen_designing_2022} \cite{casimiro_self-adaptive_2022}.
+    To address some of the challenges of adopting ML-enabled systems in healthcare, some researchers have proposed the idea of incorporating \textit{lifelong learning} and \textit{self-adaptive systems} (SAS) in their design \cite{casimiro_self-adaptive_2022,huyen_designing_2022}. Lifelong learning refers to the ability of an ML model to continually learn from new data and adapt to changes in its environment, while SAS refers to the kind of software systems that continually monitor faults in their operating environment, modifying their behavior at runtime when they encounter an issue. 
+    
+    The two ideas are closely related, with terms like \textit{lifelong} or \textit{continual} learning often used to refer only to Machine-Learning (or learning-enabled) systems and SAS to refer to any software that can adapt to changes in its environment. In this work, we use the terms \textit{continual adaptation} to refer to the ability of any ML system to continually learn from new data and/or adapt to changes or faults in its environment, drawing inspiration from both concepts.
 
-    \begin{table}[h]
-        \caption{Some Causes of Degradation of an ML System}
+    SAS often adopt a feedback-loop architecture known as \textbf{MAPE-K} loops. These systems are based on using some form of \textit{knowledge-base} to continually \textit{monitor} the system, to then evaluate when an \textit{adaptation} is needed, to finally select the best action \textit{plan} and \textit{execute} it (The letters in MAPE stand for the words Monitor, Analyze, Plan, and Execute, and the K stands for Knowledge) \cite{redbooks_practical_2004}.
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.6\textwidth]{mape_k_loop.png}
+        \caption{The original MAPE-K Loop as first introduced by IBM in 2004. Source: \cite{redbooks_practical_2004}}
+        \label{fig:mape-k}
+    \end{figure}
+
+    The idea of bringing MAPE-K loops to the context of this work is that much like traditional software systems, ML Systems can also benefit from the study of SAS techniques (and the ample literature that exists on the topic) to improve their robustness and reliability. Indeed, the idea of continual adaptation is not new to the ML field, with well-known researchers arguing that it is a fundamental aspect of intelligence \cite{,thrun_lifelong_1995, parisi_continual_2019}. 
+    
+    However, the design of such systems presents unique challenges that must be addressed to ensure their reliability and robustness. In particular, ML models differ from traditional software systems in that they are often trained on a fixed dataset but deployed in a dynamic environment, with the assumption that the data used to train the model is representative of the data it will encounter in the real world.
+    
+    In practice, the assumption described above is not met, more often than not, the model's performance degrades over time as the data distribution changes. This phenomenon is known as \textit{data drift} and is one of the most common causes of degradation of a learning system \cite{huyen_designing_2022}.
+
+    While data drift is one of the most studied phenomena in the context of continual adaptation, it is not the only one. Table \ref{tab:causes_of_ml_degradation} lists some of the most relevant causes of degradation of a machine-learning system and their characteristics. It is meant to give an overview of the different phenomena that can affect a model's performance and the kind of challenges that must be addressed in the design of a system that reliably adapts to changes in its environment.
+
+    \begin{table}[H]
+        \caption{Some Causes of Degradation of an ML System and their Characteristics.}
         \label{tab:causes_of_ml_degradation}
         \hspace*{-0.7cm}
         \begin{tabular}{p{0.25\linewidth} | p{0.45\linewidth} | p{0.35\linewidth}}
@@ -218,13 +237,17 @@
             \midrule
         \textbf{\small Environment drift} & \footnotesize 
             The environment changes over time. The model is deployed in a different environment than the one it was trained on.  & \\
-        \bottomrule
+        \midrule
+        % catastrophic forgetting and other learning phenomena
+        \multirow{2}{*}{\small \textbf{Learning phenomena}} & \footnotesize
+            \textbf{Catastrophic forgetting:} The model forgets what it has learned in the past when learning new information. & \\
+            \cline{2-3} & \footnotesize
+            \textbf{Catastrophic interference:} The model forgets what it has learned in the past when learning new information. & \\
+        
         \end{tabular}
     \end{table}
 
-    \todo[inline]{Add a brief description of the concept of continual adaptation and its relevance in the context of this work.}
-
-    \clearpage
+    % \clearpage
 
     \section{Objectives} \label{sec:objectives}
 
@@ -252,13 +275,15 @@
 
     This work is divided into five chapters, including this introduction. Chapter \ref{chap:intro} describes the context and motivation of this work and its objectives and provides the necessary background information to understand the concepts and techniques used. 
     
-    Chapter \ref{chap:state_of_the_art} describes relevant work and state-of-the-art techniques. It also provides a literature review of related work in the field of machine learning methods for continual systems and their applications, highlighting the most important contributions and their limitations.
+    Chapter \ref{chap:state_of_the_art} describes relevant work and state-of-the-art techniques. It also provides a literature review of related work in tuberculosis detection and adaptive machine learning systems, highlighting the most important contributions and their limitations and showing examples of their use in healthcare applications.
 
     Chapter \ref{chap:methodology} describes the methodology used to design and implement the proposed system.  It gives a detailed description of the data, models, techniques, and specific tools used in the implementation of the platform, experiments conducted, and relevant metrics to evaluate the system's performance.
     
-    Chapter \ref{chap:results} presents the results of the experiments, analyzes the performance of the system, and compares the results with the baseline metrics. Finally, Chapter \ref{chap:conclusions} presents the conclusions and future work. It also discusses the limitations of the proposed system and the implications of the results obtained in the context of the project.
-
+    Chapter \ref{chap:results} presents the results of the experiments described in the previous chapter, analyzing the performance of the system, and comparing the results with the baseline metrics.
     
+    Finally, Chapter \ref{chap:conclusions} presents the conclusions of the work. It discusses the implications of the results obtained in the context of the project and the limitations of the proposed system. It also proposes possible future work that could be explored to improve the system and its integration into the ERA4TB platform and discusses emergent directions in the areas of research discussed in this work, highlighting those that have a higher potential for impact or that we consider to be of special interest.
+
+    Additionally, there are two extra chapters at the end where we discuss the regulatory framework, ethical considerations, and the socioeconomic implications of the use of the proposed system (or similar systems) in the context of the project and the healthcare field in general.
     
 
 % \dobib
