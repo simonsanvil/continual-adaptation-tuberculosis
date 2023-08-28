@@ -9,14 +9,20 @@
 
     \chapter{State of the Art} \label{chap:state_of_the_art} \info{10-12 pgs}
 
-    \section{Relevant Techniques} \label{sec:relevant_techniques} \info{6-7 pages}
+    The following chapter provides an overview of the current environment and state of the art in the topics related to this work. The goal is to provide a better understanding of the techniques that can be used to address the problem introduced in the previous chapter, highlighting emerging methods and their relevance to the problem.
+    
+    We begin by giving a high-level description of known machine learning paradigms and techniques that have been proposed in the literature to address the degradation of ML models or solve problems related to deploying machine learning systems in real-world scenarios, highlighting their application in the healthcare domain.
+    
+    Then, in section \ref{sec:literature_review} we make a review of prior studies relevant to the topics of this thesis that have achieved state-of-the-art performance or that have done similar work as the one proposed here. In that section, we go into more detail about the implementation of the relevant techniques, their contributions to the field, and how they relate to our problem.
 
-    While it is important to consider the design of robust machine learning models from their training phase, and part of this work will discuss techniques to optimize for that goal, our primary concern is to provide a model-agnostic framework for maintaining reliability \textit{after} a model has been already deployed.
-    % That is, during the inference phase of deployed models.
-    
-    To accomplish this, we consider a set of novel techniques proposed in the literature to address the problems related to deploying supervised and semi-supervised machine learning models in real-world scenarios. The following section describes these techniques and their relevance to the problem at hand. 
-    
-    Note that while the focus is on applying these techniques to healthcare applications, it is easy to show that these methods can be generalized to other domains.
+    Finally, we conclude the chapter with table \ref{tab:sota_summary}, which lists the studies discussed in this chapter that we consider to be the most relevant to our work. 
+    % This table may serve as a reference for the following chapters, as it will be used to compare the contributions of this work to the state of the art.
+
+    \section{Relevant Learning Paradigms and Adaptation Techniques} \label{sec:relevant_techniques} \info{6-7 pages}
+
+    Throughout this section, we consider a set of novel techniques that have been proposed in the literature that are related to ML model adaptation. One of the key aspects in selecting which techniques to include in this section (besides their relevance to the topic) was the technical feasibility of implementing them as \textit{tactics} (as described in section \ref{sec:lifelong_adaptive_systems}) in a self-adaptive system. 
+
+    The idea is that some of the techniques described below may be used as the basis for the process of adaptation of an ML model after it has been detected (through specific monitorization) that some form of degradation has occurred. The goal would be to then use some of these techniques (or a combination of them) as a way to improve performance.
 
     % \clearpage
     
@@ -28,12 +34,10 @@
 
     Transfer learning is a technique that aims to improve the performance of a model by transferring the knowledge of a pre-trained model to a new task. This is achieved by training the model on a large dataset and then fine-tuning it on a smaller dataset for the new task. The model is trained on a large dataset to learn general features that can be applied to a wide range of tasks. The model is then `fine-tuned' on the smaller dataset to learn task-specific features that are relevant to the new task \cite{pan_survey_2010}.
 
-
-    
 	
 	\subsection{Continual Learning} \label{sec:continual_learning} \info{1.25 pages}
 	
-	 Continual learning refers to the concept of constantly updating a model as new information arrives, allowing them to adapt to changing data \cite{huyen_designing_2022}. This constant change in the data distribution requires models to be updated periodically to maintain their accuracy and relevance, prevent model stagnation and extend their relevance to the application.
+	 Continual learning refers to the concept of constantly updating a model as new information arrives, allowing it to adapt to changing data \cite{huyen_designing_2022}. This constant change in the data distribution requires models to be updated periodically to maintain their accuracy and relevance, prevent model stagnation, and extend their relevance to the application.
 
      We can consider two frameworks for implementing continual learning in a machine-learning system. We refer to the first as \textit{offline learning}, where the model is updated periodically using a batch of data collected over time. Offline learning can be additionally subdivided into two categories based on how data is monitored prior to updating a model: \textit{passive} and \textit{active} continual learning.
 
@@ -57,6 +61,27 @@
     
     \todo[inline]{Modify description, add more details, references \dots}
 
+
+    \subsection{Adversarial Training} \label{sec:adversarial_training} \unsure{Unsure about keeping this section}
+
+    Adversarial attacks on machine learning occur when an attacker produces inputs that are intentionally designed to be misclassified by a specific ML model. They are created by adding small perturbations to the input data that may be imperceptible to humans but can cause the model to make a wrong prediction.
+    
+    Adversarial examples are a major concern in healthcare applications, an attacker may purposely create adversarial examples to fool the model into making incorrect predictions, which can have serious consequences like misdiagnosing a patient or prescribing them unnecessary treatment \cite{finlayson_adversarial_2019}. 
+    % Figure \ref{fig:medical_adversarial_attacks} shows examples of adversarial examples in health .
+
+    \begin{figure}[h]
+        \includegraphics[width=0.65\linewidth]{figures/medical-adversarial-attacks.jpeg}
+        \caption{Adversarial examples in health from Finlayson et al. (2019) \cite{finlayson_adversarial_2019}.}
+        \label{fig:medical_adversarial_attacks}
+    \end{figure}
+    % \vspace*{-0.5cm}
+
+    Furthermore, adversarial examples shine a light on the black-box nature of several types of ML models. The fact that these models can be fooled by small changes that are not perceptible to any expert raises questions about their general reliability and trustworthiness. This is why this phenomenon is an active area of research in the field \cite{finlayson_adversarial_2019}.
+
+    One way to deal with adversarial attacks is by choosing models that are more robust to these examples. Goodfellow et al. 2015, for example, favors the use of nonlinear model families like RBF networks or using regularization strategies like dropout, weight decay, or gradient masking to improve the robustness of the model \autocite{goodfellowExplainingHarnessingAdversarial2015}.
+    
+    Another popular approach to make ML models more robust to these attacks is by feeding them directly adversarial examples on their training data. This is known as \textit{adversarial training}. Methods like the Fast Gradient Sign Method \cite{goodfellowExplainingHarnessingAdversarial2015} (FGSM) or the more recent Projected Gradient Descent (PGD) \autocite{madryDeepLearningModels2019}  can be used to generate adversarial examples and train the model to be robust to them. 
+
     \subsection{Dynamic Quantization and Network Pruning} \label{sec:dynamic_quantization_pruning_sparsification} \info{0.5 pages}
 
     Quantization and network pruning are techniques that aim to reduce the size of a model by removing redundant parameters\dots
@@ -64,43 +89,7 @@
     Cite \cite{carreira-perpinan_model_2017} and \cite{han_deep_2016}, \cite{carreira-perpinan_compression_2018}
 
     \todo[inline]{Modify this description and add more details, references \dots}
-
-    % \subsection{Adversarial Learning} \label{sec:adversarial_training} \unsure{Unsure about keeping this section}
-
-    % Adversarial learning is a technique that aims to make models more robust to adversarial examples. Adversarial examples are inputs intentionally designed to be misclassified by a model. They are created by adding small perturbations to the input data, which are imperceptible to humans but can cause the model to make a wrong prediction. Adversarial examples are a major concern in healthcare applications, as they can mislead models into making incorrect diagnoses, misrepresenting the patient's condition, and leading to incorrect treatment decisions \cite{finlayson_adversarial_2019}.
-
-    % \begin{figure}[h]
-    %     % \frame{
-    %     \includegraphics[width=0.65\linewidth]{figures/medical-adversarial-attacks.jpeg}
-    %     \caption{Adversarial examples in medical imaging from Finlayson et al. (2019) \cite{finlayson_adversarial_2019}.}
-    %     % }
-    % \end{figure}
-    % \vspace*{-0.5cm}
-    % Adversarial training aims to make models more robust to adversarial examples by training them to be resilient to small perturbations in the input data. This can be achieved by adding a loss term to the training objective that penalizes the model for making incorrect predictions on adversarial examples or by creating a separate adversarial model that is trained to generate adversarial examples that are difficult to detect by the original model and then use those examples for training the original model. 
-
-    % \subsection{Adaptive Learning with Human Feedback} \label{sec:human_feedback}
-
-    % In healthcare applications, feedback from experts is a very important resource, essential for improving the accuracy of the model. This technique aims to explode human feedback as much as possible to obtain model improvements. The goal is to construct policies that adapt the model based on feedback provided by the expert. 
-    
-    % One recent example of this technique is OpenAI's ChatGPT, which used Reinforcement Learning with Human Feedback (RLHF) to instruction fine-tune their GPT-3 language models \cite{christiano_deep_2023,ouyang_training_2022} to align them better with human preferences. RLHF consists of training a reward function that maximizes the probability of the model's predictions matching the expert's feedback. This reward function is then used to train or fine-tune the model using reinforcement learning.
-
-    % For example, a model can be trained to prioritize the detection of a specific disease over others or to provide more accurate predictions for a specific patient.
-
-    % \begin{equation}
-    %     \label{eq:human_feedback}
-    %     \begin{aligned}
-    %         \max_{\theta} & \sum_{i=1}^{n} \sum_{j=1}^{m} \alpha_{ij} \cdot \mathbb{1}(\hat{y}_{ij} = y_{ij}) \\
-    %         \text{subject to} & \hat{y}_{ij} = \text{argmax}_{k} \hat{p}_{ijk} \\
-    %         & \hat{p}_{ijk} = \sigma(\theta \cdot x_{ij})
-    %     \end{aligned}
-    % \end{equation}
-
-    % The objective function in Equation \ref{eq:human_feedback} is a weighted sum of the number of times the model and the expert agree on the prediction for each class. $n$ is the number of data points, and $m$ is the number of classes
-    %  The weights are determined by the number of times the model and the expert agree on the prediction for the correct class. This objective function is maximized by training the model to prioritize detecting the classes in which the expert has the most confidence.
-
-
-    % \todo[inline]{Modify description, add more details, references \dots}
-
+   
     \subsection{Federated Learning} \label{sec:federated_learning} \info{1 page}
 
     Federated learning is the concept of training a model using data from multiple sources without having to share the data itself. This is achieved by training the model on each source separately and then combining the results to obtain a final model. This technique is particularly useful in healthcare applications, where data privacy is a major concern. It allows us to train models on data from multiple sources without having to share the data itself, thus preserving the privacy of the patients \cite{joshi_federated_2022}.
@@ -120,22 +109,53 @@
         \label{fig:relevant_ml_paradigms}
     \end{figure}
     \clearpage
+
+    \section{Literature Review} \label{sec:literature_review} \todo{4-5 pages}
+
+    As mentioned at the beginning of this chapter, this section provides a detailed overview of the most relevant work in the literature related to the topics of this thesis. It is meant for readers who want to dive more into the details of the techniques studied, how they achieved state-of-the-art performance, their overall contributions, and how they relate to the problems posed in this work.
+
+    \subsection{Computer Vision and DL-Based Object-Detection Techniques } \label{sec:computer_vision_sota}
+
+    This thesis focuses on the application of computer vision (CV) techniques applied to the detection of tuberculosis. Thus, we consider it important to give an overview of the most important work in the literature in CV with the goal that the discussion here also serves as a good reference for the proposed solution and for the techniques that will be introduced in the upcoming sections. 
     
-    % \section{Goals} \label{goals}
+    Since CV is a very broad field, we will not be able to cover all the relevant work in the literature. Instead, since the problem in this work relates more to the tasks of image classification and object detection using Deep Learning (DL) algorithms (to identify tuberculosis), we will limit our scope to the most relevant work in those areas.
 
+    First of all, we consider it important to highlight the importance of DL techniques in CV. The immense popularity that DL has gained in the area of CV can be traced back to 2012 when Convolutional Neural Network (CNN) architectures like AlexNet \cite{dengImageNetLargescaleHierarchical2009} started showing breakthrough performance for solving image classification tasks in recognized competitions like the ImageNet Large Scale Visual Recognition Challenge (ISLVR) \cite{krizhevskyImageNetClassificationDeep2012}.
     
-    % The goal of this work is to study
-	
-	% \section{Data Sources} \label{data_sources}
+    CNNs are a type of neural network that uses \textit{convolutional layers} (which can be thought of as a set of functions that learn image filters through the use of convolutional operations) to extract features from the input image \autocite{goodfellowDeepLearning2016}. CNNs were first introduced by Yann LeCun in 1989 \cite{lecunBackpropagationAppliedHandwritten1989}, 30 years before ImageNet. It has since been used to achieve SOTA performance on a wide range of CV tasks, including object-detection \cite{lecun_deep_2015,zouObjectDetection202023b}.
+
+    Then, bringing the focus specifically to Deep Learning for object detection tasks
+    (ignoring the breakthroughs that CNNs have allowed in tasks like image segmentation, captioning, or generation), we can find that most literature is divided into two main approaches to the problem: \textit{two-stage} and \textit{one-stage} object detectors.
     
-    % \subsection{Wave Data from NOAA's National Data Buoy Center}
+    \textbf{Two-stage object detection} methods first propose a set of candidate regions in the image (the \textit{region proposal} stage) and then classify each region as either containing an object or not (the \textit{classification} stage). \textbf{One-stage object detection} methods, on the other hand, directly predict the bounding boxes and class labels of the objects in the image \cite{zouObjectDetection202023b}. 
+    
+    Figure \ref{fig:fastrcnn_vs_yolo} shows a comparison between the two approaches:
+    \clearpage
+    
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.9\linewidth]{figures/fastrcnn_vs_yolo}
+        \caption{(a) A two-stage Faster R-CNN object detector. (b) A one-stage YOLO object detector. Figure from Li et al. (2019) \cite{liEnhancedBirdDetection2019}.
+        % The two-stage detector requires two forward passes through the network, while the one-stage detector only requires one. 
+        }
+        \label{fig:fastrcnn_vs_yolo}
+    \end{figure}
 
-    \section{Related Work} \label{related_work}
+    Generally, the advantage of two-stage detectors is that they tend to be more accurate than one-stage detectors, as the region proposal stage allows them to focus on a smaller set of candidate regions that can be then individually discriminated by the classification stage. However, this comes at the cost of being slower than one-stage detectors since they require two inference steps through the network \cite{zouObjectDetection202023b}.
 
-    \subsection{Computer Vision in Healthcare} \label{sec:computer_vision_sota} \todo{2 pages}
+    The SOTA status of two-stage object detection methods precedes that of their one-stage counterpart. The popularity of CNNs in the CV field in the early 2010s led to the development of \textbf{RCNN} (2014), an architecture that first proposes image regions by selective search \cite{uijlingsSelectiveSearchObject2013}, which are then rescaled and fed into a CNN to extract features and finally use a linear classifier to predict their label \cite{girshickRichFeatureHierarchies2014}. 
+    
+    The success of RCNN for object detection tasks was followed by SPP-Net (2014), which introduced a Spatial Pyramid Pooling (SPP) layer to allow the model to process images of arbitrary sizes without rescaling them \cite{heSpatialPyramidPooling2014}. Then came \textbf{Fast RCNN} and \textbf{Faster R-CNN} in 2015 \cite{girshickFastRCNN2015,renFasterRCNNRealTime2016}, who respectively improved on RCNN by training the detector and bounding box regressor jointly, and by using a Region Proposal Network (RPN) to replace the selective search algorithm used in previous models. 
+    
+    While two-stage detectors were achieving state-of-the-art performance in terms of accuracy, they were not fast enough to be used for real-time applications or on embedded devices such as smartphones. This led to the need to develop faster object detection methods that could be used for such purposes \cite{zouObjectDetection202023b}.
+    
+    It wasn't until 2016 that one-stage object detectors reached this milestone with the proposal of the \textbf{YOLO} (You Only Look Once) model \cite{redmonYouOnlyLook2016}. Unlike RCNN-based approaches, YOLO poses the task as a regression problem, where the model directly predicts the bounding boxes and class probabilities of the objects in one evaluation, allowing the system to be optimized in an end-to-end fashion. 
+    % This approach allowed YOLO to achieve real-time performance while still being comparable to Faster R-CNN.
 
-    SOTA methods in computer vision with an emphasis on object detection techniques (CNN, YOLO, Faster R-CNN, etc.)
-
+     YOLO marked a turning point in the field, a surge in the popularity of one-stage detectors led to more methods being proposed in the following years, from more adequate loss functions like RetinaNet's Focal Loss \cite{linFocalLossDense2018} to subsequent developments to YOLO's architecture like YOLO9K (2016), YOLOv3 (2018), and YOLOv8 (2023) \cite{redmonYOLO9000BetterFaster2016, redmonYOLOv3IncrementalImprovement2018, Jocher_YOLO_by_Ultralytics_2023} that improved on the original model's performance, allowing it to retain SOTA performance.
+     
+     In this age, single-stage object detectors dominate the general benchmarks (e.g.: ISLVR, COCO \cite{linMicrosoftCOCOCommon2015}, PASCAL VOC \cite{everinghamPascalVisualObject2010}) in both accuracy and speed. More recent methods use Transformer architectures \cite{vaswaniAttentionAllYou2017} to overcome the limitations of traditional CNNs in terms of parallelization and locally restrictive receptive field, showing that abandoning convolutions in favor of an attention-only approach can also achieve SOTA \cite{ carionEndtoEndObjectDetection2020,zhuDeformableDETRDeformable2021}.
+    
     \subsection{Tuberculosis Detection using Machine Learning Methods} \label{sec:ml_tuberculosis_detection} \todo{1-1.5 pages}
 
     Visuña et al. (2023) \cite{visuna_novel_2023} presented a deep-learning-based technique to detect tuberculosis from sputum smear microscopy images. The author used a one-stage object detection method with a Convolutional Neural Network (CNN) backbone to detect the presence of bacilli in the images, first fragmenting the image into patches of 80x80 pixels. The model was trained on a dataset of 200 microscopy stain images, achieving a 99.49\% precision and 92.86\% recall on the test set. 

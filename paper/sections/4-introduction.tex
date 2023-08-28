@@ -186,9 +186,9 @@
 
     \subsection{Lifelong Learning and Self-Adaptive Systems} \label{sec:lifelong_adaptive_systems}
 
-    To address some of the challenges of adopting ML-enabled systems in healthcare, some researchers have proposed the idea of incorporating \textit{lifelong learning} and \textit{self-adaptive systems} (SAS) in their design \cite{casimiro_self-adaptive_2022,huyen_designing_2022}. Lifelong learning refers to the ability of an ML model to continually learn from new data and adapt to changes in its environment, while SAS refers to the kind of software systems that continually monitor faults in their operating environment, modifying their behavior at runtime when they encounter an issue. 
+    To address some of the challenges of adopting ML-enabled systems in healthcare, some researchers have proposed the idea of incorporating \textit{lifelong learning} and \textit{self-adaptive systems} (SAS) in their design \cite{casimiro_self-adaptive_2022,huyen_designing_2022}. Lifelong learning refers to the ability of an ML model to continually learn from new data and adapt to changes in its environment, while SAS refers to the kind of software systems that continually monitor faults in their operating environment, modifying their behavior by the execution of adaptive actions usually referred as \textbf{tactics}. 
     
-    The two ideas are closely related, with terms like \textit{lifelong} or \textit{continual} learning often used to refer only to Machine-Learning (or learning-enabled) systems and SAS to refer to any software that can adapt to changes in its environment. In this work, we use the terms \textit{continual adaptation} to refer to the ability of any ML system to continually learn from new data and/or adapt to changes or faults in its environment, drawing inspiration from both concepts.
+    The two ideas are closely related, with terms like \textit{lifelong} or \textit{continual} learning often used to refer only to Machine-Learning systems and \textit{SAS} to refer to any software that can adapt to changes in its environment. In this work, we use the terms \textbf{continual adaptation} to refer to the ability of any ML system to continually learn from new data and/or adapt to changes or faults in its environment, drawing inspiration from both concepts.
 
     SAS often adopt a feedback-loop architecture known as \textbf{MAPE-K} loops. These systems are based on using some form of \textit{knowledge-base} to continually \textit{monitor} the system, to then evaluate when an \textit{adaptation} is needed, to finally select the best action \textit{plan} and \textit{execute} it (The letters in MAPE stand for the words Monitor, Analyze, Plan, and Execute, and the K stands for Knowledge) \cite{redbooks_practical_2004}.
 
@@ -199,55 +199,59 @@
         \label{fig:mape-k}
     \end{figure}
 
-    The idea of bringing MAPE-K loops to the context of this work is that much like traditional software systems, ML Systems can also benefit from the study of SAS techniques (and the ample literature that exists on the topic) to improve their robustness and reliability. Indeed, the idea of continual adaptation is not new to the ML field, with well-known researchers arguing that it is a fundamental aspect of intelligence \cite{,thrun_lifelong_1995, parisi_continual_2019}. 
+    The idea of bringing MAPE-K loops to the context of this work is that much like traditional software systems, ML Systems can also benefit from the study of SAS techniques (and the ample literature that exists on the topic) to improve their robustness and reliability. Indeed, the idea of continual adaptation is not new to the ML field, with well-known researchers arguing that it is a fundamental aspect of intelligence \cite{kirsch_self-referential_2022,thrun_lifelong_1995, parisi_continual_2019}. 
     
-    However, the design of such systems presents unique challenges that must be addressed to ensure their reliability and robustness. In particular, ML models differ from traditional software systems in that they are often trained on a fixed dataset but deployed in a dynamic environment, with the assumption that the data used to train the model is representative of the data it will encounter in the real world.
+    However, the design of such systems in practice presents unique challenges that must be addressed to ensure their reliability and robustness. In particular, ML models differ from traditional software systems in that they are often trained on a fixed dataset but deployed in a dynamic environment, with the assumption that the data used to train the model is representative of the data it will encounter in the real world.
     
-    In practice, the assumption described above is not met, more often than not, the model's performance degrades over time as the data distribution changes. This phenomenon is known as \textit{data drift} and is one of the most common causes of degradation of a learning system \cite{huyen_designing_2022}.
+    In practice, the assumption described above is not met, more often than not, the model's performance degrades over time as the data distribution changes in a phenomenon known as \textit{data drift}, one of the most common causes of degradation of a learning system. Furthermore, the nature of such models makes it difficult to incorporate feedback from experts to improve their performance, as the model's predictions are often treated as a `black box' that is difficult to interpret by humans \cite{esteva_deep_2021}.
 
-    While data drift is one of the most studied phenomena in the context of continual adaptation, it is not the only one. Table \ref{tab:causes_of_ml_degradation} lists some of the most relevant causes of degradation of a machine-learning system and their characteristics. It is meant to give an overview of the different phenomena that can affect a model's performance and the kind of challenges that must be addressed in the design of a system that reliably adapts to changes in its environment.
+    While data drift is one of the most studied phenomena in the context of continual adaptation \cite{huyen_designing_2022}, it is not the only one. Table \ref{tab:causes_of_ml_degradation} lists some of the most relevant causes of degradation of a machine-learning system and their characteristics. It is meant to give an overview of the different phenomena that can affect a model's performance and the kind of challenges that must be addressed in the design of an adaptive ML system.
 
     \begin{table}[H]
         \caption{Some Causes of Degradation of an ML System and their Characteristics.}
         \label{tab:causes_of_ml_degradation}
         \hspace*{-0.7cm}
-        \begin{tabular}{p{0.25\linewidth} | p{0.45\linewidth} | p{0.35\linewidth}}
+        \begin{tabular}{p{0.22\linewidth} | p{0.42\linewidth} | p{0.41\linewidth}}
         \toprule
         \textbf{Cause} & \textbf{Description} & \textbf{Example} \\
         \midrule
-            \multirow{3}{*}{\small \textbf{Data distribution shift}} & \footnotesize
+            \multirow{3}{*}{\small \textbf{Data Drift}} & \footnotesize
             \textbf{Covariate shift:} When the input distribution $P(X)$ that the model was trained with differs significantly from the one in the inference environment (i.e. the input changes over time, but the model remains the same). &
             \footnotesize
             A model trained on chest X-ray images from a particular dataset is deployed in a hospital where the X-ray machines are of a different brand and produce images with different characteristics.
             \\
             \cline{2-3} & \footnotesize
-            \textbf{Label shift:} When the distribution  $P(Y)$ at inference time differs from the one the model was trained with, i.e. the model is trained on a dataset whose class proportions are substantially different from the ones in the inference environment. &
+            \textbf{Label shift:} When the model is trained on a dataset whose class proportions are substantially different from the ones in the inference environment ($P(Y)$). &
             \footnotesize
-            A model trained on a dataset where the proportion of positive cases is 50\% is deployed in a hospital where the proportion is 10\%.
+            A model trained on a dataset where the proportion of positive cases is 50\% is deployed in a hospital where the proportion is 10\%. \\
+        \midrule
+        \multirow{2}{*}{\small \textbf{Model Unfairness}} & \footnotesize
+            \textbf{Model bias:} The model misrepresents or produces an erroneous causal relationship between its input features and the target output, often caused when the training data is not fully representative of the real-word. & 
             \footnotesize
-            \\
-            \cline{2-3} & \footnotesize
-            \textbf{Concept shift:} \footnotesize The relationship between the input and output changes over time. That is, the model is trained on a dataset whose relationship between the input and output differs from the one in the inference environment. &  \\
+            A model trained with data from patients of a hospital in one neighborhood performs poorly after being deployed in another neighborhood with very different demographics. \\
+            % \cline{2-3} & \footnotesize
         \midrule
-        \multirow{2}{*}{\small \textbf{Model}} & \footnotesize
-            \textbf{Model drift:}The model's performance degrades over time. 
-                & ? \\
-            \cline{2-3} & \footnotesize
-            \textbf{Model bias:} The model is biased towards a specific class or group. & \\
-            \midrule
-        \textbf{\small Environment drift} & \footnotesize 
-            The environment changes over time. The model is deployed in a different environment than the one it was trained on.  & \\
+        \multirow{2}{*}{\small \textbf{Learning Sensitivity}} & \footnotesize
+            \textbf{Catastrophic forgetting:} The model no longer performs well in an old task after training on new information. & \footnotesize  
+            A model is trained to detect a specific disease, but when adapted to detect a different disease, it `forgets' how to detect the first.\\
         \midrule
-        % catastrophic forgetting and other learning phenomena
-        \multirow{2}{*}{\small \textbf{Learning phenomena}} & \footnotesize
-            \textbf{Catastrophic forgetting:} The model forgets what it has learned in the past when learning new information. & \\
-            \cline{2-3} & \footnotesize
-            \textbf{Catastrophic interference:} The model forgets what it has learned in the past when learning new information. & \\
-        
+        \small \textbf{Adversarial Attack} & \footnotesize
+            \textbf{Vulnerability to adversarial attacks:}
+            The model is vulnerable to small perturbations to the input that cause it to make very different predictions than it would otherwise.
+            & \footnotesize 
+            A bad actor makes imperceptible changes to individual pixels in an X-ray image that cause the model to misclassify the presence of a disease. \\
+        \bottomrule
         \end{tabular}
     \end{table}
 
-    % \clearpage
+    One important thing to note is that a model experiencing one of the degradation causes listed above doesn't mean that it will necessarily fail or that it should be addressed. For example, a model might suffer from catastrophic forgetting after learning new information but that might not affect the performance of the current task in any significant way.
+    
+    This is why a crucial aspect of designing such systems is that of defining the \textit{adaptation criteria} that should be monitored in order to trigger the right \textit{tactics} that will allow the system to adapt to the specific changes in its environment that cause it to degrade.
+    
+    This criterion should be based on the specific needs of the application and the context in which the system is deployed. An example is that a model trained to detect a specific rare disease might have different criteria than a model trained to detect a more common one (e.g. The first system might be more sensitive to data drift than the latter).
+
+    Chapter \ref{chap:state_of_the_art} discusses some of the state of the art techniques that can be used to deal with some of the causes of degradation addressed in the table above. 
+    % In particular, we will focus on the techniques that have been proposed to address the challenges of data drift and model degradation, as these are the most relevant to the context of this work.
 
     \section{Objectives} \label{sec:objectives}
 

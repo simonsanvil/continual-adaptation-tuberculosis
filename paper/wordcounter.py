@@ -9,7 +9,7 @@ import PyPDF2
 import typer
 from datetime import datetime
 
-def main(pdf_file:str, output_file:str='wordcount.csv'):
+def main(pdf_file:str, output_file:str='wordcount.csv', save:bool=False):
     """
     Count the number of words in a PDF file.
     """
@@ -17,7 +17,7 @@ def main(pdf_file:str, output_file:str='wordcount.csv'):
     if not os.path.exists(pdf_file):
         typer.echo(f"File not found: {pdf_file}")
         raise typer.Exit(code=1)
-    if not os.path.isfile(output_file):
+    if not os.path.isfile(output_file) and save:
         with open(output_file, 'w') as f:
             f.write('file,date,words\n')
 
@@ -52,8 +52,9 @@ def main(pdf_file:str, output_file:str='wordcount.csv'):
     num_pages = sum(1 for i,p in pages_count.items() if p > 20 and i not in chapter_count[chapters[0]][1] and i not in chapter_count[chapters[-1]][1])
     typer.echo(f"Avg words per page (excluding preliminaries and bibliography): {num_words/num_pages:.2f}")
 
-    with open(output_file, 'a') as f:
-        f.write(f'{os.path.basename(pdf_file)},{datetime.now().strftime("%Y-%m-%dT%H:%M:00")},{num_words}\n')
+    if save:
+        with open(output_file, 'a') as f:
+            f.write(f'{os.path.basename(pdf_file)},{datetime.now().strftime("%Y-%m-%dT%H:%M:00")},{num_words}\n')
 
 if __name__ == "__main__":
     typer.run(main)
