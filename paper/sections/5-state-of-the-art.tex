@@ -124,8 +124,8 @@
     
     CNNs are a type of neural network that uses \textit{convolutional layers} (which can be thought of as a set of functions that learn image filters through the use of convolutional operations) to extract features from the input image \autocite{goodfellowDeepLearning2016}. CNNs were first introduced by Yann LeCun in 1989 \cite{lecunBackpropagationAppliedHandwritten1989}, 30 years before ImageNet. It has since been used to achieve SOTA performance on a wide range of CV tasks, including object-detection \cite{lecun_deep_2015,zouObjectDetection202023b}.
 
-    Then, bringing the focus specifically to Deep Learning for object detection tasks
-    (ignoring the breakthroughs that CNNs have allowed in tasks like image segmentation, captioning, or generation), we can find that most literature is divided into two main approaches to the problem: \textit{two-stage} and \textit{one-stage} object detectors.
+    Thus, bringing the focus specifically to Deep Learning for object detection tasks
+    (and ignoring others like image segmentation, captioning, or image generation where CNNs have also achieved SOTA), we can find that most literature is divided into two main approaches to the problem: \textit{two-stage} and \textit{one-stage} object detectors.
     
     \textbf{Two-stage object detection} methods first propose a set of candidate regions in the image (the \textit{region proposal} stage) and then classify each region as either containing an object or not (the \textit{classification} stage). \textbf{One-stage object detection} methods, on the other hand, directly predict the bounding boxes and class labels of the objects in the image \cite{zouObjectDetection202023b}. 
     
@@ -143,9 +143,9 @@
 
     Generally, the advantage of two-stage detectors is that they tend to be more accurate than one-stage detectors, as the region proposal stage allows them to focus on a smaller set of candidate regions that can be then individually discriminated by the classification stage. However, this comes at the cost of being slower than one-stage detectors since they require two inference steps through the network \cite{zouObjectDetection202023b}.
 
-    The SOTA status of two-stage object detection methods precedes that of their one-stage counterpart. The popularity of CNNs in the CV field in the early 2010s led to the development of \textbf{RCNN} (2014), an architecture that first proposes image regions by selective search \cite{uijlingsSelectiveSearchObject2013}, which are then rescaled and fed into a CNN to extract features and finally use a linear classifier to predict their label \cite{girshickRichFeatureHierarchies2014}. 
+    The SOTA status of two-stage object detection methods precedes that of their one-stage counterpart. The popularity of CNNs in the CV field in the early 2010s led to the development of \textbf{RCNN} (2014), an architecture that first proposes image regions by selective search \cite{uijlingsSelectiveSearchObject2013}, which are then rescaled and fed into a CNN to extract features to finally use a linear classifier to predict their label \cite{girshickRichFeatureHierarchies2014}. 
     
-    The success of RCNN for object detection tasks was followed by SPP-Net (2014), which introduced a Spatial Pyramid Pooling (SPP) layer to allow the model to process images of arbitrary sizes without rescaling them \cite{heSpatialPyramidPooling2014}. Then came \textbf{Fast RCNN} and \textbf{Faster R-CNN} in 2015 \cite{girshickFastRCNN2015,renFasterRCNNRealTime2016}, who respectively improved on RCNN by training the detector and bounding box regressor jointly, and by using a Region Proposal Network (RPN) to replace the selective search algorithm used in previous models. 
+    The success of RCNN for object detection tasks was followed by SPP-Net (2014), which introduced a Spatial Pyramid Pooling (SPP) layer to allow the model to process images of arbitrary sizes without rescaling them \cite{heSpatialPyramidPooling2014}. Then came \textbf{Fast RCNN} and \textbf{Faster R-CNN} in 2015 \cite{girshickFastRCNN2015,renFasterRCNNRealTime2016}, who respectively improved on RCNN by training the detector and bounding box regressor jointly, and by using a Region Proposal Network (RPN) to replace the much slower selective search algorithm used by previous models. 
     
     While two-stage detectors were achieving state-of-the-art performance in terms of accuracy, they were not fast enough to be used for real-time applications or on embedded devices such as smartphones. This led to the need to develop faster object detection methods that could be used for such purposes \cite{zouObjectDetection202023b}.
     
@@ -158,7 +158,20 @@
     
     \subsection{Tuberculosis Detection using Machine Learning Methods} \label{sec:ml_tuberculosis_detection} \todo{1-1.5 pages}
 
-    Visuña et al. (2023) \cite{visuna_novel_2023} presented a deep-learning-based technique to detect tuberculosis from sputum smear microscopy images. The author used a one-stage object detection method with a Convolutional Neural Network (CNN) backbone to detect the presence of bacilli in the images, first fragmenting the image into patches of 80x80 pixels. The model was trained on a dataset of 200 microscopy stain images, achieving a 99.49\% precision and 92.86\% recall on the test set. 
+    While general object detection methods have achieved great performance for more common object detection tasks, like detecting cars, people, or animals from images 
+    that could be taken in a wide range of conditions (i.e. those that most people would be able to identify), they tend to perform poorly when applied to more domain-specific tasks.
+    
+    The reason for this problem is that models like those described in the previous subsection are trained on big datasets of images that can be commonly found on the internet and are easier to annotate, which tend to exclude more specialized images that are hard to obtain and even harder to annotate.
+
+    Furthermore, two-stage object detections like YOLO tend to perform poorly when applied to images that contain small objects (e.g., cells, bacteria, etc.)  because their region proposal mechanism tends to favor larger objects with a clear distinction from the background. 
+
+    These latter issues present a problem with the type of datasets that are usually available for medical applications, where images are usually taken in a more controlled environment and contain objects that only experts in the specific domain can identify. Furthermore, it is likely for objects of interest in medical images to be small and harder to distinguish from the background in applications, as the need for specialized devices (often having a lower resolution and more prone to noise) is more common in this field.
+
+    This is the case of the kind of dataset used for TB detection, and that is of interest in this work. In sputum-microscopy images, for example, the objects of interest are the bacilli that cause tuberculosis, tiny bacteria that are small and hard to distinguish from the background or other organic material that surround it. This makes the detection of tuberculosis a challenging task that requires specialized methods to achieve good performance.
+
+    But even though the models that achieve SOTA in general benchmarks tend to fail for medical applications right out of the box, that doesn't mean that they cannot be adapted to more specialized datasets. In fact, the same methods have also been shown to perform well for medical applications when adapted to a specific domain, including TB detection.
+
+    Visuña et al. (2023) \cite{visuna_novel_2023}, for example, presented a deep-learning-based technique to detect tuberculosis from sputum smear microscopy images. The author used a one-stage object detection method with a Convolutional Neural Network (CNN) backbone to detect the presence of bacilli in the images, first fragmenting the image into patches of 80x80 pixels. The model was trained on a dataset of 200 microscopy stain images, achieving a 99.49\% precision and 92.86\% recall on the test set. 
     
     \subsection{Continually Adaptive Systems} \label{sec:continually_adaptive_systems_sota} \todo{1-1.5 pages}
 
