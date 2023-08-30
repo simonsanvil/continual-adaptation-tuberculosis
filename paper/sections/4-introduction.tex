@@ -16,25 +16,28 @@
  As health information becomes increasingly digitized, machine learning (ML) algorithms play a crucial role in deriving meaningful insights from complex, multi-modal data that is often difficult to interpret by humans. 
  Conventional machine-learning approaches, however, may be inadequate in the face of rapidly evolving health technology, shifting patient needs, and the increasing availability of large amounts of uncertain and noisy data that is deemed too unreliable for use in clinical settings.
 
- Modern techniques aim to address these limitations by refining models in a continual loop, prioritizing data acquisition, labeling, and feedback from experts to dynamically adapt to the data stream reliably. This work explores the potential of these techniques in the context of healthcare applications.
+ Modern techniques aim to address these limitations by refining models in a continual loop, prioritizing data acquisition, labeling, and feedback from experts to dynamically adapt to the data stream reliably. A field of research known in the relevant literature as \textit{continual learning} (CL) \cite{parisi_continual_2019} This work explores the potential of these techniques in a medical context. 
  
- In particular, we incorporate the use of continual and active learning methods in the design of an end-to-end platform for the diagnosis of \textit{tuberculosis} using computer vision techniques. Tuberculosis (TB) is an infectious pulmonary disease that has affected humankind for well over 4,000 years \cite{cdctb_world_2023} and still affects millions of people worldwide. According to the World Health Organization, until the arrival of the COVID-19 pandemic, TB was the leading cause of widespread death from a single infectious agent, ranking even above HIV/AIDS \cite{who_global_2022}.
-
- The platform is meant to be integrated into a Healthcare and Data Portal that is being developed as part of an ongoing European project for the research of Tuberculosis, and it will serve as a tool to test and validate the use of machine-learning models for the diagnosis of Tuberculosis. 
+ In particular, we consider the problem of developing a machine-learning platform to aid in the research of \textit{tuberculosis} (TB), an infectious disease that affects millions of people worldwide. We incorporate continual and active learning methods into this platform to improve the performance of computer vision models used to detect tuberculosis.
+ 
+ Furthermore, the platform proposed here is meant to be integrated into a Healthcare and Data Portal that is being developed as part of an ongoing European project for the research of Tuberculosis, and it will serve as a tool to test and validate the use of machine learning models for its diagnosis. 
 
  As such, in an effort to research the competence of continual adaptation methods in that context, the platform incorporates a system that is designed to continually adapt to new data as it becomes available and to ease labeling efforts by prioritizing the acquisition of the most informative data samples. Including a front-end interface for the visualization of the detection, labeling, and interaction with the models.
  
  We evaluate the system's performance on a real dataset and compare it to a baseline model that doesn't use adaptation techniques.  Our results show that the use of these methods outperforms the baseline in terms of robustness and sample efficiency while maintaining a similar level of accuracy on the test set. Furthermore, the system proposed can automatically adapt to new data and improve its performance over time. 
  
- These results demonstrate the potential of incorporating these techniques into designing real-world systems for healthcare applications and other high-stake domains. The final chapter of this work includes a lengthy discussion about possible future work and improvements to the system that might facilitate its integration into other projects and applications.
+ These results demonstrate the potential of incorporating these techniques into designing real-world systems for healthcare applications and other high-stake domains. The final chapter of this work includes a discussion about possible future work and improvements to the system that might facilitate its integration into other projects and a broader discussion about the potential of these techniques beyond the scope of this work.
     
  \section{Context and Motivation} \label{sec:motivation}
 %  \section{An ML Platform to aid on the research of Mycobacterial Tuberculosis (TB)}
 %  drug discovery and early detection of
 
+    Tuberculosis (TB) is an infectious pulmonary disease that has affected humankind for well over 4,000 years \cite{cdctb_world_2023} and still affects millions of people worldwide. According to the World Health Organization, until the arrival of the COVID-19 pandemic, TB was the leading cause of widespread death from a single infectious agent, even above HIV \cite{who_global_2022}.
+
+
     This work is done in the context of the European Regimen Accelerator for Tuberculosis (ERA4TB). ERA4TB is a public-private initiative that started in 2020 and aims to create an open European platform to accelerate the development of new treatment regimens for tuberculosis (TB). The project is integrated by over 31 organizations from the European Union and the United States, including academic institutions, research centers, non-profit organizations, and other public and private entities \cite{noauthor_era4tb}.
     
-    ERA4TB's mission statement aligns itself with (and is in response to) the United Nation's (UN) Sustainable Development Goals (SGD). The project's website reads, `The goal of ERA4TB is to deliver an innovative and differentiated combination regimen for the treatment of TB, which can play a key role in the TB elimination agenda' \cite{noauthor_era4tb}. This aligns with the UN's SGD target to end the TB epidemic by 2030 \cite{world_health_organization_regional_office_for_europe_tuberculosis_2017}.
+    ERA4TB's mission statement aligns itself with (and is in response to) the United Nation's (UN) Sustainable Development Goals (SGD) to end the TB epidemic by 2030 \cite{world_health_organization_regional_office_for_europe_tuberculosis_2017}. The project's website reads, `The goal of ERA4TB is to deliver an innovative and differentiated combination regimen for the treatment of TB, which can play a key role in the TB elimination agenda' \cite{noauthor_era4tb}.
 
     To address some of the challenges of TB drug development and clinical trial design, one of the project's objectives from deliverable 1.15 of ERA4TB's agenda is developing a data-science-specific platform to enable the efficient use of machine learning methods from the collaborative platform. The platform is meant to be used by researchers and other project stakeholders to facilitate the use, development, and evaluation of machine-learning models that can aid in the research of TB.
 
@@ -42,14 +45,14 @@
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=\textwidth]{figures/ERA4TB_map.png}
+        \includegraphics[width=0.7\textwidth]{figures/ERA4TB_map.png}
         \caption{ERA4TB's Consortium of Partners and Collaborators. Source: \cite{noauthor_era4tb}}
         \label{fig:era4tb}
     \end{figure}
 
     \section{Background Concepts} \label{sec:background}
     
-    The following section provides a brief introduction to some of the concepts and techniques that are relevant to this work. It is meant to provide the reader with the necessary high-level information to understand the context and motivation behind the ideas proposed that were used to inform every design decision and experiment conducted. For a more in-depth overview of the same concepts, the reader is referred to the literature review in Chapter \ref{chap:state_of_the_art}.
+    The following section provides a brief introduction to some of the concepts and techniques that are relevant to this work. It is meant to provide the reader with the necessary high-level information to understand the context behind the ideas proposed that were used to inform every design decision and experiment conducted. For a more in-depth overview of the same concepts, the reader is referred to the literature review in Chapter \ref{chap:state_of_the_art}.
 
     \subsection{Tuberculosis Treatment and Diagnosis} \label{sec:tuberculosis_data}
 
@@ -59,11 +62,13 @@
 
     Some of the diagnosis techniques to detect TB include chest X-rays, sputum smear microscopy, and molecular tests. \textit{Chest X-rays} are a common procedure to diagnose any signs of tuberculosis due to the wide availability of radiology devices, but they are often inconclusive and require expert radiologists to interpret the results \cite{escalante_tuberculosis_2009}.
     
-    \textit{Sputum smear microscopy} is another widely available technique that requires a trained clinician to identify the bacteria under images taken with a microscope of a patient's sputum (a mixture of saliva and mucus from the respiratory tract). This technique is relatively inexpensive but requires a high concentration of bacteria in the sample to be effective. Additionally, studies argue that in conditions with limited resources and a significant number of samples, there have been reports of poor sample observation and quality control measures, which can result in false-negative results \cite{desikan_sputum_2013}.
+    \textit{Sputum smear microscopy} is another widely available technique that requires a trained clinician to identify the bacteria under images taken with a microscope of a patient's sputum (a mixture of saliva and mucus from the respiratory tract). 
     
-    Molecular tests based on \textit{nucleic acid amplification} (NAATs), similar to the ones popularized to detect COVID-19, are another technique to diagnose TB. These tests identify the presence of bacilli by amplifying the genetic material of the bacteria in a patient's sputum sample (if any is present) and using a chemical solution to react to it \cite{cdc_tb_2016}. NAATs are by far the most reliable method to diagnose TB and have the advantage of being rapid and fully automated. 
+    This technique is relatively inexpensive but requires a high concentration of bacteria in the sample to be effective. Additionally, studies argue that in conditions with limited resources and a significant number of samples, there have been reports of poor sample observation and quality control measures, which can result in false-negative results \cite{desikan_sputum_2013}.
     
-    However, NAATs are expensive to produce and require specialized equipment, making them less accessible in low-resource settings \cite{albert_development_2016, maclean_advances_2020}. Indeed, a study conducted in 2018 showed that the ratio of smear microscopy tests to NAATs in countries with a high burden of TB was 6:1 \cite{cazabon_market_2018, maclean_advances_2020}.
+    Molecular tests based on \textit{nucleic acid amplification} (NAATs), similar to the ones popularized to detect COVID-19, are another technique to diagnose TB. These tests identify the presence of bacilli by amplifying the genetic material of the bacteria in a patient's sputum sample (if any is present) and using a chemical solution to react to it \cite{cdc_tb_2016}. 
+    
+    NAATs are by far the most reliable method to diagnose TB and have the advantage of being rapid and fully automated. However, they are also expensive to produce and require specialized equipment, making them less accessible in low-resource settings \cite{albert_development_2016, maclean_advances_2020}. Indeed, a study conducted in 2018 showed that the ratio of smear microscopy tests to NAATs in countries with a high burden of TB was 6:1 \cite{cazabon_market_2018, maclean_advances_2020}.
 
     Each of these techniques presents its own benefits and limitations. Recently, there have been efforts to develop machine-learning models that can aid in the diagnosis of TB as a way to reduce the need (or provide a first/second opinion) for expert clinicians in the process and improve the speed and/or accuracy of the diagnosis \footnote{A literature review on the topic of TB diagnosis using ML methods is presented in section \ref{sec:ml_tuberculosis_detection}}.
 
@@ -103,7 +108,20 @@
 
     Machine Learning (ML) is a subfield of Artificial Intelligence (AI) that studies the design of algorithms that can learn from data and make predictions based on it. ML algorithms are fed a set of data samples (often called the training set) and learn a function that maps the input data to a desired output. The goal is to learn a function that can generalize well to unseen data and make accurate predictions. 
 
+    % \clearpage
+
     Supervised learning is a paradigm of ML where the goal is to fit a function $f: x \rightarrow \hat{y}$ that maps a given input, $x$, to a `prediction' output, $\hat{y}$, based on an available finite set of input-output pairs $(x_i, y_i)$ that are passed to a learnable model as `training' data. The function is learned by minimizing a loss function $L(y, \hat{y})$ that measures the difference between the `predicted' output and the actual one and returns a value that represents the error of the prediction, which is then used to update the model's parameters.
+    
+    \begin{figure}[h]
+        \centering
+        \resizebox*{0.9\columnwidth}{!}{
+            % \hspace*{-0.5cm}
+            \input{../figures/supervised_learning_tikz.tex}
+        }
+        \caption{Illustrative example of a supervised machine-learning pipeline.}
+        \label{fig:supervised_learning}
+    \end{figure}
+
 
     The most common supervised learning tasks are classification and regression, where the goal is to predict discrete and continuous outputs, respectively. Conversely, the aforementioned loss function is often defined based on the task at hand and the type of data available (e.g., cross-entropy loss for classification tasks, mean squared error for regression tasks, etc.).
 
@@ -116,17 +134,7 @@
     
     % which is especially challenging in the healthcare field where the data is scarce, expensive to obtain, or difficult to label.
     
-    \begin{figure}
-        \centering
-        \resizebox*{1\columnwidth}{!}{
-            % \hspace*{-0.5cm}
-            \input{../figures/supervised_learning_tikz.tex}
-        }
-        \caption{Illustrative example of a supervised machine-learning pipeline.}
-        \label{fig:supervised_learning}
-    \end{figure}
-    
-    In the two decades, one set of algorithms that have enabled significant advances in Machine Learning, allowing to solve very difficult problems, is \textbf{deep learning}. Deep learning is a subfield of ML that studies the design of algorithms that can learn complex representations of data by hierarchically composing simpler functions in an architecture inspired by the structure of the human brain known as `Deep Neural Networks' (DNN)  \cite{lecun_deep_2015}. Figure \ref{fig:dnn_example} shows an example of a DNN architecture.
+    In the last decade, one set of algorithms that have enabled significant advances in Machine Learning, allowing to solve very difficult problems, is \textbf{deep learning}. Deep learning is a subfield of ML that studies the design of algorithms that can learn complex representations of data by hierarchically composing simpler functions in an architecture inspired by the structure of the human brain known as `Deep Neural Networks' (DNN)  \cite{lecun_deep_2015}. Figure \ref{fig:dnn_example} shows an example of a DNN architecture.
     
     \begin{figure}[H]
         \centering
@@ -138,10 +146,17 @@
         \label{fig:dnn_example}
     \end{figure}
 
-    \clearpage
+    % \clearpage
     \subsection{Challenges and Potential of Adopting ML-enabled Systems in Healthcare}
 
     ML techniques have seen their adoption in many applications, from malware and spam detection to self-driving cars and environmental modeling. The healthcare field is no exception. In the 20 years between 1995 and 2015, the FDA had approved fewer than 30 algorithms for medical use. In contrast, only in the last 5 years, the number of new approvals has reached over \textit{10 times} that amount (see Figure \ref{fig:fda_approved_ml_apps}). 
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{fda_approved_ml_apps}
+        \caption{Number of FDA-approved AI applications per year since 2005. Data Source: \cite{health_artificial_2022}}
+        \label{fig:fda_approved_ml_apps}
+    \end{figure}
     
     Indeed, the recent availability to store and process ever larger amounts of data through the use of Big Data technologies and the development of more powerful hardware and algorithmic techniques have made it possible to train models that can perform complex medical tasks with enough high accuracy and robustness to be considered for use
     \cite{topol_high-performance_2019}.
@@ -151,66 +166,67 @@
     In the context of healthcare, CV techniques have been primarily used in radiology to aid with the diagnosis of diseases and other tasks through the analysis of medical images (e.g., X-rays, CT scans, MRIs, microscopy, etc.) \cite{esteva_deep_2021}. Indeed, over 75\% of all FDA-cleared AI applications have been for radiology use cases \cite{health_artificial_2022}.
     
     One study made in 2018 trained a \textit{Convolutional Neural Network} (CNN), a common DL model popular for computer vision tasks, to detect pneumonia from X-ray images at an Indian hospital. The researchers compared the performance of the algorithm with the findings of four expert radiologists and concluded that the algorithm was comparable to (sometimes even \textit{outperformed}) the radiologist in most cases \cite{wang_chestx-ray8_2017}.
-    
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.9\textwidth]{fda_approved_ml_apps}
-        \caption{Number of FDA-approved AI applications per year since 2005. Data Source: \cite{health_artificial_2022}}
-        \label{fig:fda_approved_ml_apps}
-    \end{figure}
+
+    \clearpage
+
+    \begin{table}[h]
+       \resizebox{0.95\textwidth}{!}{
+           \begin{tabular}{lrll}
+               \toprule
+               Company &  Year & Usecase & Panel \\
+               \midrule
+               Apple &  2022 & Atrial Fibrillation Detection via Apple Watch & Cardiovascular \\
+               Arterys &  2022 & Liver and Lung Cancer Detection & Radiology \\
+               Philips Healthcare &  2022 & Philips Incisive CT Reconstruction & Radiology \\ 
+               GE Healthcare &  2021 & Deep Learning Image Reconstruction &  Radiology \\
+               Siemens &  2021 & AI-Rad Companion for CT Interpretation & Radiology \\
+               Icometrix &  2018 & Brain MRI Analysis & Radiology \\ 
+               23\&Me &  2017 & Genetic Testing for Hereditary Thrombophilia & Hematology \\
+               \bottomrule
+           \end{tabular}
+           \caption{Examples of FDA-approved AI applications for medical use. S\lowercase{ource: \cite{health_artificial_2022}}}
+       }
+   \end{table}
 
     Other AI systems such as Google Deepmind's \textit{AlphaFold} \cite{yang_alphafold2_2023} have been shown to predict the 3D structure of proteins with high accuracy, solving a problem that had been considered to be one of the most challenging in computational biology for over 50 years. Such breakthrough is thought to have a significant impact in applications like drug discovery in the near future \cite{jumper_highly_2021}.
     
     Results such as these shine a light on the potential that AI techniques have in the medical field. However, the adoption of such technologies doesn't come with new challenges. Experts have emphasized the importance of improving aspects of these models like their lack of interpretability, robustness to unseen data, and the difficulty of integrating them into existing workflows before they can be widely adopted in clinical settings \cite{esteva_deep_2021, topol_high-performance_2019}.
     
-    Thus, the design of ml-enabled systems must be mindful of the limitations of such models. Research in the healthcare and AI fields must pave the way to develop workflows that can be trusted by clinicians, patients, lawmakers, and other researchers alike to improve the quality of care/research, reduce costs, and overall increase the efficiency of the healthcare system.
+%    \clearpage
 
-     \begin{table}[h]
-        \resizebox{0.9\textwidth}{!}{
-            \begin{tabular}{lrll}
-                \toprule
-                Company &  Year & Usecase & Panel \\
-                \midrule
-                Apple &  2022 & Atrial Fibrillation Detection via Apple Watch & Cardiovascular \\
-                Arterys &  2022 & Liver and Lung Cancer Detection & Radiology \\
-                Philips Healthcare &  2022 & Philips Incisive CT Reconstruction & Radiology \\ 
-                GE Healthcare &  2021 & Deep Learning Image Reconstruction &  Radiology \\
-                Siemens &  2021 & AI-Rad Companion for CT Interpretation & Radiology \\
-                Icometrix &  2018 & Brain MRI Analysis & Radiology \\ 
-                23\&Me &  2017 & Genetic Testing for Hereditary Thrombophilia & Hematology \\
-                \bottomrule
-            \end{tabular}
-            \caption{Examples of FDA-approved AI applications for medical use. S\lowercase{ource: \cite{health_artificial_2022}}}
-        }
-    \end{table}
+    Thus, the design of ml-enabled systems must be mindful of the limitations of such models. Research in the healthcare and AI fields must pave the way to develop workflows that can be trusted by every stakeholder alike to improve the quality of care/research, reduce costs, and overall increase the efficiency of the healthcare system.
 
-    \subsection{Lifelong Learning and Self-Adaptive Systems} \label{sec:lifelong_adaptive_systems}
 
-    To address some of the challenges of adopting ML-enabled systems in healthcare, some researchers have proposed the idea of incorporating \textit{lifelong learning} and \textit{self-adaptive systems} (SAS) in their design \cite{casimiro_self-adaptive_2022,huyen_designing_2022}. Lifelong learning refers to the ability of an ML model to continually learn from new data and adapt to changes in its environment, while SAS refers to the kind of software systems that continually monitor faults in their operating environment, modifying their behavior by the execution of adaptive actions usually referred as \textbf{tactics}. 
+    \subsection{Continual Learning and Self-Adaptive Systems} \label{sec:lifelong_adaptive_systems}
+
+    To address some of the challenges of adopting ML-enabled systems in healthcare, some researchers have proposed the idea of incorporating \textit{continual learning} and \textit{self-adaptive systems} (SAS) in their design \cite{casimiro_self-adaptive_2022,huyen_designing_2022}. Continual learning refers to the ability of an ML system to learn continually from new data, adapting to novel changes in the data stream that it may have not been exposed to before \cite{parisi_continual_2019}.
     
-    The two ideas are closely related, with terms like \textit{lifelong} or \textit{continual} learning often used to refer only to Machine-Learning systems and \textit{SAS} to refer to any software that can adapt to changes in its environment. In this work, we use the terms \textbf{continual adaptation} to refer to the ability of any ML system to continually learn from new data and/or adapt to changes or faults in its environment, drawing inspiration from both concepts.
+    SAS has a similar definition, but it generalizes to any software systems that continually monitor faults in their operating environment using a closed feedback loop. The system can then modify its behavior at runtime by the execution of so-called \textbf{tactics} in an attempt to fix them, thereby reducing human efforts in the interaction. Nowadays, self-adaptivity is considered a classical concept with ample literature in fields like software engineering and robotics \cite{macias-escrivaSelfadaptiveSystemsSurvey2013,casimiro_self-adaptive_2022}.
 
-    SAS often adopt a feedback-loop architecture known as \textbf{MAPE-K} loops. These systems are based on using some form of \textit{knowledge-base} to continually \textit{monitor} the system, to then evaluate when an \textit{adaptation} is needed, to finally select the best action \textit{plan} and \textit{execute} it (The letters in MAPE stand for the words Monitor, Analyze, Plan, and Execute, and the K stands for Knowledge) \cite{redbooks_practical_2004}.
-
-    \begin{figure}
-        \centering
-        \includegraphics[width=0.6\textwidth]{mape_k_loop.png}
-        \caption{The original MAPE-K Loop as first introduced by IBM in 2004. Source: \cite{redbooks_practical_2004}}
-        \label{fig:mape-k}
-    \end{figure}
-
-    The idea of bringing MAPE-K loops to the context of this work is that much like traditional software systems, ML Systems can also benefit from the study of SAS techniques (and the ample literature that exists on the topic) to improve their robustness and reliability. Indeed, the idea of continual adaptation is not new to the ML field, with well-known researchers arguing that it is a fundamental aspect of intelligence \cite{kirsch_self-referential_2022,thrun_lifelong_1995, parisi_continual_2019}. 
+    \clearpage
     
-    However, the design of such systems in practice presents unique challenges that must be addressed to ensure their reliability and robustness. In particular, ML models differ from traditional software systems in that they are often trained on a fixed dataset but deployed in a dynamic environment, with the assumption that the data used to train the model is representative of the data it will encounter in the real world.
+    The two ideas are closely related, with \textit{continual} (or \textit{lifelong}) learning often used to refer specifically to ML systems while \textit{SAS} to any software that adapts itself to disruptive changes. The core idea of both is the same, though, the ability of a system to `survive' variations in its environment with or without human intervention and continue to perform its intended function. %In this work, we use the terms \textbf{continual adaptation}, drawing inspiration from both concepts. 
+
+    Consider the scenario of a machine-learning model that has been trained with pictures from an X-ray machine of a particular hospital. The model is then deployed in a different hospital where the X-ray machines are of another and produce images with different characteristics (a particular noise, artifacts, different resolution, etc.). 
     
-    In practice, the assumption described above is not met, more often than not, the model's performance degrades over time as the data distribution changes in a phenomenon known as \textit{data drift}, one of the most common causes of degradation of a learning system. Furthermore, the nature of such models makes it difficult to incorporate feedback from experts to improve their performance, as the model's predictions are often treated as a `black box' that is difficult to interpret by humans \cite{esteva_deep_2021}.
+    Because the data distribution is different from the one the model was trained with, the model's performance may likely be affected. However, under a continual learning setting, the model would be able to adapt to the new data and improve its performance over time. 
 
-    While data drift is one of the most studied phenomena in the context of continual adaptation \cite{huyen_designing_2022}, it is not the only one. Table \ref{tab:causes_of_ml_degradation} lists some of the most relevant causes of degradation of a machine-learning system and their characteristics. It is meant to give an overview of the different phenomena that can affect a model's performance and the kind of challenges that must be addressed in the design of an adaptive ML system.
+    % SAS often adopt a feedback-loop architecture known as \textbf{MAPE-K} loops. These systems are based on using some form of \textit{knowledge-base} to continually \textit{monitor} the system, to then evaluate when an \textit{adaptation} is needed, to finally select the best action \textit{plan} and \textit{execute} it (The letters in MAPE stand for the words Monitor, Analyze, Plan, and Execute, and the K stands for Knowledge) \cite{redbooks_practical_2004}.
+    
+    However, the design of such systems in practice presents unique challenges that must be addressed. The FDA has never approved a medical application based on continual learning. Experts argue that this is owing to the fact of the questionable robustness of the adaptation process \cite{vokingerContinualLearningMedical2021}. 
+    
+    Indeed, some known problems like \textit{catastrophic forgetting} (i.e., when the model forgets how to perform a task after learning a new one) and \textit{bias drift} (i.e., when the model's predictions suddenly become biased towards a particular class or group of samples) are among the most studied phenomena in continual learning.
+    
+    % In particular, ML models differ from traditional software systems in that they are often trained on a fixed dataset but deployed in a dynamic environment 
+    
+    Still, the fact that ML models are often deployed as static components in a dynamic environment with the assumption that the data used to train them is representative of the data it will encounter in the real world is a known source of degradation \cite{vokingerContinualLearningMedical2021}.
 
-    \begin{table}[H]
-        \caption{Some Causes of Degradation of an ML System and their Characteristics.}
+    Table \ref{tab:causes_of_ml_degradation} describes some of the most relevant causes of degradation of ML systems. It gives an overview of different phenomena that can affect a model's performance and the challenges that must be addressed in the design of an adaptive system.
+
+    \begin{table}[t]
+        \caption{Some causes of Degradation of an ML System and their characteristics.}
         \label{tab:causes_of_ml_degradation}
-        \hspace*{-0.7cm}
+        \resizebox{\textwidth}{!}{
         \begin{tabular}{p{0.22\linewidth} | p{0.42\linewidth} | p{0.41\linewidth}}
         \toprule
         \textbf{Cause} & \textbf{Description} & \textbf{Example} \\
@@ -231,33 +247,40 @@
             A model trained with data from patients of a hospital in one neighborhood performs poorly after being deployed in another neighborhood with very different demographics. \\
             % \cline{2-3} & \footnotesize
         \midrule
-        \multirow{2}{*}{\small \textbf{Learning Sensitivity}} & \footnotesize
+        \multirow{2}{*}{\small \textbf{Learning Plasticity}} & \footnotesize
             \textbf{Catastrophic forgetting:} The model no longer performs well in an old task after training on new information. & \footnotesize  
             A model is trained to detect a specific disease, but when adapted to detect a different disease, it `forgets' how to detect the first.\\
+            \cline{2-3} & \footnotesize
+            \textbf{Loss of Plasticity:} The model is unable to learn new information after training on a specific task (DNNs are often prone to this phenomenon \cite{parisi_continual_2019}).
+            & \footnotesize
+            A model is trained to detect a specific disease, but can't be adapted to detect a different one. \\
         \midrule
-        \small \textbf{Adversarial Attack} & \footnotesize
-            \textbf{Vulnerability to adversarial attacks:}
-            The model is vulnerable to small perturbations to the input that cause it to make very different predictions than it would otherwise.
-            & \footnotesize 
+            \small \textbf{Adversarial Attacks} & \footnotesize
+            \textbf{Vulnerability to adversarial attacks:}  The model is vulnerable to small perturbations to the input that cause it to make very different predictions than it would otherwise.
+            & \footnotesize
             A bad actor makes imperceptible changes to individual pixels in an X-ray image that cause the model to misclassify the presence of a disease. \\
         \bottomrule
         \end{tabular}
+    }
     \end{table}
+    % \vspace*{-0.5cm}
 
-    One important thing to note is that a model experiencing one of the degradation causes listed above doesn't mean that it will necessarily fail or that it should be addressed. For example, a model might suffer from catastrophic forgetting after learning new information but that might not affect the performance of the current task in any significant way.
+    One important thing to note is that a model experiencing one of the degradation causes listed doesn't mean that it will necessarily fail or that it should be addressed. For example, a model might suffer from catastrophic forgetting after learning new information but that might not affect the performance of the current task in any significant way.
     
     This is why a crucial aspect of designing such systems is that of defining the \textit{adaptation criteria} that should be monitored in order to trigger the right \textit{tactics} that will allow the system to adapt to the specific changes in its environment that cause it to degrade.
     
-    This criterion should be based on the specific needs of the application and the context in which the system is deployed. An example is that a model trained to detect a specific rare disease might have different criteria than a model trained to detect a more common one (e.g. The first system might be more sensitive to data drift than the latter).
+    % This criterion should be based on the specific needs of the application and the context in which the system is deployed. An example is that a model trained to detect a specific rare disease might have different criteria than a model trained to detect a more common one (e.g. The first system might be more sensitive to data drift than the latter).
 
-    Chapter \ref{chap:state_of_the_art} discusses some of the state of the art techniques that can be used to deal with some of the causes of degradation addressed in the table above. 
+    In chapter \ref{chap:state_of_the_art} we address some state-of-the-art techniques that can be used to deal with the causes of degradation listed in the table. 
     % In particular, we will focus on the techniques that have been proposed to address the challenges of data drift and model degradation, as these are the most relevant to the context of this work.
 
     \section{Objectives} \label{sec:objectives}
 
     \subsection*{Main objective} \label{sec:main_goal}
 
-    The main objective of this work is to research the most relevant techniques on continual adaptation methods in Machine Learning, make a comparative analysis of the most relevant techniques and their relevance for health applications, and design and implement a system for the diagnosis of tuberculosis that incorporates these techniques into its design that can be integrated into the ERA4TB platform. The platform should allow its users to incorporate test machine-learning models into the platform and facilitate the use and collaboration between researchers and other stakeholders.
+    The main objective of this work is to research the most relevant techniques on continual adaptation methods in Machine Learning, make a comparative analysis of the most relevant techniques and their relevance for health applications, and design and implement a system for the diagnosis of tuberculosis that incorporates these techniques into its design that can be integrated into the ERA4TB platform. 
+    
+    The platform should allow its users to incorporate machine-learning models into the platform, facilitate their use, and allow collaboration between researchers and other stakeholders.
 
     \subsection*{Specific objectives} \label{sec:specific_objectives}
 
@@ -271,9 +294,9 @@
         \item Evaluate possible future research directions that could be explored in the area of continual and dynamic adaptation in Machine Learning, highlighting the contributions that have a higher potential for impact in healthcare or other high-stake domains.
     \end{enumerate}
 
-    \clearpage
+    % \clearpage
 
-    \section{Main Contributions} \label{sec:main_contributions}
+    % \section{Main Contributions} \label{sec:main_contributions}
 
     \section{Structure of the Work} \label{sec:structure_of_the_work}
 

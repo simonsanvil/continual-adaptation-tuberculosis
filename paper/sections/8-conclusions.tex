@@ -28,7 +28,7 @@
 
     Anytime a model is trained on a particular dataset, any biases present on that dataset are also introduced to the model. In any high-stakes environment, the researchers who design these models should be aware of the biases present in the data and how they might affect the model's predictions and consider them in the decision-making process.
 
-    Furthermore, this aspect is especially crucial in the healthcare sector, where legislation and ethical guidelines stress the importance of AI systems being transparent \cite{noauthor_ethics_2019,eu_aiact_2023}. Healthcare professionals have the moral and legal obligation to be able to explain the decisions made by the AI systems they use to the relevant stakeholders, the latter also has the right to know how the decisions that affect them are made.
+    Furthermore, this aspect is especially crucial in the healthcare sector, where legislation and ethical guidelines stress the importance of AI systems being transparent \cite{noauthor_ethics_2019,eu_aiact_2023}. Healthcare professionals have the moral and legal obligation to be able to explain the decisions made by the AI systems they use to the relevant stakeholders, and the latter also has the right to know how the decisions that affect them are made.
     
     In that regard, one of the main limitations of the system proposed here is the lack of explainability of the continual learning process, where a model that is designed initially to be as transparent as possible might gradually lose explainability power as it adapts to new data distributions over time.
     
@@ -52,14 +52,14 @@
 
     The following are some of the recent and upcoming research directions in the field of machine learning that we consider to be relevant to the work presented in this thesis.
     
-    Unlike, the previous section, which focused on the limitations of the proposed system and detailed ideas about how to address or improve them in the immediate future, this section takes a broader view, focusing on the limitations of the current state-of-the-art and what might be considered to be the next steps in the area.
+    Unlike the previous section, which focused on the limitations of the proposed system and detailed ideas about how to address or improve them in the immediate future, this section takes a broader view, focusing on the limitations of the current state-of-the-art and what might be considered to be the next steps in the area.
     
     The idea is that these research directions could used as a starting point for future work (maybe even a Ph.D. thesis) on the topics of adaptive machine-learning systems, either as a continuation of some of the work presented here or as a completely new approach to the problem. We make no claims about the feasibility of these ideas but rather present why I consider them to be relevant and interesting for further research and discussion.
 
 
     \subsection{Future directions in Tuberculosis AI Research} \label{conclusions:future_work:tb_ai} \info{<1 pág}
     
-    Detection will soon be a solved problem thanks to NAATs (or rather, more of a money problem than a technical one), thus, the emphasis should now be on drug discovery, finding new biomarkers, etc. \dots
+    Detection will soon be a solved problem thanks to NAATs (or rather, more of a money problem than a technical one). Thus, the emphasis should now be on drug discovery, finding new biomarkers, etc. \dots
 
     \clearpage
 
@@ -79,7 +79,7 @@
 
     As a low-hanging fruit, we can envision the design of a system similar to the one proposed in this work that integrates and builds upon concepts from meta-learning, unlearning, knowledge distillation, and transfer learning \footnote{See section \ref{sec:relevant_techniques}}, that enables model that can more sophisticatedly adapt to new problems. 
     
-    This self-adaptive process would necessarily be based on the evaluation of the model's performance and a metric of the `necessity' of adaptation/learning that task better, but rather than relying on simple heuristics and a model-agnostic approach, the system would trigger a more complex adaptation process.
+    This self-adaptive process would necessarily be based on evaluating the model's performance and a metric of the `necessity' of adaptation/learning that task better, but rather than relying on simple heuristics and a model-agnostic approach, the system would trigger a more complex adaptation process.
 
     \clearpage
 
@@ -97,9 +97,9 @@
     
     Another advantage of this approach is the potential for more failsafe systems. By having each model deployed independently in a distributed system, one could devise a mechanism that detects when one of the expert models fails, either due to a hardware/software error or due to a significant performance drop, and automatically replaces the gating function of the current MoE with one (previously trained) that excludes the failing model.
     
-    One could also use such a mechanism as a way to save operational costs, the system might monitor the number of instances being routed to each expert model and, if one of the models is not being used, it could be automatically shut down to save resources.
+    One could also use such a mechanism as a way to save operational costs. The system might monitor the number of instances being routed to each expert model, and if one of the models is not being used, it could be automatically shut down to save resources.
     
-    Another interesting research direction would be to explore the use of MoEs to handle multimodal data. In \cite{mustafa_multimodal_2022} researchers at Google Brain used MoEs to train an architecture that accepts both image and text inputs and outputs a single prediction by 
+    Another interesting research direction would be to explore the use of MoEs to handle multimodal data. In \cite{mustafa_multimodal_2022}, researchers at Google Brain used MoEs to train an architecture that accepts both image and text inputs and outputs a single prediction by 
     
     % \subsection{AutoML and Neural Architecture Search} \label{conclusions:research_directions:automl_nas}
 

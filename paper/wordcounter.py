@@ -54,7 +54,7 @@ def main(pdf_file:str, output_file:str='wordcount.csv', save:bool=False):
 
     if save:
         with open(output_file, 'a') as f:
-            f.write(f'{os.path.basename(pdf_file)},{datetime.now().strftime("%Y-%m-%dT%H:%M:00")},{num_words}\n')
+            f.write(f'{os.path.basename(pdf_file)},{datetime.now().strftime("%Y-%m-%dT%H:%M:00")},{num_words},{num_pages} pages\n')
 
 if __name__ == "__main__":
     typer.run(main)
