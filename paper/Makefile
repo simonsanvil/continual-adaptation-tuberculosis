@@ -29,7 +29,7 @@ clear_cache: ## Clear the cache of biber
 count: ## Count the number of words in the paper, display the result, and save it to a file in append mode
 	/opt/homebrew/Caskroom/miniforge/base/envs/tf-env/bin/python wordcounter.py main.pdf --save
 
-push: count ## Push the paper to the repository
+push: ## Push the paper to the repository
 	make clean-all
 	cd .. && git add paper && git commit -m "Updated paper" && git push
 
