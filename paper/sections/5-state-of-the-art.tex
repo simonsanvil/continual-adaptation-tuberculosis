@@ -229,7 +229,13 @@
      
      Active learning enables the development of accurate models using significantly less labeled data, paving the way for more efficient and cost-effective healthcare systems. 
      
-     Some common active learning strategies include uncertainty sampling, query by committee, and expected model change. 
+     Some common active learning strategies include uncertainty sampling, query by committee, and expected model change. We describe each of them below.
+
+     \begin{itemize}
+        \item \textbf{Uncertainty sampling} is a strategy that selects the instances that the model is most uncertain about. This is done by selecting the instances for which the model's prediction is closest to 0.5 (i.e., the model is unsure about its prediction). This strategy allows the model to focus on the instances that it is most uncertain about.
+        \item  \textbf{Query by committee} is a strategy that selects the instances for which the model's predictions are most diverse. This is done by training multiple models on the same dataset and selecting the instances for which the models disagree the most. This strategy allows the model to focus on the instances that are most likely to be misclassified.
+        \item \textbf{Expected model change} is a strategy that selects the instances for which the model's predictions are most likely to change. This is done by selecting the instances for which the model's prediction is closest to 0.5 and then training the model on them. This strategy allows the model to focus on the instances that are most likely to change its predictions.
+     \end{itemize}
 
      \clearpage
 
@@ -240,9 +246,13 @@
     
     The student model is trained on the same data as the teacher model but is trained to predict the probabilities of the teacher model's predictions instead of the actual labels. This allows the student model to learn from the teacher model's mistakes and improve its performance on the given task \cite{hinton_distilling_2015}.
 
-    While conceptually simple, knowledge distillation can be a very effective technique to improve the efficiency of a 
+    While conceptually simple, knowledge distillation can be a very effective technique to improve the efficiency of an ML system by reducing the computational costs associated. The key, in this case, is to find the right balance between the size of the teacher and student models, as the student model needs to be small enough to be more efficient than the teacher model but large enough to be able to learn from it \cite{hinton_distilling_2015}.
+
+    Knowledge distillation fits well in a continual adaptation setting. We can envision a knowledge distillation tactic that is executed when a model is too large to be constantly deployed in a resource-constrained environment. The system may trigger the training of a smaller model that mimics the predictions of the larger one and use it in its place if it is deemed to be more efficient - and approximately as accurate - than the previous model.
+
+    % \subsection{Unlearning} \label{sec:unlearning}
     
-    \todo[inline]{Modify description, add more details, references \dots}
+    % \todo[inline]{Modify description, add more details, references \dots}
 
 
     \subsection{Adversarial Training} \label{sec:adversarial_training} 
