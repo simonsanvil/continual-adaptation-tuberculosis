@@ -22,6 +22,14 @@
         Implementing new adaptation strategies to the system 
     } \label{conclusions:future_work:adaptation_strategies}\info{0.5 pág}
 
+    Furthermore, we could integrate more hardware-related optimization techniques like quantization and network pruning methods that aim to reduce the size of a DNN and/or reduce its computational cost. The way they go about doing that is different. Network pruning removes redundant parameters of the neural network, while quantization reduces the precision of the weights and activations of the model (e.g., from 32-bit floating-point numbers to 8-bit integers).
+    
+    Rather than using these techniques to improve the model's performance on a particular task, these would be used to possibly reduce the computational or memory cost of the system. The way we would propose such an adaptation tactic would be to continually evaluate different versions (quantized, not quantized, pruned, not pruned) of the model to determine which one is the most suitable for the given task, and under what circumstances.
+
+    For example, we could have a model that is trained on a particular task and then quantized to reduce its computational cost. The system would then evaluate the performance of the quantized model on the task under all monitored aspects and determine whether the performance drop is relevant enough to warrant the use of the quantized model and reduce the computational cost of the overall system.
+
+    Cite \cite{carreira-perpinan_model_2017} and \cite{han_deep_2016}, \cite{carreira-perpinan_compression_2018}
+
     \subsection{
         Improving the explainability of the continual learning process 
     } \label{conclusions:future_work:explainability}\info{0.5 pág}
@@ -83,11 +91,11 @@
 
     \clearpage
 
-    \subsection{Scalable Adaptability and Multimodality through Mixtures of Experts} \label{conclusions:research_directions:moes} \info{1.5 pág}
+    \subsection{Scalable Adaptability through Mixtures of Experts} \label{conclusions:research_directions:moes} \info{1.5 pág}
 
     Mixture of experts (MoEs) models are a type of ensemble model that combines the predictions of multiple models to obtain a final prediction. The difference between MoEs and other ensemble models is that the predictions of the individual `experts' are combined using a gating function that adapts to the given data point and dynamically determines the weight of each model in the final prediction \cite{chen_towards_2022}.
 
-    MoEs are really powerful systems. They have been shown to be able to learn complex multimodal distributions and have been used in a wide variety of applications, including object detection \cite{hwang_tutel_2023}, language modeling \cite{mustafa_multimodal_2022}, machine translation \cite{shazeer_outrageously_2017}, and even multiomics \cite{minoura_scmm_2021}.
+    MoEs are really powerful systems. They have been shown to be able to learn complex multimodal distributions and have been used in a wide variety of applications, including object detection, language modeling, machine translation, and even multiomics \cite{hwang_tutel_2023,mustafa_multimodal_2022,shazeer_outrageously_2017, minoura_scmm_2021}.
     
     In the context of this work, we consider that MoEs could be used to create a more scalable and robust system that can adapt to new tasks and data distributions. The idea is that the system would be composed of a set of `expert' models, each of which would be specialized in a particular task or data distribution. The system would then be able to adapt to new tasks by autonomously learning a new expert model or by retraining an existing one.
     
@@ -98,8 +106,19 @@
     Another advantage of this approach is the potential for more failsafe systems. By having each model deployed independently in a distributed system, one could devise a mechanism that detects when one of the expert models fails, either due to a hardware/software error or due to a significant performance drop, and automatically replaces the gating function of the current MoE with one (previously trained) that excludes the failing model.
     
     One could also use such a mechanism as a way to save operational costs. The system might monitor the number of instances being routed to each expert model, and if one of the models is not being used, it could be automatically shut down to save resources.
-    
-    Another interesting research direction would be to explore the use of MoEs to handle multimodal data. In \cite{mustafa_multimodal_2022}, researchers at Google Brain used MoEs to train an architecture that accepts both image and text inputs and outputs a single prediction by 
+
+    Figure \ref{fig:moes} shows a diagram illustrating the concept of a mixture of experts system (multimodal in this case).
+
+    \begin{figure}[H]
+        \centering
+        \caption{Diagram of a mixture of experts model.}
+        \resizebox*{0.8\linewidth}{!}{
+            \input{../figures/moes_tikz.tex}
+        }
+        \label{fig:moes}
+    \end{figure}
+
+    % Another interesting research direction would be to explore the use of MoEs to handle multimodal data. In \cite{mustafa_multimodal_2022}, researchers at Google Brain used MoEs to train an architecture that accepts both image and text inputs and outputs a single prediction by 
     
     % \subsection{AutoML and Neural Architecture Search} \label{conclusions:research_directions:automl_nas}
 

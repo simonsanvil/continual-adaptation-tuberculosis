@@ -161,7 +161,7 @@
     \section{Adaptation Techniques and Learning Paradigms} \label{sec:relevant_techniques} 
     % \info{6-7 pages}
 
-    Throughout this section, we consider a set of novel techniques proposed in the literature related to ML model adaptation. One of the critical aspects in selecting which methods to include in this section (besides their relevance to the topic) was the technical feasibility of implementing them as \textit{tactics} (as described in section \ref{sec:lifelong_adaptive_systems}) in a self-adaptive system. 
+    Throughout this section, we consider a set of novel techniques proposed in the literature related to ML model adaptation. One of the critical aspects in selecting which methods to include in this section - besides their relevance to the topic - was the technical feasibility of implementing them as \textit{tactics} (as described in section \ref{sec:lifelong_adaptive_systems}) in a self-adaptive system. 
 
     The idea is that some of the techniques described below may be used as the basis for the adaptation process of an ML model after it has been detected (through specific monitorization) that some form of degradation has occurred. The goal would be to then use some of these techniques (or a combination of them) as a way to improve performance.
 
@@ -172,9 +172,18 @@
 
     In its most basic form,  continual learning is about updating the model when new data becomes available. However, this is not as simple as it sounds. The key to a successful continual learning process is that the model is updated such that it performs well on the new data without hurting it in the task it was designed for. While obvious, this is not a trivial problem, and it is a particularly known weak point of current ML algorithms. Often called the \textbf{stability-plasticity dilemma} \cite{mermillodStabilityplasticityDilemmaInvestigating2013}.
 
-    We can consider two frameworks for implementing continual learning in a machine-learning system, adding more to the complexity of such systems: \textit{offline} and \textit{online} continual learning
+    Richard Sutton, one of the pioneers of the field of reinforcement learning (and author of the infamous article `\href{https://www.cs.utexas.edu/~eunsol/courses/data/bitter_lesson.pdf}{The Bitter Lesson}' \cite{suttonBitterLesson2019}), has very recently studied this problem in \textit{deep supervised learning models}, a subject that is very relevant to this work. In an August 2023 paper (and seminar), he makes the big claim that `Deep learning does not work for continual learning' \cite{dohareLossPlasticityDeep2023}. 
     
-    Learning offline is the most typical example where the model is updated periodically using a batch of data collected over time, i.e., the model is updated only when a certain amount of \textit{new} data has been collected (and labeled, in the supervised case). This is the most common approach in the literature and the easiest to implement.
+    This statement is a bit exaggerated (by Sutton's own admission). What he argues about really is the reality that DNNs tend to eventually become very slow to learn from new data, eventually leading to a catastrophic loss of performance. This phenomenon is denominated \textbf{loss of plasticity}.
+
+    Problems with DNN plasticity have been studied before, Ash et. al's (2019) \cite{ashWarmStartingNeuralNetwork2020} was a very influential paper that discussed the failure of warm-starting neural networks, and proposed a regularization method consisting of shrinking and perturbing slightly the weights of the network at every optimization step, which improved significantly the performance of continual learning tasks.
+
+    Related to plasticity is \textbf{catastrophic forgetting}, when models forget previously learned information when trained on new data, another well-studied problem with ML algorithms
+     \cite{mccloskeyCatastrophicInterferenceConnectionist1989,huyen_designing_2022,parisiContinualLifelongLearning2019}. Beyond that, there are other myriads of issues to face when implementing a continual learning setting: how to select the optimal samples to train the model with, dealing with class imbalance, improving hardware efficiency, how to store and manage the data and evaluate performance, to name a few.
+
+     Adding more to their complexity, we can consider two frameworks for implementing continual learning in a machine-learning system: \textit{offline} and \textit{online} continual learning. 
+    
+    Learning offline is the most typical example where the model is updated periodically using a batch of data obtained over time, i.e., the model is updated only when a certain amount of \textit{new} data has been collected (and labeled, in the supervised case). This is the most common approach in the literature and also the easiest to implement.
     
     % Offline learning can be additionally subdivided into two categories based on how data is monitored before updating a model: \textit{passive} and \textit{active} continual learning.
 
@@ -182,21 +191,20 @@
 
    Online learning is the second framework. In this case, the model is adapted as soon as new data arrives, with every new instance - or very small batch of instances - being used to update it. This approach is optimal when it is adamant for the model to adapt to the data as soon as it arrives (streaming applications, for example). 
    
-   However, online learning algorithms tend to be more computationally expensive than offline learning and can be less effective than their offline counterparts. They are also likely to suffer even more from catastrophic forgetting \cite{huyen_designing_2022}, that's why they are often used in conjunction with offline learning\dots
+   However, online learning algorithms tend to be more computationally expensive than offline learning and can be less effective than their offline counterparts, they are also likely to suffer even more from catastrophic forgetting \cite{huyen_designing_2022}.
 
-   Continual learning is well-suited for healthcare applications where data arrives in a stream (e.g., wearable health monitors, electronic medical records, and imaging systems)\dots
-
+   The work in this thesis is all about adopting continual learning for healthcare applications. It is not only suitable in applications where data arrives in a stream (e.g., wearable health monitors) but also in cases where the data is collected periodically (e.g., medical imaging). In both cases, the data is likely to change over time, and the model needs to adapt to it. We'll continue this section with techniques that can be used to implement or improve a continual learning system and face the challenges described above.
 
     \subsection{Transfer Learning and Domain Adaptation} \label{sec:transfer_learning} 
     % \info{1 page}
 
-    Transfer learning is a technique that aims to improve the performance of a model by `transferring' the knowledge of a pre-trained model to a new task. This is achieved by first training the model on a large dataset (that was presumably easy to obtain), from which it can learn general features and patterns of the data modality, and then \textbf{fine-tuning} it on a smaller dataset specific to the new task. Avoiding the need to train the model from scratch on the new dataset allows the model to achieve better performance with less data and training time \cite{panSurveyTransferLearning2010}.
+    Transfer learning is a technique that aims to improve the performance of a model by `transferring' the knowledge of a pre-trained model to a new task. This is achieved by first training the model on a large dataset - that was presumably easy to obtain - from which it can learn general features and patterns of the data modality, and then \textbf{fine-tuning} it on a smaller dataset specific to the new task. Avoiding the need to train the model from scratch on the new dataset allows the model to achieve better performance with less data and training time \cite{panSurveyTransferLearning2010}.
 
-     Nowadays transfer learning has been adopted widely by the Deep Learning community in parts because it allows researchers and practitioners in the industry alike to effectively `recycle' models that have been trained and shared previously on large datasets (e.g., ImageNet \cite{dengImageNetLargescaleHierarchical2009}) and apply them for their own purposes. Thus saving the (often prohibitively) expensive time and resources required to train deep-learning models from scratch on such significant amounts of data  \cite{yosinskiHowTransferableAre2014}.
+     Nowadays transfer learning has been adopted widely by the Deep Learning community in parts because it allows researchers and practitioners in the industry alike to effectively `recycle' models that have been trained and shared previously on large datasets and apply them for their own purposes. Thus saving the - often prohibitively - expensive time and resources required to train deep-learning models from scratch on such significant amounts of data  \cite{yosinskiHowTransferableAre2014}.
 
-     Furthermore, it has been shown that initializing a neural network with pre-trained weights (i.e., using transfer learning) can help the model converge faster and achieve better generalization than training it from scratch \cite{yosinskiHowTransferableAre2014}. Showing the model can leverage the knowledge learned from previous data to learn the new task more efficiently.
+     Furthermore, it has been shown that initializing a neural network with pre-trained weights (i.e., using transfer learning) can help the model converge faster and achieve better generalization than training it from scratch. Showing the model can leverage the knowledge learned from previous data to learn the new task more efficiently \cite{yosinskiHowTransferableAre2014}.
 
-     Transfer Learning is useful for healthcare applications because it allows us to adapt pre-trained models to the medical domain (which often lacks annotated samples). This is particularly relevant to our problem, we can use transfer learning to adapt models trained on general object detection datasets (e.g., COCO \cite{linMicrosoftCOCOCommon2015}, PASCAL VOC \cite{everinghamPascalVisualObject2010}) to the task of detecting tuberculosis in microscopy images, which has been done before in the literature with good results \cite{visuna_novel_2023}.
+     Transfer Learning is useful for healthcare applications because it allows us to adapt pre-trained models to the medical domain - something referred to as \textbf{domain adaptation}. This is particularly relevant to our problem, we can use transfer learning to adapt models trained on general object detection datasets (e.g., COCO \cite{linMicrosoftCOCOCommon2015}, PASCAL VOC \cite{everinghamPascalVisualObject2010}) to the task of detecting tuberculosis in microscopy images. Something that has been done before in the literature with good results \cite{visuna_novel_2023}.
 
      We can envision this technique as part of a continual system that automatically adapts machine learning components to new tasks using transfer learning, avoiding the need to retrain the entire model from scratch.
 
@@ -214,9 +222,9 @@
 
     \begin{figure}
         \centering
-        \caption{Relevant Machine Learning Paradigms and Techniques}
-        \resizebox*{1.1\columnwidth}{!}{
-            \hspace*{-3cm}
+        \caption{Illustrations of the relevant Machine Learning Paradigms and Techniques}
+        \resizebox*{1.15\columnwidth}{!}{
+            \hspace*{-1.5cm}
             \input{../figures/adaptive_techniques_tikz.tex}
         }
         \label{fig:relevant_ml_paradigms}
@@ -252,12 +260,8 @@
     
     Another popular approach to make ML models more robust to these attacks is to feed adversarial examples directly into their training data. This is known as \textit{adversarial training}. Methods like the Fast Gradient Sign Method \cite{goodfellowExplainingHarnessingAdversarial2015} (FGSM) or the more recent Projected Gradient Descent (PGD) \autocite{madryDeepLearningModels2019}  can be used to generate adversarial examples and train the model to be robust to them. 
 
-    \subsection{Dynamic Quantization and Network Pruning} \label{sec:dynamic_quantization_pruning_sparsification} 
+    % \subsection{Dynamic Quantization and Network Pruning} \label{sec:dynamic_quantization_pruning_sparsification} 
     % \info{0.5 pages}
-
-    Quantization and network pruning are techniques that aim to reduce the size of a model by removing redundant parameters\dots
-
-    Cite \cite{carreira-perpinan_model_2017} and \cite{han_deep_2016}, \cite{carreira-perpinan_compression_2018}
 
     \todo[inline]{Modify this description and add more details, references \dots}
    

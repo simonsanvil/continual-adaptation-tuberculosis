@@ -134,7 +134,7 @@
     
     % which is especially challenging in the healthcare field where the data is scarce, expensive to obtain, or difficult to label.
     
-    In the last decade, one set of algorithms that have enabled significant advances in Machine Learning, allowing to solve very difficult problems, is \textbf{deep learning}. Deep learning is a subfield of ML that studies the design of algorithms that can learn complex representations of data by hierarchically composing simpler functions in an architecture inspired by the structure of the human brain known as `Deep Neural Networks' (DNN)  \cite{lecun_deep_2015}. Figure \ref{fig:dnn_example} shows an example of a DNN architecture.
+    In the last decade, one set of algorithms that have enabled significant advances in Machine Learning, allowing to solve very difficult problems, is \textbf{deep learning}. Deep learning is a subfield of ML that studies the design of algorithms that can learn complex representations of data by hierarchically composing simpler functions in an architecture inspired by the structure of the human brain known as `Deep Neural Networks' (DNN)  \cite{lecun_deep_2015}.
     
     \begin{figure}[H]
         \centering
@@ -142,14 +142,14 @@
             % \hspace*{-0.5cm}
             \includegraphics{dnn_example_topol}
         }
-        \caption{Example of a simplified neural network architecture taken from \cite{topol_high-performance_2019}.}
+        \caption{Example of a simplified neural network architecture taken from Topol et. al (2019) \cite{topol_high-performance_2019}.}
         \label{fig:dnn_example}
     \end{figure}
 
     % \clearpage
     \subsection{Challenges and Potential of Adopting ML-enabled Systems in Healthcare}
 
-    ML techniques have seen their adoption in many applications, from malware and spam detection to self-driving cars and environmental modeling. The healthcare field is no exception. In the 20 years between 1995 and 2015, the FDA had approved fewer than 30 algorithms for medical use. In contrast, only in the last 5 years, the number of new approvals has reached over \textit{10 times} that amount (see Figure \ref{fig:fda_approved_ml_apps}). 
+    ML techniques have seen their adoption in many applications, from malware and spam detection to self-driving cars and environmental modeling. The healthcare field is no exception. In the 20 years between 1995 and 2015, the FDA had approved fewer than 30 algorithms for medical use. In contrast, only in the last 5 years, the total count of new approvals has reached over \textit{10 times} that amount (see Figure \ref{fig:fda_approved_ml_apps}). 
 
     \begin{figure}[h]
         \centering
@@ -205,7 +205,8 @@
 
     \clearpage
     
-    The two ideas are closely related, with \textit{continual} (or \textit{lifelong}) learning often used to refer specifically to ML systems while \textit{SAS} to any software that adapts itself to disruptive changes. The core idea of both is the same, though, the ability of a system to `survive' variations in its environment with or without human intervention and continue to perform its intended function. %In this work, we use the terms \textbf{continual adaptation}, drawing inspiration from both concepts. 
+    The two ideas are closely related, with \textit{continual} (or \textit{lifelong}) learning often used to refer specifically to ML systems while \textit{SAS} to any software that adapts itself to disruptive changes. The core idea of both is the same, though, the ability of a system to `survive' variations in its environment with or without human intervention and continue to perform its intended function \cite{macias-escrivaSelfadaptiveSystemsSurvey2013}.
+    %In this work, we use the terms \textbf{continual adaptation}, drawing inspiration from both concepts. 
 
     Consider the scenario of a machine-learning model that has been trained with pictures from an X-ray machine of a particular hospital. The model is then deployed in a different hospital where the X-ray machines are of another and produce images with different characteristics (a particular noise, artifacts, different resolution, etc.). 
     
