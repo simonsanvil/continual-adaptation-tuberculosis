@@ -22,13 +22,6 @@
         Implementing new adaptation strategies to the system 
     } \label{conclusions:future_work:adaptation_strategies}\info{0.5 pág}
 
-    Furthermore, we could integrate more hardware-related optimization techniques like quantization and network pruning methods that aim to reduce the size of a DNN and/or reduce its computational cost. The way they go about doing that is different. Network pruning removes redundant parameters of the neural network, while quantization reduces the precision of the weights and activations of the model (e.g., from 32-bit floating-point numbers to 8-bit integers).
-    
-    Rather than using these techniques to improve the model's performance on a particular task, these would be used to possibly reduce the computational or memory cost of the system. The way we would propose such an adaptation tactic would be to continually evaluate different versions (quantized, not quantized, pruned, not pruned) of the model to determine which one is the most suitable for the given task, and under what circumstances.
-
-    For example, we could have a model that is trained on a particular task and then quantized to reduce its computational cost. The system would then evaluate the performance of the quantized model on the task under all monitored aspects and determine whether the performance drop is relevant enough to warrant the use of the quantized model and reduce the computational cost of the overall system.
-
-    Cite \cite{carreira-perpinan_model_2017} and \cite{han_deep_2016}, \cite{carreira-perpinan_compression_2018}
 
     \subsection{
         Improving the explainability of the continual learning process 
@@ -46,7 +39,10 @@
 
     \subsection{Adapting the system to run on a federated platform} \label{conclusions:future_work:federated} \info{1.75 pág}
 
-    
+    % \info{1 page}
+
+    Federated learning is the concept of training a model using data from multiple sources without having to share the data itself. This is achieved by training the model on each source separately and combining the results to obtain a final model. This technique is particularly useful in healthcare applications, where data privacy is a significant concern. It allows us to train models on data from multiple sources without having to share the data itself, thus preserving the privacy of the patients \cite{joshi_federated_2022}.
+    \todo[inline]{Modify this description and add more details, references \dots}
 
     Efforts such as \cite{joshi_federated_2022} have demonstrated the benefits and potential of taking a federated learning approach to training machine learning models in the healthcare industry. A future proposal to improve the system presented in this work would be to adapt the current platform to one where the models are trained in a federated fashion.
     

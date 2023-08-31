@@ -231,23 +231,16 @@
      
      Some common active learning strategies include uncertainty sampling, query by committee, and expected model change. 
 
-     \newpage
-
-    \begin{figure}
-        \centering
-        \caption{Illustrations of the relevant Machine Learning Paradigms and Techniques}
-        \resizebox*{1.15\columnwidth}{!}{
-            \hspace*{-1.5cm}
-            \input{../figures/adaptive_techniques_tikz.tex}
-        }
-        \label{fig:relevant_ml_paradigms}
-    \end{figure}
-    \clearpage
+     \clearpage
 
      \subsection{Knowledge Distillation} \label{sec:knowledge_distillation} 
     %  \info{0.5 pages}
 
-    Knowledge distillation is a technique that aims to improve the performance of a model by transferring the knowledge of a larger model (teacher) to a smaller model (student). This is achieved by training the student model to mimic the predictions of the teacher model. The student model is trained on the same data as the teacher model but is trained to predict the probabilities of the teacher model's predictions instead of the actual labels. This allows the student model to learn from the teacher model's mistakes and improve its performance on the given task \cite{hinton_distilling_2015}.
+    Knowledge distillation is a technique that aims to improve the performance of a model by transferring the knowledge of a larger model (teacher) to a smaller model (student). This is achieved by training the student model to mimic the predictions of the teacher model. 
+    
+    The student model is trained on the same data as the teacher model but is trained to predict the probabilities of the teacher model's predictions instead of the actual labels. This allows the student model to learn from the teacher model's mistakes and improve its performance on the given task \cite{hinton_distilling_2015}.
+
+    While conceptually simple, knowledge distillation can be a very effective technique to improve the efficiency of a 
     
     \todo[inline]{Modify description, add more details, references \dots}
 
@@ -273,9 +266,49 @@
     
     Another popular approach to make ML models more robust to these attacks is to feed adversarial examples directly into their training data. This is known as \textit{adversarial training}. Methods like the Fast Gradient Sign Method \cite{goodfellowExplainingHarnessingAdversarial2015} (FGSM) or the more recent Projected Gradient Descent (PGD) \autocite{madryDeepLearningModels2019}  can be used to generate adversarial examples and train the model to be robust to them. 
 
-    % \subsection{Dynamic Quantization and Network Pruning} \label{sec:dynamic_quantization_pruning_sparsification} 
+    For use cases where the vulnerability of healthcare systems is considered important, one can try to adopt adversarial training into the continual learning process (for example, by incorporating adversarial samples into a fine-tuning dataset) as a way to improve the robustness of the model to adversarial attacks. 
+
+    \subsection{Dynamic Quantization and Network Pruning} \label{sec:dynamic_quantization_pruning_sparsification} 
     % \info{0.5 pages}
 
-    \todo[inline]{Modify this description and add more details, references \dots}
+    We consider the idea of integrating more hardware-related optimization techniques that aim to reduce the size of a DNN and/or reduce its computational cost. Quantization and Network pruning are some interesting methods to accomplish this. These two techniques have been shown to be promising in significantly reducing the computational cost of Deep Neural Networks without significantly affecting their performance \cite{carreira-perpinan_model_2017, han_deep_2016, carreira-perpinan_compression_2018}.
+    
+    The way they go about doing that is different. Network pruning removes redundant parameters of the neural network, while quantization reduces the precision of the weights and activations of the model (e.g., from 32-bit floating-point numbers to 8-bit integers).
+    
+    Rather than using these techniques to improve the model's performance on a particular task, these would be used to possibly reduce the computational or memory cost of the system. The way we would propose such an adaptation tactic would be to continually evaluate different versions (quantized, not quantized, pruned, not pruned) of the model to determine which one is the most suitable for the given task, and under what circumstances.
 
+    For example, we could have a model that is trained on a particular task and then quantized to reduce its computational cost. The system would then evaluate the performance of the quantized model on the task under all monitored aspects and determine whether the performance drop is relevant enough to warrant the use of the quantized model and reduce the computational cost of the overall system.
+
+    \newpage
+
+    \begin{figure}
+        \centering
+        \caption{Illustrations of the relevant Machine Learning Paradigms and Techniques}
+        \resizebox*{1.15\columnwidth}{!}{
+            \hspace*{-1.5cm}
+            \input{../figures/adaptive_techniques_tikz.tex}
+        }
+        \label{fig:relevant_ml_paradigms}
+    \end{figure}
+    \clearpage
+
+    \newpage
+    % \begin{landscape}    
+    \begin{table}[p]
+        \caption{Summary of the most relevant works in the literature.}
+        \label{tab:sota_summary}
+        \hspace*{-1.5cm}
+        \begin{tabular}{
+            p{0.14\linewidth} | p{0.13\linewidth} | p{0.35\linewidth} | p{0.5\linewidth} 
+        }
+        \toprule
+        \textbf{Reference} & \textbf{Domain} &\textbf{Technique(s)} & \textbf{Summary of Contributions} \\
+        \midrule
+        Visuña et al. (2023) \cite{visuna_novel_2023} & Tuberculosis detection & Object detection, Image preprocessing, CNN fine-tuning, NASNetMobile & Tested novel DL-based method on 200 microscopy stain images of sputum. Reached  99.49\% precision and 92.86\% recall \\
+        \bottomrule
+        \end{tabular}
+    \end{table}
+
+
+   
     \end{document}
