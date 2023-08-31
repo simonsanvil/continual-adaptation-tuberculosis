@@ -74,20 +74,21 @@
 
     \subsection{Scalable Adaptability through Mixtures of Experts} \label{conclusions:research_directions:moes} \info{1.5 pág}
 
-    Mixture of experts (MoEs) models are a type of ensemble model that combines the predictions of multiple models to obtain a final prediction. The difference between MoEs and other ensemble models is that the predictions of the individual `experts' are combined using a gating function that adapts to the given data point and dynamically determines the weight of each model in the final prediction \cite{chen_towards_2022}.
+    Mixture of experts (MoE) systems are a type of ensemble model that combines the predictions of multiple models to obtain a final prediction. The difference between MoEs and other ensemble models is that the predictions of the individual `experts' are combined using a gating function that adapts to the given data point and dynamically determines the weight of each model in the final prediction \cite{chen_towards_2022}.
 
     MoEs are really powerful systems. They have been shown to be able to learn complex multimodal distributions and have been used in a wide variety of applications, including object detection, language modeling, machine translation, and even multiomics \cite{hwang_tutel_2023,mustafa_multimodal_2022,shazeer_outrageously_2017, minoura_scmm_2021}.
-
-    More to this point, the computational sparsity of MoEs have shown the capacity to scale DNN models to outrageous amounts of parameters at constant computational cost. Recently, researchers at Google Brain presented a MoE architecture called Switch Transformers \cite{fedusSwitchTransformersScaling2022a} that allows language models - AI systems that can generate text - to scale
-    to trillion parameters and has been shown to outperform state-of-the-art language models such as GPT-3 \cite{brown_language_2020}.
     
-    In the context of this work, we consider that MoEs could be used to create a more scalable and robust system that can adapt to new tasks and data distributions. The idea is that the system would be composed of a set of `expert' models, each of which would be specialized in a particular task or data distribution. The system would then be able to adapt to new tasks by autonomously learning a new expert model or by retraining an existing one.
+    But by far, the biggest advantage of MoEs is that each expert model can be deployed independently, allowing for a more flexible, modular system capable of being distributed and data-parallelized among different hardware resources. 
+
+    The computational sparsity of these systems has shown the capacity of MoEs to scale DNN models to outrageous amounts of parameters. Recently, researchers at Google Brain presented a MoE architecture called Switch Transformers \cite{fedusSwitchTransformersScaling2022a} that allows language models - AI systems that can generate text - to scale to even a trillion parameters at a constant computational cost.
+    
+    Furthermore, systems that take advantage of MoEs to scale LLMs (Large Language Models) already exist and have been deployed to production for applications as big as ChatGPT (GPT-4 is thought to be a MoE with over 8-billion parameters \todo{add citation}).
+    
+    In the context of the area of this work, we consider that MoEs could be used to create a more scalable and robust system that can adapt to new tasks and data distributions. The idea is that the system would be composed of a set of `expert' models, each of which would be specialized in a particular aspect of the input data. The system would then be able to adapt to new tasks by autonomously learning a new expert model or by retraining an existing one when the need arises.
     
     The main advantage of this approach is that it would allow the system to scale to a large number of tasks and data distributions, only needing to retrain the gating function continually instead of entire models. 
     
-    Furthermore, each expert model can be deployed independently, allowing for a more flexible, modular system capable of being distributed among different environments and hardware resources. Systems that take advantage of MoEs to scale billion-parameter models to multiple GPUs already exist and have been deployed to production for applications as big as ChatGPT \todo{add citation}.
-    
-    Another advantage of this approach is the potential for more failsafe systems. By having each model deployed independently in a distributed system, one could devise a mechanism that detects when one of the expert models fails, either due to a hardware/software error or due to a significant performance drop, and automatically replaces the gating function of the current MoE with one (previously trained) that excludes the failing model.
+    Another advantage is the potential for more failsafe systems. By having each model deployed independently in a distributed system, one could devise a mechanism that detects when one of the expert models fails, either due to a hardware/software error or due to a significant performance drop, and automatically replaces the gating function of the current MoE with one (previously trained) that excludes the failing model.
     
     One could also use such a mechanism as a way to save operational costs. The system might monitor the number of instances being routed to each expert model, and if one of the models is not being used, it could be automatically shut down to save resources.
 
