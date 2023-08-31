@@ -199,9 +199,9 @@
 
     \subsection{Continual Learning and Self-Adaptive Systems} \label{sec:lifelong_adaptive_systems}
 
-    To address some of the challenges of adopting ML-enabled systems in healthcare, some researchers have proposed the idea of incorporating \textit{continual learning} and \textit{self-adaptive systems} (SAS) in their design \cite{casimiro_self-adaptive_2022,huyen_designing_2022}. Continual learning refers to the ability of an ML system to learn continually from new data, adapting to novel changes in the data stream that it may have not been exposed to before \cite{parisi_continual_2019}.
+    To address some of the challenges of adopting ML-enabled systems in healthcare, we can take a look at the idea of incorporating \textit{continual learning} and \textit{self-adaptive systems} (SAS) in their design. Continual learning refers to the ability of an ML system to learn continually from new data, adapting to novel changes in the data stream that it may have not been exposed to before \cite{parisi_continual_2019}. 
     
-    SAS has a similar definition, but it generalizes to any software systems that continually monitor faults in their operating environment using a closed feedback loop. The system can then modify its behavior at runtime by the execution of so-called \textbf{tactics} in an attempt to fix them, thereby reducing human efforts in the interaction. Nowadays, self-adaptivity is considered a classical concept with ample literature in fields like software engineering and robotics \cite{macias-escrivaSelfadaptiveSystemsSurvey2013,casimiro_self-adaptive_2022}.
+    SAS has a similar definition, but it generalizes to any software systems that continually monitor faults in their operating environment using a closed feedback loop. The system can then modify its behavior at runtime by the execution of so-called \textbf{tactics} in an attempt to fix them, thereby reducing human efforts in the interaction. Nowadays, self-adaptivity is considered a classical concept with ample literature in fields like software engineering and robotics \cite{macias-escrivaSelfadaptiveSystemsSurvey2013,gheibiApplyingMachineLearning2020,casimiro_self-adaptive_2022}.
 
     \clearpage
     
@@ -214,15 +214,13 @@
 
     % SAS often adopt a feedback-loop architecture known as \textbf{MAPE-K} loops. These systems are based on using some form of \textit{knowledge-base} to continually \textit{monitor} the system, to then evaluate when an \textit{adaptation} is needed, to finally select the best action \textit{plan} and \textit{execute} it (The letters in MAPE stand for the words Monitor, Analyze, Plan, and Execute, and the K stands for Knowledge) \cite{redbooks_practical_2004}.
     
-    On the other side, the design of such systems in practice presents unique challenges that must be addressed - the FDA has never approved a medical application based on continual learning, experts argue that this is owing to the fact of the questionable robustness of the adaptation process \cite{vokingerContinualLearningMedical2021}. 
+    On the other side, the design of such systems in practice presents unique challenges that must be addressed - the FDA has never approved a medical application based on continual learning, experts argue that this is owing to the fact of questionable robustness of the adaptation process \cite{vokingerContinualLearningMedical2021}. 
     
     Indeed, some known problems like \textit{catastrophic forgetting} (i.e., when the model forgets how to perform a task after learning a new one) and \textit{bias drift} (i.e., when the model's predictions suddenly become biased towards a particular class or group of samples) are among the most studied phenomena in continual learning.
     
     % In particular, ML models differ from traditional software systems in that they are often trained on a fixed dataset but deployed in a dynamic environment 
     
     Still, the fact that ML models are often deployed as static components in a dynamic environment with the assumption that the data used to train them is representative of the data it will encounter in the real world is a known source of degradation \cite{vokingerContinualLearningMedical2021}.
-
-    Works like the one from Gheibi et al. (2020) \cite{gheibiApplyingMachineLearning2020}, that makes a review of studies in the literature that have applied ML in Self-Adaptive systems, identifies six problems where learning is used to solve adaptation problems  
 
     Table \ref{tab:causes_of_ml_degradation} describes some of the most relevant causes of degradation of ML systems. It gives an overview of different phenomena that can affect a model's performance and the challenges that must be addressed in the design of an adaptive system.
 

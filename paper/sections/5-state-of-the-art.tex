@@ -109,13 +109,19 @@
     \begin{figure}[h]
         \centering
         \includegraphics[width=0.48\textwidth]{mape_k_loop.png}
-        \caption{The original MAPE-K Loop as first introduced by IBM in 2004. Source: \cite{redbooks_practical_2004}}
+        \caption{The original MAPE-K Loop, as first introduced by IBM in 2004. Source: \cite{redbooks_practical_2004}}
         \label{fig:mape-k}
     \end{figure}
     
     The authors discuss the required changes to the traditional MAPE-K loop and the challenges associated with developing such systems for ML applications. They motivate their ideas by presenting a case study of SAS in the enterprise (ES) and cyber-physical (CPS) system domains. Table \ref{tab:casimiro_problems} shows an example of the problems they identified in these domains along with the learning-based tactics considered to solve them.
     
-    Note how rather than focusing on how to obtain a plan to adapt the system, Casimiro et al.'s approach is to identify first the specific \textbf{causes of degradation} within each domain to then characterize the appropriate \textbf{adaptation tactics}. That study is very relevant to the work in this thesis since the approach we take is very similar to theirs. Although we consider a larger set of tactics that can be used to adapt the system and apply it to the problem of object detection in medical images.
+    Note how rather than focusing on how to obtain a plan to adapt the system, Casimiro et al.'s approach is to identify first the specific \textbf{causes of degradation} within each domain to then characterize the appropriate \textbf{adaptation tactics}. 
+
+    Similar works such as Gheibi et al. (2020) \cite{gheibiApplyingMachineLearning2020}, which makes a review of the literature on machine learning applied to self-adaptive systems, also focuses on the use of MAPE-K loops to develop such systems. Furthermore, the authors differentiate between two classes of problems that are tacked by ML in SAS: \textbf{adaptation problems where learning is applied} and \textbf{learning problems where adaptation is applied}.
+
+    In the first case, 
+
+    % That study is very relevant to the work in this thesis since the approach we take is very similar to theirs. Although we consider a larger set of tactics that can be used to adapt the system and apply it to the problem of object detection in medical images.
     
 
     \begin{table}
