@@ -117,11 +117,12 @@
     
     Note how rather than focusing on how to obtain a plan to adapt the system, Casimiro et al.'s approach is to identify first the specific \textbf{causes of degradation} within each domain to then characterize the appropriate \textbf{adaptation tactics}. 
 
-    Similar works such as Gheibi et al. (2020) \cite{gheibiApplyingMachineLearning2020}, which makes a review of the literature on machine learning applied to self-adaptive systems, also focuses on the use of MAPE-K loops to develop such systems. However, the scope of the study is about using ML to support Self-Adaptive systems rather than using SAS to support the learning process itself.
+    Similar works such as Gheibi et al. (2020) \cite{gheibiApplyingMachineLearning2020}, which makes a review of the literature on machine learning applied to self-adaptive systems, also focuses on the use of MAPE-K loops to develop such systems. However, the scope of the study is about using ML to support SAS rather than the latter to support the learning process.
     
-    Note that the difference between the two approaches is subtle but important. In the first case, the problem is about using learning algorithms as a means to support one or more functions of the MAPE loop. For example, to predict the best tactic to use in a given situation (Planning) or predict resource usage to optimize the system's performance before executing a tactic (Monitoring).
+    Note that the difference between the two approaches is subtle but important. In the first case, the problem is about using learning algorithms as a means to support the adaptive system without considering the tasks that it executes. The task of the ML model, then, is to improve one or more functions of the MAPE loop. For example, to predict the best tactic to use in a given situation (Planning) or detecting anomalies in the behavior of the system (Monitoring).
 
-    In the second case, the problem is about using ML to improve the adaptation process of the system, for example, to predict the best tactic to use in a given situation. In the first case, the problem is about using ML to improve the adaptation process of the system, for example, to
+    In the second case, the one we are interested in, the problem is about using the MAPE-K loop as a means to improve the learning process of an ML model. 
+    For example, to detect when the model is degrading (Monitoring) and then use a tactic to improve its performance (Execution).
 
     % In the first case, the problem is about using ML to improve the adaptation process of the system, for example, to 
 
