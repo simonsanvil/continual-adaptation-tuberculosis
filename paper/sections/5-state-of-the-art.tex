@@ -215,6 +215,8 @@
 
      Transfer Learning is useful for healthcare applications because it allows us to adapt pre-trained models to the medical domain - something referred to as \textbf{domain adaptation}. This is particularly relevant to our problem, we can use transfer learning to adapt models trained on general object detection datasets (e.g., COCO \cite{linMicrosoftCOCOCommon2015}, PASCAL VOC \cite{everinghamPascalVisualObject2010}) to the task of detecting tuberculosis in microscopy images. Something that has been done before in the literature with good results \cite{visuna_novel_2023}.
 
+     \clearpage
+
      We can envision this technique as part of a continual system that automatically adapts machine learning components to new tasks using transfer learning, avoiding the need to retrain the entire model from scratch.
 
     % \clearpage
@@ -225,7 +227,9 @@
      Active learning strategies selectively acquire data based on their informativeness or uncertainty to the model. Its value comes from allowing the model to guide its own data acquisition process, thus potentially reducing the need for vast - or unnecessary - amounts of pre-labeled data before a model is trained or updated \cite{huyen_designing_2022, chen_study_2015, figueroa_predicting_2012}. 
     %  This is particularly important in health applications, as the availability of annotated medical data is often limited due to privacy concerns, expert time constraints, and the complexity of pathological findings.
      
-    %  Active learning enables the development of accurate models using significantly less labeled data, paving the way for more efficient and cost-effective machine-learning platforms. Some common active learning strategies include uncertainty sampling, query by committee, and expected model change. 
+     Active learning enables the development of accurate models using significantly less labeled data, paving the way for more efficient and cost-effective healthcare systems. 
+     
+     Some common active learning strategies include uncertainty sampling, query by committee, and expected model change. 
 
      \newpage
 
