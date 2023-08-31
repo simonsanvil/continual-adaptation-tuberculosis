@@ -121,8 +121,7 @@
     
     Note that the difference between the two approaches is subtle but important. In the first case, the problem is about using learning algorithms as a means to support the adaptive system without considering the tasks that it executes. The task of the ML model, then, is to improve one or more functions of the MAPE loop. For example, to predict the best tactic to use in a given situation (Planning) or detecting anomalies in the behavior of the system (Monitoring).
 
-    In the second case, the one we are interested in, the problem is about using the MAPE-K loop as a means to improve the learning process of an ML model. 
-    For example, to detect when the model is degrading (Monitoring) and then use a tactic to improve its performance (Execution).
+    In the second case, the one we care about, the problem is about using the MAPE-K loop as a means to improve the learning process of an ML model. That is, we are putting the learning process at the center of the system, and the task of the MAPE-K loop is to support it with any tactic (learning-based or not) that can help improve the performance and/or efficiency of the model. 
 
     % In the first case, the problem is about using ML to improve the adaptation process of the system, for example, to 
 
@@ -154,9 +153,10 @@
         \vspace*{-0.4cm}
     \end{table}
     
-    The idea of bringing MAPE-K loops to the context of this work is that much like traditional software systems, ML Systems can also benefit from the study of SAS techniques (and the ample literature that exists on the topic) to improve their robustness and reliability. Indeed, the idea of continual adaptation is not new to the ML field, with well-known researchers arguing that it is a fundamental aspect of intelligence \cite{kirsch_self-referential_2022,thrun_lifelong_1995, parisi_continual_2019}. 
+    The idea of bringing MAPE-K loops to the context of this work is that much like traditional software systems, ML can also benefit from the study of SAS techniques (and the ample literature that exists on the topic) to improve their performance and robustness.
+    % Indeed, the idea of continual adaptation is not new to the ML field, with well-known researchers arguing that it is a fundamental aspect of intelligence \cite{kirsch_self-referential_2022,thrun_lifelong_1995, parisi_continual_2019}. 
 
-    In her book `Designing Machine Learning Systems' \cite{huyen_designing_2022}, Chip Huyen presents the challenges and patterns of deploying ML Systems. Like Casimiro et al., she stresses the importance of monitoring a system's behavior to identify causes of degradation and continually update them. She also discusses how having humans in the loop who can provide feedback to the system is essential for their reliability in high-stakes domains.
+    In her book `Designing Machine Learning Systems' \cite{huyen_designing_2022}, Chip Huyen presents the challenges and patterns of deploying ML Systems. Like Casimiro et al., she stresses the importance of monitoring a model's behavior to identify causes of degradation and continually update them. She also discusses how having humans in the loop who can provide feedback to the system is essential for their reliability in high-stakes domains.
 
     Vokinger et al. \cite{vokingerContinualLearningMedical2021} makes further discussion about the reliability of continually-adapted systems in healthcare, arguing that the risk that such systems pose in such a domain is likely the reason why the FDA has not approved any continual-learning systems for medical use. The authors highlight problems like \textbf{catastrophic forgetting} and \textbf{bias induction} as two inherent risks of continual learning systems to address.
 
