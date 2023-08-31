@@ -158,12 +158,12 @@
 
     In her book `Designing Machine Learning Systems' \cite{huyen_designing_2022}, Chip Huyen presents the challenges and patterns of deploying ML Systems. Like Casimiro et al., she stresses the importance of monitoring a model's behavior to identify causes of degradation and continually update them. She also discusses how having humans in the loop who can provide feedback to the system is essential for their reliability in high-stakes domains.
 
-    Vokinger et al. \cite{vokingerContinualLearningMedical2021} makes further discussion about the reliability of continually-adapted systems in healthcare, arguing that the risk that such systems pose in such a domain is likely the reason why the FDA has not approved any continual-learning systems for medical use. The authors highlight problems like \textbf{catastrophic forgetting} and \textbf{bias induction} as two inherent risks of continual learning systems to address.
+    Vokinger et al. (2021) makes further discussion about the reliability of continually-adapted systems in healthcare, arguing that the risk that such systems pose in such a domain is likely the reason why the FDA has not approved any continual-learning systems for medical use \cite{vokingerContinualLearningMedical2021} ¿. The authors highlight problems like \textbf{catastrophic forgetting} and \textbf{bias induction} as two inherent risks of continual learning systems to address.
 
     Adaptive systems that have been deployed for health uses can be more commonly found in the remote sensing domain, where typically a set of sensors is used to monitor signals from the user's body to obtain fitness-related insights. Jha et al. (2021) \cite{jhaContinualLearningSensorbased2021}, for example, makes an empirical analysis of continual learning applied to Human-Activity Recognition models that can learn to recognize new activities over time different from the ones they were initially trained on.
     
-    A different approach to self-adaptivity comes from the authors of MsO-KELM \cite{haoTechnologyOrientedPathwayAuxiliary2022}, a system that takes a kernel extreme learning machine (KELM) model \cite{xiaEvolvingKernelExtreme2022} and introduces a swarm intelligence algorithm to optimize its hyperparameters in a self-adaptive manner. The authors show that their system can achieve better performance than other KELM-based models. This approach, however, suffers from its lack of flexibility.
-
+    A different approach to self-adaptivity comes from the authors of MsO-KELM \cite{haoTechnologyOrientedPathwayAuxiliary2022}, a system that takes a kernel extreme learning machine (KELM) model \cite{xiaEvolvingKernelExtreme2022} and introduces a swarm intelligence algorithm to optimize its hyperparameters in a self-adaptive manner. The authors show that their system can achieve better performance than other KELM-based models. This approach, however, suffers from the lack of flexibility MAPE-K loops provide, as it is not clear how this system would adapt to other problems or models.
+    
     In the next section, we will characterize some adaptation techniques and learning paradigms proposed in the literature that could be used as \textit{tactics} of a continual-learning system that tackles the problems described in this work.
     
     
@@ -171,9 +171,9 @@
     \section{Adaptation Techniques and Learning Paradigms} \label{sec:relevant_techniques} 
     % \info{6-7 pages}
 
-    Throughout this section, we consider a set of novel techniques proposed in the literature related to ML model adaptation. One of the critical aspects in selecting which methods to include in this section - besides their relevance to the topic - was the technical feasibility of implementing them as \textit{tactics} (as described in section \ref{sec:lifelong_adaptive_systems}) in a self-adaptive system. 
+    Throughout this section, we consider a set of novel techniques proposed in the literature related to ML model adaptation. One of the critical aspects in selecting which methods to include in this section - besides their relevance to the topic - was the technical feasibility of implementing them as \textit{tactics} (as described above) in a self-adaptive system. 
 
-    The idea is that some of the techniques described below may be used as the basis for the adaptation process of an ML model after it has been detected (through specific monitorization) that some form of degradation has occurred. The goal would be to then use some of these techniques (or a combination of them) as a way to improve performance.
+    The idea is that some of the techniques described here may be used as the basis for the adaptation process of an ML model after it has been detected (through specific monitorization) that some form of degradation has occurred. The goal would be to then use some of these techniques (or a combination of them) as a way to improve performance.
 
     \subsection{Continual Learning} \label{sec:continual_learning} 
     % \info{1.25 pages}
