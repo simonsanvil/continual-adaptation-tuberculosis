@@ -60,42 +60,26 @@
 
     The following are some of the recent and upcoming research directions in the field of machine learning that we consider to be relevant to the work presented in this thesis.
     
-    Unlike the previous section, which focused on the limitations of the proposed system and detailed ideas about how to address or improve them in the immediate future, this section takes a broader view, focusing on the limitations of the current state-of-the-art and what might be considered to be the next steps in the area.
+    Unlike the previous section, which focused on the limitations of the proposed system and detailed ideas about how to address or improve them in the immediate future, this section takes a broader view, focusing on gaps in the current state-of-the-art and what might be considered to be the next steps in the field.
     
-    The idea is that these research directions could used as a starting point for future work (maybe even a Ph.D. thesis) on the topics of adaptive machine-learning systems, either as a continuation of some of the work presented here or as a completely new approach to the problem. We make no claims about the feasibility of these ideas but rather present why I consider them to be relevant and interesting for further research and discussion.
+    The idea is that these directions could used as a starting point for future research (i.e. a Ph.D. thesis) on the topics presented in this thesis, either as a continuation of some of the work here or as a completely new approach to the problem. We make no claims about the feasibility of these ideas but rather present why I consider them to be interesting for further research and/or discussion.
 
 
     \subsection{Future directions in Tuberculosis AI Research} \label{conclusions:future_work:tb_ai} \info{<1 pág}
     
-    Detection will soon be a solved problem thanks to NAATs (or rather, more of a money problem than a technical one). Thus, the emphasis should now be on drug discovery, finding new biomarkers, etc. \dots
+    Detection will soon be a solved problem thanks to NAATs (or rather, more of a money problem than a technical one). Thus, the emphasis should be less on CV-based detectors and more to advances in drug discovery, finding new biomarkers, etc. \dots
 
     \clearpage
 
-    \subsection{Meta-Learning and Self-Improving Systems} \label{conclusions:research_directions:l2l} \info{1 pág}
-
-    Much like human learners, who, building from previous knowledge, continuously seek and filter information that could be useful to learn new concepts and skills, an area of research in machine learning concerns the design of programs/systems that can efficiently improve their learning process without the need for explicit human intervention. This area of research is known as \textbf{meta-learning}, and it is a very active area of research in AI \todo{add citation}.
-    
-    Meta-learning is a technique that aims to improve the performance of machine-learning models by `learning to learn' (L2L) a certain task. Such ideas have been successfully applied to a wide range of problems, including computer vision, natural language processing, robotics, video games, and more \cite{hospedales_meta-learning_2020}.
-    
-    The way meta-learning is formulated is by training a model on a variety of tasks and then using the knowledge gained from those to improve its performance on new tasks or learn it faster / more sample-efficiently than if it had been trained only for that task \cite{hospedales_meta-learning_2020}.
-    
-    This idea is regarded to have been first introduced by Dr. Jurgen Schmidhuber in 1987 with his thesis `Evolutionary Principles in Self-Referential Learning'. In his work, Schmidhuber proposed an algorithm that adaptively improves its learning skills by recursively applying genetic programming to itself and ensuring that only `useful' modifications (made by the program to itself) `survive' in an evolutionary fashion \cite{schmidhuber_evolutionary_1987}.
-    
-    Recently, Finn et al. (2017) \cite{finn_model-agnostic_2017} propose a model-agnostic framework for meta-learning that can be applied to any deep-learning architecture and learning task. The framework consists of \dots
-
-    The idea behind researching this area is that, by adopting this L2L framework, we could design a system that can continually improve its learning process over time.
-
-    As a low-hanging fruit, we can envision the design of a system similar to the one proposed in this work that integrates and builds upon concepts from meta-learning, unlearning, knowledge distillation, and transfer learning \footnote{See section \ref{sec:relevant_techniques}}, that enables model that can more sophisticatedly adapt to new problems. 
-    
-    This self-adaptive process would necessarily be based on evaluating the model's performance and a metric of the `necessity' of adaptation/learning that task better, but rather than relying on simple heuristics and a model-agnostic approach, the system would trigger a more complex adaptation process.
-
-    \clearpage
 
     \subsection{Scalable Adaptability through Mixtures of Experts} \label{conclusions:research_directions:moes} \info{1.5 pág}
 
     Mixture of experts (MoEs) models are a type of ensemble model that combines the predictions of multiple models to obtain a final prediction. The difference between MoEs and other ensemble models is that the predictions of the individual `experts' are combined using a gating function that adapts to the given data point and dynamically determines the weight of each model in the final prediction \cite{chen_towards_2022}.
 
     MoEs are really powerful systems. They have been shown to be able to learn complex multimodal distributions and have been used in a wide variety of applications, including object detection, language modeling, machine translation, and even multiomics \cite{hwang_tutel_2023,mustafa_multimodal_2022,shazeer_outrageously_2017, minoura_scmm_2021}.
+
+    More to this point, the computational sparsity of MoEs have shown the capacity to scale DNN models to outrageous amounts of parameters at constant computational cost. Recently, researchers at Google Brain presented a MoE architecture called Switch Transformers \cite{fedusSwitchTransformersScaling2022a} that allows language models - AI systems that can generate text - to scale
+    to trillion parameters and has been shown to outperform state-of-the-art language models such as GPT-3 \cite{brown_language_2020}.
     
     In the context of this work, we consider that MoEs could be used to create a more scalable and robust system that can adapt to new tasks and data distributions. The idea is that the system would be composed of a set of `expert' models, each of which would be specialized in a particular task or data distribution. The system would then be able to adapt to new tasks by autonomously learning a new expert model or by retraining an existing one.
     
@@ -119,7 +103,27 @@
     \end{figure}
 
     % Another interesting research direction would be to explore the use of MoEs to handle multimodal data. In \cite{mustafa_multimodal_2022}, researchers at Google Brain used MoEs to train an architecture that accepts both image and text inputs and outputs a single prediction by 
+  
+    \subsection{Meta-Learning and L2L Systems} \label{conclusions:research_directions:l2l} \info{1 pág}
+
+    Much like human learners, who, building from previous knowledge, continuously seek and filter information that could be useful to learn new concepts and skills, an area of research in machine learning concerns the design of programs/systems that can efficiently improve their learning process without the need for explicit human intervention. This area of research is known as \textbf{meta-learning}, and it is a very active area of research in AI \todo{add citation}.
     
+    Meta-learning is a technique that aims to improve the performance of machine-learning models by `learning to learn' (L2L) a certain task. Such ideas have been successfully applied to a wide range of problems, including computer vision, natural language processing, robotics, video games, and more \cite{hospedales_meta-learning_2020}.
+    
+    The way meta-learning is formulated is by training a model on a variety of tasks and then using the knowledge gained from those to improve its performance on new tasks or learn it faster / more sample-efficiently than if it had been trained only for that task \cite{hospedales_meta-learning_2020}.
+    
+    This idea is regarded to have been first introduced by Dr. Jurgen Schmidhuber in 1987 with his thesis `Evolutionary Principles in Self-Referential Learning'. In his work, Schmidhuber proposed an algorithm that adaptively improves its learning skills by recursively applying genetic programming to itself and ensuring that only `useful' modifications (made by the program to itself) `survive' in an evolutionary fashion \cite{schmidhuber_evolutionary_1987}.
+    
+    Recently, Finn et al. (2017) \cite{finn_model-agnostic_2017} propose a model-agnostic framework for meta-learning that can be applied to any deep-learning architecture and learning task. The framework consists of \dots
+
+    The idea behind researching this area is that, by adopting this L2L framework, we could design a system that can continually improve its learning process over time.
+
+    As a low-hanging fruit, we can envision the design of a system similar to the one proposed in this work that integrates and builds upon concepts from meta-learning, unlearning, knowledge distillation, and transfer learning \footnote{See section \ref{sec:relevant_techniques}}, that enables model that can more sophisticatedly adapt to new problems. 
+    
+    This self-adaptive process would necessarily be based on evaluating the model's performance and a metric of the `necessity' of adaptation/learning that task better, but rather than relying on simple heuristics and a model-agnostic approach, the system would trigger a more complex adaptation process.
+
+    \clearpage
+  
     % \subsection{AutoML and Neural Architecture Search} \label{conclusions:research_directions:automl_nas}
 
     % AutoML and Neural Architecture Search (NAS) are other two areas of research that have been gaining a lot of traction in the last few years. The idea behind these approaches is to automate the design of machine learning models by using optimization techniques to search for the best model architecture and hyperparameters for a given task.
