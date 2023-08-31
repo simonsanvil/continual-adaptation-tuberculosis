@@ -117,11 +117,11 @@
     
     Note how rather than focusing on how to obtain a plan to adapt the system, Casimiro et al.'s approach is to identify first the specific \textbf{causes of degradation} within each domain to then characterize the appropriate \textbf{adaptation tactics}. 
 
-    Similar works such as Gheibi et al. (2020) \cite{gheibiApplyingMachineLearning2020}, which makes a review of the literature on machine learning applied to self-adaptive systems, also focuses on the use of MAPE-K loops to develop such systems. However, the scope of the study is about using ML to support SAS rather than the latter to support the learning process.
+    Similar works such as Gheibi et al. (2020) \cite{gheibiApplyingMachineLearning2020}, which makes a review of the literature on machine learning applied to self-adaptive systems, also focuses on the use of MAPE-K loops to develop such systems. However, the scope of the study is about using ML to support SAS rather than using the latter to support the learning process.
     
     Note that the difference between the two approaches is subtle but important. In the first case, the problem is about using learning algorithms as a means to support the adaptive system without considering the tasks that it executes. The task of the ML model, then, is to improve one or more functions of the MAPE loop. For example, to predict the best tactic to use in a given situation (Planning) or detecting anomalies in the behavior of the system (Monitoring).
 
-    In the second case, the one we care about, the problem is about using the MAPE-K loop as a means to improve the learning process of an ML model. That is, we are putting the learning process at the center of the system, and the task of the MAPE-K loop is to support it with any tactic (learning-based or not) that can help improve the performance and/or efficiency of the model. 
+    In the second case, the one we care about, the problem is about using the MAPE-K loop as a means to \textbf{improve the learning process} of an ML model. That is, we are putting the learning process at the center of the system, and the task of the MAPE-K loop is to support it with any tactic (learning-based or not) that can help improve the performance and/or efficiency of the model. 
 
     % In the first case, the problem is about using ML to improve the adaptation process of the system, for example, to 
 
@@ -158,7 +158,7 @@
 
     In her book `Designing Machine Learning Systems' \cite{huyen_designing_2022}, Chip Huyen presents the challenges and patterns of deploying ML Systems. Like Casimiro et al., she stresses the importance of monitoring a model's behavior to identify causes of degradation and continually update them. She also discusses how having humans in the loop who can provide feedback to the system is essential for their reliability in high-stakes domains.
 
-    Vokinger et al. (2021) makes further discussion about the reliability of continually-adapted systems in healthcare, arguing that the risk that such systems pose in such a domain is likely the reason why the FDA has not approved any continual-learning systems for medical use \cite{vokingerContinualLearningMedical2021} ¿. The authors highlight problems like \textbf{catastrophic forgetting} and \textbf{bias induction} as two inherent risks of continual learning systems to address.
+    Vokinger et al. (2021) makes further discussion about the reliability of continually-adapted systems in healthcare, arguing that the risk that such systems pose in such a domain is likely the reason why the FDA has not approved any continual-learning systems for medical use \cite{vokingerContinualLearningMedical2021}. The authors highlight problems like \textbf{catastrophic forgetting} and \textbf{bias induction} as two inherent risks of continual learning systems to address.
 
     Adaptive systems that have been deployed for health uses can be more commonly found in the remote sensing domain, where typically a set of sensors is used to monitor signals from the user's body to obtain fitness-related insights. Jha et al. (2021) \cite{jhaContinualLearningSensorbased2021}, for example, makes an empirical analysis of continual learning applied to Human-Activity Recognition models that can learn to recognize new activities over time different from the ones they were initially trained on.
     
