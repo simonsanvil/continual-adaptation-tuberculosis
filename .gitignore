@@ -152,15 +152,57 @@ wandb/
 *.DS_Store
 
 # IGNORED TEMPORARILY (TO DO)
-temp/
-*.pdf
-paper/*
-!paper/main.tex
-!paper/header.tex
-!paper/main.pdf
-!paper/images/
-!paper/sections/*.tex
-!paper/Makefile
+*temp/
+./*.pdf
+paper/.vscode
+paper/plantilla/
+paper/sections/*.pdf
+paper/**/*.xml
+paper/**/*.tdo
+paper/**/*.xml
+paper/**/*synctex*
+paper/**/*.out
+paper/**/*.log
+paper/**/*.aux
+paper/**/*.bbl
+paper/**/*.blg
+paper/**/*.synctex.gz
+paper/**/*.toc
+paper/**/*.lof
+paper/**/*.lot
+paper/**/*.idx
+paper/**/*.ind
+paper/**/*.ilg
+paper/**/*.glo
+paper/**/*.xmpi
+# !paper/main.tex
+# !paper/header.tex
+# !paper/main.pdf
+# !paper/images*
+# !paper/snippets*
+# !paper/figures*
+# !paper/bibliography*
+# !**/*tex
+# !paper/**/1-cover.tex
+# !paper/**/2-preliminaries.tex
+# !paper/**/3-indices.tex
+# !paper/**/4-introduction.tex
+# !paper/**/5-state-of-the-art.tex
+# !paper/**/6-solution-design.tex
+# !paper/**/7-results.tex
+# !paper/**/8-conclusions.tex
+# !paper/**/9-post-conclusions.tex
+# !paper/**/10-appendix.tex
+
 
 *.log
 *.onnx
+
+# pytorch and other big pickle files
+*.pth
+*.pt
+*.h5
+*.npy
+*.npz
+*.pkl
+*.pickle
