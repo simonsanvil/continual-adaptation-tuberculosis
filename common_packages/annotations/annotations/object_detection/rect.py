@@ -97,6 +97,10 @@ class Rect(BaseModel):
         return (self.left, self.top, self.right, self.bottom)
     
     @property
+    def cxcywh(self) -> Tuple[float, float, float, float]:
+        return (self.left + self.width/2, self.top + self.height/2, self.width, self.height)
+    
+    @property
     def center(self) -> Tuple[float, float]:
         return (self.left + self.width/2, self.top + self.height/2)
     

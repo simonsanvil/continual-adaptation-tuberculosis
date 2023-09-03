@@ -18,17 +18,21 @@ class ImageForObjectDetection(BaseModel):
     width: Optional[int] = Field(None, description="The width of the image.", gt=0)
     height: Optional[int] = Field(None, description="The height of the image.", gt=0)
     name: Optional[str] = Field(None, description="The name of the image.")
+    img_dir: Optional[str] = Field(None, description="The directory containing the image.")
     _artifact: object = PrivateAttr(None)
 
     def __init__(self, **data) -> None:
         super().__init__(**data)
-        # self.image_path = Path(self.image_path)
-        # if (self.width is None or self.height is None) and self.image_path.exists():
-        #     import PIL
-        #     img = PIL.Image.open(self.image)
-        #     self.width, self.height = img.size
-        # if self.name is None:
-        #     self.name = self.image_path
+        image_path = Path(self.uri)
+        if self.img_dir is not None:
+            image_path = Path(self.img_dir) / image_path
+            self.uri = str(image_path)
+        if (self.width is None or self.height is None) and image_path.exists():
+            import PIL
+            img = PIL.Image.open(image_path)
+            self.width, self.height = img.size
+        if self.name is None:
+            self.name = image_path.stem
 
     @property
     def artifact(self) -> Artifact:
@@ -69,8 +73,10 @@ class ImageForObjectDetection(BaseModel):
         """
         from PIL import Image, ImageDraw
 
-
-        im = Image.open(self.uri)
+        img_path = Path(self.uri)
+        if not img_path.exists():
+            raise FileNotFoundError(f"Could not find image at {img_path}")
+        im = Image.open(img_path)
         if rects:
             draw = ImageDraw.Draw(im)
             for rect in self.rects:
@@ -153,7 +159,7 @@ class ImageForObjectDetection(BaseModel):
         image_path = img_path.resolve()
         image = plt.imread(image_path)
         if ax is None:
-            fig, ax = plt.subplots(1)
+            fig, ax = plt.subplots(1, **kwargs)
         ax.imshow(image)
 
         if self.artifact is None:
@@ -171,7 +177,7 @@ class ImageForObjectDetection(BaseModel):
         return ax
     
     @classmethod
-    def from_db(cls, artifact: Artifact) -> "ImageForObjectDetection":
+    def from_db(cls, artifact: Artifact, **kwargs) -> "ImageForObjectDetection":
         """
         Create an ImageForObjectDetection from an artifact in the database.
         """
@@ -180,6 +186,7 @@ class ImageForObjectDetection(BaseModel):
         odimg = cls(
             uri=artifact.uri,
             name=artifact.name,
+            **kwargs
             # artifact=artifact
         )
         odimg._artifact = artifact
