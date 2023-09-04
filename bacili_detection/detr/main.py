@@ -11,9 +11,9 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader, DistributedSampler
 
-import datasets
+from . import datasets
 import util.misc as utils
-from datasets import build_dataset
+from .datasets import build_dataset
 from engine import evaluate, train_one_epoch
 from models import build_model
 
@@ -113,6 +113,9 @@ def get_args_parser():
 
     # number of classes
     parser.add_argument('--num_classes', default=2, type=int)
+
+    # tags of the dataset
+    parser.add_argument('--tags', default='all', type=str)
 
     return parser
 

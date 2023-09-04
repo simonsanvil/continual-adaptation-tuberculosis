@@ -13,7 +13,7 @@ from annotations.object_detection.object_detection import ImageForObjectDetectio
 from annotations.object_detection.dataset import DatasetForObjectDetection
 from annotations import db
 
-from . import transforms as T
+from . import transforms as detr_transforms
 
 sys.path.append('bacili_detection/src')
 
@@ -109,17 +109,25 @@ class TBBacilliDataset(DatasetForObjectDetection):
         b_xyxy[:, 1::2] *= height
         return b_xyxy.type(torch.int16).cpu().numpy()
 
-def make_ds_transforms(tag:str):
+def make_ds_transforms(tag:str, includes_target:bool=True):
+    if not includes_target:
+        T = torchvision.transforms
+    else:
+        T = detr_transforms
+
     normalize = T.Compose([
         T.ToTensor(),
         T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
-    scales = [672, 704, 736, 768, 800]
+    scales = [768, 800]
     if tag == "train":
         train_transforms = T.Compose([
             T.RandomHorizontalFlip(0.5),
             T.ColorJitter(0.4, 0.4, saturation=0, hue=0),
-            T.RandomResize(scales, max_size=1333),
+            T.RandomResize(scales, max_size=1432),
+            # random resize will make it so that the image's smallest side is one of the scales
+            # and the largest side is less than or equal to 1333
+            # this makes sure that the model learns to detect objects at different scales
             # T.RandomSelect(
             #     T.RandomResize(scales, max_size=1333),
             #     T.Compose([
@@ -131,6 +139,12 @@ def make_ds_transforms(tag:str):
             normalize,
         ])
         return train_transforms
+    elif tag == "test":
+        test_transforms = T.Compose([
+            T.Resize(800),
+            normalize,
+        ])
+        return test_transforms
     else:
         eval_transforms = T.Compose([
             T.RandomResize([800], max_size=1333),

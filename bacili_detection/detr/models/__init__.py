@@ -8,6 +8,7 @@ from PIL import Image
 def build_model(args):
     return build(args)
 
+@torch.no_grad()
 def detr_inference(
         imgs:Union[Image.Image,List[Image.Image]], 
         model, 
@@ -15,32 +16,45 @@ def detr_inference(
         id2label:dict=None, 
         threshold:float=0.7,
         device:str='cpu',
+        labels:bool=True,
     ):
-    with torch.no_grad():
-        # inputs = processor(images=img, return_tensors="pt")['pixel_values']
-        # inputs = torchvision.transforms.functional.to_tensor(img)#.unsqueeze(0)
-        if not isinstance(imgs, list):
-            imgs = [imgs]
-        inputs = [transform(i).unsqueeze(0) for i in imgs]
-        inputs = torch.cat(inputs, dim=0) # batched inference
-        inputs = inputs.to(device)
-        model = model.to(device)
-        outputs = model(inputs)
-        # keep only predictions with 0.7+ confidence
-        keep = outputs['pred_logits'].softmax(-1)[0, :, :-1].max(-1).values > threshold
-        # convert to numpy
-        x_c, y_c, w, h = outputs['pred_boxes'][0, keep].cpu().numpy().T
-        # convert from xcenter, ycenter, width, height to xyxy (corner) format
-        bboxes = np.stack(
-            [(x_c - 0.5 * w), (y_c - 0.5 * h), (x_c + 0.5 * w), (y_c + 0.5 * h)]
-        ).transpose(1, 0)
-        # rescale boxes to original image (since DETR is scaled to 800x800)
-        for img, bbox in zip(imgs, bboxes):
-            bboxes = bboxes * np.array([img.width, img.height, img.width, img.height])
-        # the output format of detr is 
-        bboxes = bboxes.astype(np.int16)
-        # get labels
-        labels = outputs['pred_logits'].softmax(-1)[0, keep].argmax(-1).cpu().numpy()
-        if id2label:
-            labels = [id2label[label] for label in labels]
-    return bboxes, labels
+    """
+    Perform inference with DETR on a list of images
+    """
+    # inputs = processor(images=img, return_tensors="pt")['pixel_values']
+    # inputs = torchvision.transforms.functional.to_tensor(img)#.unsqueeze(0)
+    if not isinstance(imgs, list):
+        imgs = [imgs]
+    inputs = [transform(im).unsqueeze(0) for im in imgs]
+    inputs = torch.cat(inputs, dim=0) # batched inference
+    inputs = inputs.to(device)
+    model = model.to(device)
+    outputs = model(inputs)
+    return_labels = labels
+    # keep only predictions with confidence > threshold
+    keep = outputs['pred_logits'].softmax(-1)[:, :, :-1].max(-1).values > threshold
+    # denormalize bboxes
+    x_c, y_c, w, h = outputs['pred_boxes'].detach().transpose(0, 2)
+    bboxes = torch.stack(
+        [(x_c - 0.5 * w), (y_c - 0.5 * h), (x_c + 0.5 * w), (y_c + 0.5 * h)]
+    ).permute(2, 1, 0)
+    # to cpu
+    bboxes = bboxes.cpu()
+    keep = keep.cpu()
+    # filter out low confidence bboxes
+    boxes_per_img = []
+    labels_per_img = []
+    for i, img in enumerate(imgs):
+        labels = outputs['pred_logits'][i, keep[i]].argmax(-1)
+        im_bboxes = bboxes[i, keep[i]] * torch.tensor([img.width, img.height, img.width, img.height])
+        im_bboxes = im_bboxes.numpy().astype(np.int16)
+        if id2label is not None:
+            labels = [id2label[label.item()] for label in labels]
+        else:
+            labels = [label.item() for label in labels]
+        boxes_per_img.append(im_bboxes)
+        labels_per_img.append(labels)
+    
+    if return_labels:
+        return boxes_per_img, labels_per_img
+    return boxes_per_img
