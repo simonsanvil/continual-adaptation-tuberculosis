@@ -35,13 +35,15 @@
     
     
     
-    Methods such as TRAK \cite{park_trak_2023} have been proposed as a way to improve the explainability of Deep Learning models by providing a way to trace the predictions of a model to individual instances of the training data in a concept known as \textit{data attribution}, which has been proven useful in improving sample selection for active learning approaches \cite{park_trak_2023, holzmuller_framework_2023, liu_influence_2021}.
+    Methods such as TRAK \cite{park_trak_2023} have been proposed as a way to improve the explainability of DNNs by providing a way to trace the predictions of a model to individual instances of their training data in a concept known as \textit{data attribution}, which has been proven useful in improving sample selection for active learning approaches \cite{park_trak_2023, holzmuller_framework_2023, liu_influence_2021}.
 
-    \subsection{Adapting the system to run on a federated platform} \label{conclusions:future_work:federated} \info{1.75 pág}
+    \subsection{Potential to run the system as a federated learning platform} \label{conclusions:future_work:federated} \info{1.75 pág}
 
     % \info{1 page}
 
-    Federated learning is the concept of training a model using data from multiple sources without having to share the data itself. This is achieved by training the model on each source separately and combining the results to obtain a final model. This technique is particularly useful in healthcare applications, where data privacy is a significant concern. It allows us to train models on data from multiple sources without having to share the data itself, thus preserving the privacy of the patients \cite{joshi_federated_2022}.
+    Federated learning is the concept of training a model using data from multiple sources without having to share the data itself. This is achieved by training the model on each source separately and combining the results to obtain a final model.
+    
+    This technique is particularly useful in healthcare applications, where data privacy is a significant concern. It allows us to train models on data from multiple sources without having to share the data itself, thus preserving the privacy of the patients \cite{joshi_federated_2022}.
     \todo[inline]{Modify this description and add more details, references \dots}
 
     Efforts such as \cite{joshi_federated_2022} have demonstrated the benefits and potential of taking a federated learning approach to training machine learning models in the healthcare industry. A future proposal to improve the system presented in this work would be to adapt the current platform to one where the models are trained in a federated fashion.
@@ -72,15 +74,15 @@
 
     \subsection{Scalable Adaptability through Mixtures of Experts} \label{conclusions:research_directions:moes} \info{1.5 pág}
 
-    Mixture of experts (MoE) systems are a type of ensemble model that combines the predictions of multiple models to obtain a final prediction. The difference between MoEs and other ensemble models is that the predictions of the individual `experts' are combined using a gating function that adapts to the given data point and dynamically determines the weight of each model in the final prediction \cite{chen_towards_2022}.
+    Mixture of experts (MoE) systems is a type of ensemble model that combines the predictions of multiple models to obtain a final prediction. The difference between MoEs and other ensemble models is that the predictions of the individual `experts' are combined using a gating/routing function - typically a neural network - that adapts to the given data point and dynamically determines the weight of each model in the final prediction \cite{chen_towards_2022}.
 
     MoEs are really powerful systems. They have been shown to be able to learn complex multimodal distributions and have been used in a wide variety of applications, including object detection, language modeling, machine translation, and even multiomics \cite{hwang_tutel_2023,mustafa_multimodal_2022,shazeer_outrageously_2017, minoura_scmm_2021}.
     
     But by far, the biggest advantage of MoEs is that each expert model can be deployed independently, allowing for a more flexible, modular system capable of being distributed and data-parallelized among different hardware resources. 
 
-    The computational sparsity of these systems has shown the capacity of MoEs to scale DNN models to outrageous amounts of parameters. Recently, researchers at Google Brain presented a MoE architecture called Switch Transformers \cite{fedusSwitchTransformersScaling2022a} that allows language models - AI systems that can generate text - to scale to even a trillion parameters at a constant computational cost.
+    The computational sparsity of these systems has shown the capacity of MoEs to scale DNN models to outrageous amounts of parameters. Recently, researchers at Google Brain presented a MoE architecture called Switch Transformers \cite{fedusSwitchTransformersScaling2022a} that allows language models (AI systems that can generate text) to scale to even a trillion parameters at a constant computational cost.
     
-    Furthermore, systems that take advantage of MoEs to scale LLMs (Large Language Models) already exist and have been deployed to production for applications as big as ChatGPT (GPT-4 is thought to be a MoE with over 8-billion parameters \todo{add citation}).
+    Furthermore, systems that take advantage of MoEs to scale LLMs (Language Models with a Large number of parameters) already exist and have been deployed to production for applications as big as ChatGPT (GPT-4 is thought to be a MoE with over 8 billion parameters \todo{add citation}).
     
     In the context of the area of this work, we consider that MoEs could be used to create a more scalable and robust system that can adapt to new tasks and data distributions. The idea is that the system would be composed of a set of `expert' models, each of which would be specialized in a particular aspect of the input data. The system would then be able to adapt to new tasks by autonomously learning a new expert model or by retraining an existing one when the need arises.
     
@@ -88,13 +90,13 @@
     
     Another advantage is the potential for more failsafe systems. By having each model deployed independently in a distributed system, one could devise a mechanism that detects when one of the expert models fails, either due to a hardware/software error or due to a significant performance drop, and automatically replaces the gating function of the current MoE with one (previously trained) that excludes the failing model.
     
-    One could also use such a mechanism as a way to save operational costs. The system might monitor the number of instances being routed to each expert model, and if one of the models is not being used, it could be automatically shut down to save resources.
+    One could even use such a mechanism as a way to save operational costs. The system might monitor the number of instances being routed to each expert model, and if one of the models is not being used, it could be automatically shut down to save resources.
 
-    Figure \ref{fig:moes} shows a diagram illustrating the concept of a mixture of experts system.
+    Figure \ref{fig:moes} shows a diagram illustrating the concept of a mixture of expert system.
 
     \begin{figure}[H]
         \centering
-        \caption{Diagram of a mixture of experts model.}
+        \caption{Diagram of a mixture of experts (MoE) system.}
         \resizebox*{0.8\linewidth}{!}{
             \input{../figures/moes_tikz.tex}
         }

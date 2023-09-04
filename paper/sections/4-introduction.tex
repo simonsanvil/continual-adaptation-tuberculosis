@@ -18,15 +18,15 @@
 
  Modern techniques aim to address these limitations by refining models in a continual loop, prioritizing data acquisition, labeling, and feedback from experts to dynamically adapt to the data stream reliably. A field of research known in the relevant literature as \textit{continual learning} (CL) \cite{parisi_continual_2019} This work explores the potential of these techniques in a medical context. 
  
- In particular, we consider the problem of developing a machine-learning platform to aid in the research of \textit{tuberculosis} (TB), an infectious disease that affects millions of people worldwide. We incorporate continual and active learning methods into this platform to improve the performance of computer vision models used to detect tuberculosis.
+ In particular, we consider the problem of developing a machine-learning platform to aid in the research of \textit{tuberculosis} (TB), an infectious disease that affects millions of people worldwide, we incorporate continual and active learning methods into this platform to improve the performance of computer vision models used to detect TB.
  
- Furthermore, the platform proposed here is meant to be integrated into a Healthcare and Data Portal that is being developed as part of an ongoing European project for the research of Tuberculosis, and it will serve as a tool to test and validate the use of machine learning models for its diagnosis. 
+ The platform proposed here is meant to be integrated into a Healthcare and Data Portal that is being developed as part of an ongoing European project for the research of Tuberculosis, and it might serve as a tool to test and validate the use of machine learning models for its diagnosis. 
 
- As such, in an effort to research the competence of continual adaptation methods in that context, the platform incorporates a system that is designed to continually adapt to new data as it becomes available and to ease labeling efforts by prioritizing the acquisition of the most informative data samples. Including a front-end interface for the visualization of the detection, labeling, and interaction with the models.
+ As such, in an effort to research the competence of continual adaptation methods in that context, the platform incorporates a system that is designed to continually adapt to new data as it becomes available and to ease labeling efforts by prioritizing the acquisition of the most informative data samples, including a front-end interface for the visualization of the detection, labeling, and interaction with the models.
  
  We evaluate the system's performance on a real dataset and compare it to a baseline model that doesn't use adaptation techniques.  Our results show that the use of these methods outperforms the baseline in terms of robustness and sample efficiency while maintaining a similar level of accuracy on the test set. Furthermore, the system proposed can automatically adapt to new data and improve its performance over time. 
  
- These results demonstrate the potential of incorporating these techniques into designing real-world systems for healthcare applications and other high-stake domains. The final chapter of this work includes a discussion about possible future work and improvements to the system that might facilitate its integration into other projects and a broader discussion about the potential of these techniques beyond the scope of this work.
+ These results demonstrate the potential of incorporating these techniques into designing real-world systems for healthcare applications and other high-stake domains. The final chapter of this work includes a discussion about possible future work and improvements to the system that might facilitate its integration into other projects and a broader discussion about the potential of these techniques, going beyond the scope of this thesis.
     
  \section{Context and Motivation} \label{sec:motivation}
 %  \section{An ML Platform to aid on the research of Mycobacterial Tuberculosis (TB)}
@@ -39,13 +39,13 @@
     
     ERA4TB's mission statement aligns itself with (and is in response to) the United Nation's (UN) Sustainable Development Goals (SGD) to end the TB epidemic by 2030 \cite{world_health_organization_regional_office_for_europe_tuberculosis_2017}. The project's website reads, `The goal of ERA4TB is to deliver an innovative and differentiated combination regimen for the treatment of TB, which can play a key role in the TB elimination agenda' \cite{noauthor_era4tb}.
 
-    To address some of the challenges of TB drug development and clinical trial design, one of the project's objectives from deliverable 1.15 of ERA4TB's agenda is developing a data-science-specific platform to enable the efficient use of machine learning methods from the collaborative platform. The platform is meant to be used by researchers and other project stakeholders to facilitate the use, development, and evaluation of machine-learning models that can aid in the research of TB.
+    To address some of the challenges of TB drug development and clinical trial design, one of the project's objectives is developing a data-science-specific platform to enable the efficient use of machine learning methods from the collaborative platform. The platform is meant to be used by researchers and other project stakeholders to facilitate the use, development, and evaluation of machine-learning models that can aid in the research of TB.
 
     Thus, the motivation behind this work comes from the idea of incorporating novel methods into this data-science-specific platform to support researchers and collaborators in their mission to end TB by 2030. The techniques described in this work are designed to improve the performance of supervised models while prioritizing their overall robustness and reliability, aspects that are crucial in the context of healthcare applications.
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.7\textwidth]{figures/ERA4TB_map.png}
+        \includegraphics[width=0.75\textwidth]{figures/ERA4TB_map.png}
         \caption{ERA4TB's Consortium of Partners and Collaborators. Source: \cite{noauthor_era4tb}}
         \label{fig:era4tb}
     \end{figure}
@@ -66,7 +66,7 @@
     
     This technique is relatively inexpensive but requires a high concentration of bacteria in the sample to be effective. Additionally, studies argue that in conditions with limited resources and a significant number of samples, there have been reports of poor sample observation and quality control measures, which can result in false-negative results \cite{desikan_sputum_2013}.
     
-    Molecular tests based on \textit{nucleic acid amplification} (NAATs), similar to the ones popularized to detect COVID-19, are another technique to diagnose TB. These tests identify the presence of bacilli by amplifying the genetic material of the bacteria in a patient's sputum sample (if any is present) and using a chemical solution to react to it \cite{cdc_tb_2016}. 
+    Molecular tests based on \textit{nucleic acid amplification} (NAATs), similar to the ones popularized to detect COVID-19, are another technique to diagnose TB \cite{cdc_tb_2016}. These tests identify the presence of bacilli by amplifying the genetic material of the bacteria in a patient's sputum sample (if any is present) and using a chemical solution to react to it. 
     
     NAATs are by far the most reliable method to diagnose TB and have the advantage of being rapid and fully automated. However, they are also expensive to produce and require specialized equipment, making them less accessible in low-resource settings \cite{albert_development_2016, maclean_advances_2020}. Indeed, a study conducted in 2018 showed that the ratio of smear microscopy tests to NAATs in countries with a high burden of TB was 6:1 \cite{cazabon_market_2018, maclean_advances_2020}.
 
@@ -106,7 +106,7 @@
     
     \subsection{Supervised and Semi-Supervised Machine-Learning} \label{sec:supervised_ml}
 
-    Machine Learning (ML) is a subfield of Artificial Intelligence (AI) that studies the design of algorithms that can learn from data and make predictions based on it. ML algorithms are fed a set of data samples (often called the training set) and learn a function that maps the input data to a desired output. The goal is to learn a function that can generalize well to unseen data and make accurate predictions. 
+    Machine Learning (ML) is a subfield of Artificial Intelligence (AI) that studies the design of algorithms that can learn from data and make predictions based on it. ML algorithms are fed a set of data samples (often called the training set) and learn a function that maps the input data to a desired output. The goal is then to learn a function that can generalize well to unseen data and make accurate predictions. 
 
     % \clearpage
 
@@ -211,13 +211,13 @@
 
     Consider the scenario of a machine-learning model that has been trained with pictures from an X-ray machine of a particular hospital. The model is then deployed in a different hospital where the X-ray machines are of another and produce images with different characteristics (a particular noise, artifacts, different resolution, etc.). 
     
-    Because the data distribution is different from the one the model was trained with, the model's performance may likely be affected. However, under a continual learning setting, the model would be able to \textbf{adapt to the new data and improve its performance over time}. 
+    Because the data distribution is different from the one the model was trained with, the model's performance may likely be affected. However, under a continual learning setting, the model would be able to \textbf{adapt to the new data} and improve its performance over time. 
 
     % SAS often adopt a feedback-loop architecture known as \textbf{MAPE-K} loops. These systems are based on using some form of \textit{knowledge-base} to continually \textit{monitor} the system, to then evaluate when an \textit{adaptation} is needed, to finally select the best action \textit{plan} and \textit{execute} it (The letters in MAPE stand for the words Monitor, Analyze, Plan, and Execute, and the K stands for Knowledge) \cite{redbooks_practical_2004}.
     
-    On the other side, the design of such systems in practice presents unique challenges that must be addressed - \textbf{the FDA has never approved a medical application based on continual learning}. Some experts argue that this is owing to the fact of questionable robustness of the adaptation process \cite{vokingerContinualLearningMedical2021}. 
+    On the other side, the design of such systems in practice presents unique challenges that must be addressed. Some experts argue that the questionable robustness of the adaptation process \cite{vokingerContinualLearningMedical2021} is onee of the reasons why \textbf{the FDA has never approved a medical application based on continual learning}.
     
-    Indeed, some known problems like \textbf{catastrophic forgetting} (i.e., when the model forgets how to perform a task after learning a new one) and \textbf{bias drift} (i.e., when the model's predictions suddenly become biased towards a particular class or group of samples) are among the most studied phenomena in continual learning.
+    Indeed, some known problems like \textbf{catastrophic forgetting} (when the model forgets how to perform a task after learning a new one) and \textbf{bias drift} (when the model's predictions suddenly become biased towards a particular class or group of samples) are among the most studied phenomena in continual learning.
     
     % In particular, ML models differ from traditional software systems in that they are often trained on a fixed dataset but deployed in a dynamic environment 
     

@@ -217,7 +217,7 @@
 
      \clearpage
 
-     We can envision this technique as part of a continual system that automatically adapts machine learning components to new tasks using transfer learning, avoiding the need to retrain the entire model from scratch.
+     We can envision this technique as part of a continual system that automatically adapts machine learning components to new tasks using transfer learning, thus reducing the need for human intervention. 
 
     % \clearpage
 	
@@ -227,12 +227,14 @@
      Active learning strategies selectively acquire data based on their informativeness or uncertainty to the model. Its value comes from allowing the model to guide its own data acquisition process, thus potentially reducing the need for vast - or unnecessary - amounts of pre-labeled data before a model is trained or updated \cite{huyen_designing_2022, chen_study_2015, figueroa_predicting_2012}. 
     %  This is particularly important in health applications, as the availability of annotated medical data is often limited due to privacy concerns, expert time constraints, and the complexity of pathological findings.
     
-    While targetting for samples that are the most informative and/or uncertain to the model sounds like a good idea, it is not always clear how to do it. The literature on active learning is vast, and we can find many different strategies that try to achieve this goal. However, the most common - and general - strategies that we've identified in the literature are the three below:
+    Active learning is a technique that has been used in the literature to improve the performance of ML models in medical applications. Chen et al. (2015) \cite{chen_study_2015}, for example, used active learning to improve the performance of a named entity recognition (NER) model to extract important entities from clinical texts (diseases, medications, procedures). The authors used three different data sampling strategies to select the most informative instances to label, to achieve an F-measure of 0.80, their method required 66\% fewer labeled instances than a baseline model trained on randomly selected data.
+
+    The literature on active learning identifies three main strategies for selecting the most informative instances to label \cite{huyen_designing_2022, chen_study_2015, settlesActiveLearning2012}. These are:
     
     \begin{itemize}
         \item \textbf{Uncertainty sampling} is a strategy that selects the instances that the model is most uncertain about. This is done by selecting the instances for which the model's prediction is closest to 0.5 (i.e., the model is unsure about its prediction).
-        \item  \textbf{Query by committee} is a strategy that selects the instances for which the model's predictions are most diverse. This is done by training multiple models on the same dataset and selecting the instances for which the models disagree the most. Thus focusing on instances that are likely to be misclassified.
-        \item \textbf{Expected model change} is a strategy that selects the instances for which the model's parameters are most likely to change. The way this is done depends on the model. For example, for a DNN trained with Stoachastic Gradient Descent (SGD), this can be done by selecting the instances for which the gradient of the loss function might be the largest. 
+        \item \textbf{Expected model change} is a strategy that selects the instances for which the model's parameters are most likely to change. The way this is done depends on the model. For example, for a typical DNN trained with gradient descent methods, this can be done by selecting the instances for which the gradient of the loss function might be the largest. 
+        \item  \textbf{Query by committee} is a strategy that selects the instances for which the model's predictions are most diverse. This is done by training multiple models on the same dataset and selecting the instances for which the ensemble disagrees the most. Thus focusing on a more model-agnostic approach to uncertainty sampling.
     \end{itemize}
     
     In the context of this project, active learning enables the development of accurate models using significantly less labeled data, paving the way for more efficient and cost-effective healthcare systems. For this reason, it is a technique that we consider to be of great importance for the development of the system proposed in this work.
@@ -260,18 +262,18 @@
 
     Adversarial attacks on machine learning occur when an attacker produces inputs intentionally designed to be misclassified by a specific ML model. They are created by adding small perturbations to the input data that may be imperceptible to humans but can cause the model to make a wrong prediction.
     
-    Adversarial examples are a major concern in healthcare applications. An attacker may purposely create adversarial examples to fool the model into making incorrect predictions, which can have severe consequences like misdiagnosing a patient or prescribing them unnecessary treatment \cite{finlayson_adversarial_2019}. 
+    Adversarial examples are a major concern in healthcare applications. An attacker may purposely create adversarial examples to fool the model into making incorrect predictions, which can have severe consequences like misdiagnosing a patient or prescribing them unnecessary treatment. 
     % Figure \ref{fig:medical_adversarial_attacks} shows examples of adversarial examples in health .
 
     % \vspace*{-0.5cm}
     
     Furthermore, adversarial examples shine a light on the black-box nature of several types of ML models. The fact that these models can be fooled by small changes that are not perceptible by any expert raises questions about their general \textbf{reliability and trustworthiness.} This is why this phenomenon is an active area of research in the field \cite{finlayson_adversarial_2019}.
     
-    One way to deal with adversarial attacks is by choosing models that are more \textbf{robust} to these examples. Goodfellow et al. 2015, for example, favor the use of nonlinear model families like RBF networks or using regularization strategies like dropout, weight decay, or gradient masking to improve the robustness of the model \autocite{goodfellowExplainingHarnessingAdversarial2015}.
+    One way to deal with adversarial attacks is by choosing models that are more \textbf{robust} to these examples. Goodfellow et al. 2015, for example, favor the use of nonlinear model families like Radial Basis Function Networks or using regularization strategies like dropout, weight decay, or gradient masking to improve their robustness \autocite{goodfellowExplainingHarnessingAdversarial2015}.
     
     \clearpage
     
-    Another popular approach to make ML models more robust to these attacks is to feed adversarial examples directly into their training data. This is known as \textbf{adversarial training}. Methods like the Fast Gradient Sign Method \cite{goodfellowExplainingHarnessingAdversarial2015} (FGSM) or the more recent Projected Gradient Descent (PGD) \autocite{madryDeepLearningModels2019}  can be used to generate adversarial examples and train the model to be robust to them. 
+    Another popular approach to make ML models more robust to these attacks is to feed adversarial examples directly into their training data. This is known as \textbf{adversarial training}. Methods like the Fast Gradient Sign Method \cite{goodfellowExplainingHarnessingAdversarial2015} (FGSM) or the more recent Projected Gradient Descent (PGD) \autocite{madryDeepLearningModels2019}  can be used to generate adversarial examples and train the model on them. 
     
     \begin{figure}
         \includegraphics[width=0.61\linewidth]{figures/medical-adversarial-attacks.jpeg}
@@ -279,16 +281,16 @@
         \label{fig:medical_adversarial_attacks}
     \end{figure}
     
-    For use cases where the vulnerability of healthcare systems is considered important, one could try to integrate adversarial training into the continual learning process (for example, by incorporating adversarial samples into a fine-tuning dataset) as a way to improve the robustness of the model to adversarial attacks. 
+    For use cases where the vulnerability of healthcare systems is considered important, one could try to integrate adversarial training into the continual learning process, for example, by incorporating adversarial samples into a fine-tuning dataset, as a way to improve the robustness of the model to adversarial attacks. 
 
     \subsection{Dynamic Quantization and Network Pruning} \label{sec:dynamic_quantization_pruning_sparsification} 
     % \info{0.5 pages}
 
     We consider the idea of integrating more hardware-related optimization techniques that aim to reduce the size of a DNN and/or reduce its computational cost. Quantization and Network pruning are some interesting methods to accomplish this. These two techniques have been shown to be promising in significantly reducing the computational cost of Deep Neural Networks without significantly affecting their performance \cite{carreira-perpinan_model_2017, han_deep_2016, carreira-perpinan_compression_2018}.
     
-    The way they go about doing that is different. Network pruning removes redundant parameters of a neural network to \textbf{optimize its size and computational cost}. Quantization, on the other hand, reduces the precision of the weights and activations to \textbf{reduce its memory footprint}. E.g., converting all 32-bit floating-point numbers (fp) to 16-bit to cut memory size in half \cite{han_deep_2016, carreira-perpinan_compression_2018}.
+    The way they go about doing that is different. Network pruning attempts to remove redundant parameters of a neural network to \textbf{optimize its size and computational cost}. Quantization, on the other hand, reduces the precision of the weights and activations to \textbf{reduce its memory footprint} (e.g., converting all 32-bit floating-point numbers to 16-bit to cut memory size in half \cite{han_deep_2016, carreira-perpinan_compression_2018}).
 
-    It is important to note, however, that there's generally a \textbf{tradeoff} from using these techniques as they tend to reduce the model's performance. Like in the case of knowledge distillation, it is important to assess a balance between task performance and computational costs to determine whether the use of these techniques is worth it.
+    It is important to note, however, that there's generally a \textbf{tradeoff} from using these techniques as they tend to reduce the model's performance. Like in the case of knowledge distillation, one should assess a balance between task performance and computational costs to determine whether the use of these techniques is worth it.
     
     % Thus, rather than using these techniques to improve the model's performance on a particular task, they would be used to possibly reduce the computational or memory cost of the system. 
     The way we would propose such an adaptation tactic would be to continually evaluate different versions (quantized, not quantized, pruned, not pruned) of the model to determine which one is the most suitable for the given task, and under what circumstances.
