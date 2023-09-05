@@ -13,7 +13,7 @@ from annotations.object_detection.object_detection import ImageForObjectDetectio
 from annotations.object_detection.dataset import DatasetForObjectDetection
 from annotations import db
 
-from datasets import transforms as detr_transforms
+from . import transforms as detr_transforms
 
 class TBBacilliDataset(DatasetForObjectDetection):
 

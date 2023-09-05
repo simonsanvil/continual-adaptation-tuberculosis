@@ -8,14 +8,6 @@ from annotations.object_detection.dataset import DatasetForObjectDetection
 
 # calculate the IoU between the predicted and the GT boxes
 # as well as the precision and recall for each image
-batch_size = 4
-iou_threshold = 0.5 # IoU threshold for a prediction to be considered a true positive
-metrics = dict(
-    image_id = [],
-    precision = [],
-    recall = [],
-    iou = [],
-)
 
 def evaluate(
         dataset:DatasetForObjectDetection, 
@@ -27,6 +19,12 @@ def evaluate(
     calculate the IoU between the predicted and the GT boxes
     as well as the precision and recall for each image
     """
+    metrics = dict(
+        image_id = [],
+        precision = [],
+        recall = [],
+        iou = [],
+    )
     for i in tqdm(range(0, len(dataset), batch_size)):
         images = dataset._images[i:i+batch_size]
         imgs = [im.pil() for im in images]

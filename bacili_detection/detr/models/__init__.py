@@ -23,6 +23,7 @@ def detr_inference(
     """
     # inputs = processor(images=img, return_tensors="pt")['pixel_values']
     # inputs = torchvision.transforms.functional.to_tensor(img)#.unsqueeze(0)
+    model.eval()
     if not isinstance(imgs, list):
         imgs = [imgs]
     inputs = [transform(im).unsqueeze(0) for im in imgs]

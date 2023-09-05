@@ -116,6 +116,9 @@ def get_args_parser():
     # tags of the dataset
     parser.add_argument('--tags', default='all', type=str)
 
+    # config path for a custom config
+    parser.add_argument('--config', default=None, type=str, help="Path to a JSON config file")
+
     return parser
 
 
@@ -261,6 +264,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
     engine_logger = logging.getLogger("bacili_detection.detr.engine")
     engine_logger.setLevel(logging.INFO)
+    if args.config:
+        with open(args.config) as f:
+            config = json.load(f)
+        for key, value in config.items():
+            setattr(args, key, value)
     if args.output_dir:
         Path(args.output_dir).mkdir(parents=True, exist_ok=True)
     if args.logging_file:
