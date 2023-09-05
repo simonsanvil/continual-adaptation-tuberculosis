@@ -1,5 +1,5 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
-import argparse
+import argparse, sys
 import datetime
 import json, logging
 import random
@@ -11,9 +11,8 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader, DistributedSampler
 
-from . import datasets
 import util.misc as utils
-from .datasets import build_dataset
+from datasets import build_dataset
 from engine import evaluate, train_one_epoch
 from models import build_model
 

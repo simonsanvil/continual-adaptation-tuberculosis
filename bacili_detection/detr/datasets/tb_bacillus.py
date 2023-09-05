@@ -13,9 +13,7 @@ from annotations.object_detection.object_detection import ImageForObjectDetectio
 from annotations.object_detection.dataset import DatasetForObjectDetection
 from annotations import db
 
-from . import transforms as detr_transforms
-
-sys.path.append('bacili_detection/src')
+from datasets import transforms as detr_transforms
 
 class TBBacilliDataset(DatasetForObjectDetection):
 
@@ -26,6 +24,7 @@ class TBBacilliDataset(DatasetForObjectDetection):
             transform:list=None,
             class_name:str="TBbacillus",
             image_dir:str=None,
+            db_session=None,
             **kwargs
         ):
         if isinstance(artifact_tags, str):
@@ -33,9 +32,10 @@ class TBBacilliDataset(DatasetForObjectDetection):
         if isinstance(artifact_tags[0], db.Artifact):
             artifacts = artifact_tags
         else:
-            dotenv.load_dotenv('.env')
-            session = db.get_session(os.environ.get("DATABASE_URI"))
-            artifacts = get_artifacts_with_tags(artifact_tags, session)
+            if db_session is None:
+                dotenv.load_dotenv('.env')
+                db_session = db.get_session(os.environ.get("DATABASE_URI"))
+            artifacts = get_artifacts_with_tags(artifact_tags, db_session)
         self._artifact_subsets = {}
         if len(artifact_tags) > 1:
             for tag in artifact_tags:
