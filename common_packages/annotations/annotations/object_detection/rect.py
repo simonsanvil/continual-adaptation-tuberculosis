@@ -220,17 +220,17 @@ class Rect(BaseModel):
     def plot(self, ax:"plt.Axes", color:str="r", linewidth:float=1, **kwargs):
         """Plot the rectangle on a matplotlib axis"""
         from matplotlib import patches
-        ax.add_patch(
-            patches.Rectangle(
-                (self.left, self.top),
-                self.width,
-                self.height,
-                linewidth=linewidth,
-                edgecolor=color,
-                facecolor="none",
-                **kwargs
-            )
+        patch = patches.Rectangle(
+            (self.left, self.top),
+            self.width,
+            self.height,
+            linewidth=linewidth,
+            edgecolor=color,
+            facecolor="none",
+            **kwargs
         )
+        ax.add_patch(patch)
+        return patch
 
     def __repr__(self) -> str:
         return f"Rect(left={self.left}, top={self.top}, width={self.width}, height={self.height}, label={self.label})"

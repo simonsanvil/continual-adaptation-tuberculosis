@@ -31,7 +31,10 @@ class DatasetForObjectDetection:
         self._array_type = np.array
         self._output_format = output_format
         self.class_mapping = class_mapping
-        self.id2label = {v:k for k,v in self.class_mapping.items()}
+        if self.class_mapping is not None:
+            self.id2label = {v:k for k,v in self.class_mapping.items()}
+        else:
+            self.id2label = None
         self.transform_includes_target = False
     
     @classmethod

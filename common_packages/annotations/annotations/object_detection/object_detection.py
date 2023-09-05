@@ -27,10 +27,10 @@ class ImageForObjectDetection(BaseModel):
         if self.img_dir is not None:
             image_path = Path(self.img_dir) / image_path
             self.uri = str(image_path)
-        if (self.width is None or self.height is None) and image_path.exists():
-            import PIL
-            img = PIL.Image.open(image_path)
-            self.width, self.height = img.size
+        # if (self.width is None or self.height is None) and image_path.exists():
+        #     import PIL
+        #     img = PIL.Image.open(image_path)
+        #     self.width, self.height = img.size
         if self.name is None:
             self.name = image_path.stem
 
@@ -144,7 +144,7 @@ class ImageForObjectDetection(BaseModel):
             self.to_db(session)
         annotation.to_db(self.artifact, session=session)
     
-    def display(self, *, ax=None, labels: bool = True, axis='off', **kwargs):
+    def display(self, *, ax=None, labels: bool = True, axis='off', annotations:bool=True, **kwargs):
         """
         Display the image along with the bounding boxes (annotations)
         """
@@ -159,18 +159,18 @@ class ImageForObjectDetection(BaseModel):
         image_path = img_path.resolve()
         image = plt.imread(image_path)
         if ax is None:
-            fig, ax = plt.subplots(1, **kwargs)
+            fig, ax = plt.subplots(1, 1)
         ax.imshow(image)
 
         if self.artifact is None:
             return ax
         
-        for rect in self.rects:
-            patch = patches.Rectangle(
-                (rect.left, rect.top), rect.width, rect.height,
-                linewidth=0.6, edgecolor='r', facecolor='none')
-            ax.add_patch(patch)
-            if labels: ax.legend([patch], [rect.label])
+        if annotations:
+            for i, rect in enumerate(self.rects):
+                label = kwargs.pop('label', rect.label if labels and i==0 else None)
+                rect.plot(ax=ax, label=label, **kwargs)
+            if labels: 
+                ax.legend()
         ax.axis(axis)
         plt.tight_layout()
         

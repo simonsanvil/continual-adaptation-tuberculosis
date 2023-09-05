@@ -31,15 +31,15 @@ from ._base import Annotator
 from ._base import *
 
 __all__ = [
-    "Artifact",
-    "Annotation",
     "Project",
     "Datastore",
-    "AnnotationProperty",
-    "Annotator",
     "ArtifactType",
-    "ProjectAnnotator",
+    "Artifact",
     "ArtifactTag",
+    "Annotator",
+    "Annotation",
+    "AnnotationProperty",
+    "ProjectAnnotator",
     "SessionState",
 ]
 
