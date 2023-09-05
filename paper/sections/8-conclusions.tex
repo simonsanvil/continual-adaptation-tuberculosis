@@ -6,7 +6,7 @@
 \chapter{Conclusions} \label{chap:conclusions} \info{9-10 páginas}
     
 
-    Discussion about the results obtained and implications in the context of the project, limitations of the proposed system, future work, etc.
+    Discuss the results obtained and implications in the project context, limitations of the proposed system, future work, etc.
     
 
     \section{Main Implications} \label{conclusions:implications} \info{0.65 pág}
@@ -35,62 +35,61 @@
     
     
     
-    Methods such as TRAK \cite{park_trak_2023} have been proposed as a way to improve the explainability of DNNs by providing a way to trace the predictions of a model to individual instances of their training data in a concept known as \textit{data attribution}, which has been proven useful in improving sample selection for active learning approaches \cite{park_trak_2023, holzmuller_framework_2023, liu_influence_2021}.
+    Methods such as TRAK \cite{park_trak_2023} have been proposed as a way to improve the explainability of DNNs by providing a way to trace the predictions of a model to individual instances of their training data in a concept known as \textit{data attribution}, which has been proven helpful in improving sample selection for active learning approaches \cite{park_trak_2023, holzmuller_framework_2023, liu_influence_2021}.
 
     \subsection{Potential to run the system as a federated learning platform} \label{conclusions:future_work:federated} \info{1.75 pág}
 
     % \info{1 page}
 
-    Federated learning is the concept of training a model using data from multiple sources without having to share the data itself. This is achieved by training the model on each source separately and combining the results to obtain a final model.
+    Federated learning is the concept of training a model using data from multiple sources without having to share the data itself. This is achieved by training the model on each source separately and combining the results to obtain a final model. This technique benefits healthcare applications where data privacy is a significant concern. 
     
-    This technique is particularly useful in healthcare applications, where data privacy is a significant concern. It allows us to train models on data from multiple sources without having to share the data itself, thus preserving the privacy of the patients \cite{joshi_federated_2022}.
-    \todo[inline]{Modify this description and add more details, references \dots}
-
-    Efforts such as \cite{joshi_federated_2022} have demonstrated the benefits and potential of taking a federated learning approach to training machine learning models in the healthcare industry. A future proposal to improve the system presented in this work would be to adapt the current platform to one where the models are trained in a federated fashion.
+    Indeed, efforts such as Joshi et al.'s (2022) \cite{joshi_federated_2022} have demonstrated the benefits and potential of taking a federated learning approach to training machine learning models in the healthcare industry to protect the privacy of patients and/or give more utility to highly-valuable datasets that might require significant research effort to collect.
     
-    We would propose a system where each research laboratory trains an instance of a (previously agreed) global model with its own local (private) data and shares the trained weights with a central server. The new platform would be mainly used to perform inference on public data, while each client could have an instance of the annotation frontend and backend, including the active learning framework, running locally to annotate their data. 
+    Thus, a future proposal to improve the system presented in this work would be to possibly adapt the current platform to one where the models are trained in a federated fashion.
     
-    The motivation for this comes from the fact that is very difficult to convince partners (even within the same project organization) to share their data. In the healthcare industry, data is considered to be a very valuable asset, with a high cost to obtain and annotate, which is why it is often used as a bargaining chip in negotiations between companies and research organizations \todo{include citation}.
+    We would propose a system where each research laboratory trains an instance of a global model - previously agreed to train  - with its own local data - privately held - and shares the trained weights with a central server. The new platform might be mainly used to perform analysis or research on public data. At the same time, each client could have an instance of the annotation frontend and backend, including the active learning framework, running locally to annotate their data. 
+    
+    The motivation for this comes from the fact that it is challenging to convince partners (even within the same project organization) to share their data. In the healthcare industry, data is considered a very valuable asset, with a high cost to obtain and annotate, which is why it is often used as a bargaining chip in negotiations between companies and research organizations \todo{include citation}.
 
     \todo[inline]{Show a diagram of the proposed federated learning system.}
 
-    \clearpage
+    % \clearpage
 
     \section{Further Research Directions} \label{conclusions:research_directions} \info{~4.5 pág}
 
-    The following are some of the recent and upcoming research directions in the field of machine learning that we consider to be relevant to the work presented in this thesis.
+    The following are some of the recent and upcoming research directions in machine learning that we consider relevant to the work presented in this thesis.
     
     Unlike the previous section, which focused on the limitations of the proposed system and detailed ideas about how to address or improve them in the immediate future, this section takes a broader view, focusing on gaps in the current state-of-the-art and what might be considered to be the next steps in the field.
     
-    The idea is that these directions could used as a starting point for future research (i.e. a Ph.D. thesis) on the topics presented in this thesis, either as a continuation of some of the work here or as a completely new approach to the problem. We make no claims about the feasibility of these ideas but rather present why I consider them to be interesting for further research and/or discussion.
+    The idea is that these directions could used as a starting point for future research (i.e., a Ph.D. thesis) on the topics presented in this thesis, either as a continuation of some of the work here or as a completely new approach to the problem. We make no claims about the feasibility of these ideas but rather present why I consider them interesting for further research and/or discussion.
 
 
     \subsection{Future directions in Tuberculosis AI Research} \label{conclusions:future_work:tb_ai} \info{<1 pág}
     
     Detection will soon be a solved problem thanks to NAATs (or rather, more of a money problem than a technical one). Thus, the emphasis should be less on CV-based detectors and more to advances in drug discovery, finding new biomarkers, etc. \dots
 
-    \clearpage
+    % \clearpage
 
 
     \subsection{Scalable Adaptability through Mixtures of Experts} \label{conclusions:research_directions:moes} \info{1.5 pág}
 
-    Mixture of experts (MoE) systems is a type of ensemble model that combines the predictions of multiple models to obtain a final prediction. The difference between MoEs and other ensemble models is that the predictions of the individual `experts' are combined using a gating/routing function - typically a neural network - that adapts to the given data point and dynamically determines the weight of each model in the final prediction \cite{chen_towards_2022}.
+    Mixture of experts (MoE) systems is a type of ensemble model that combines the predictions of multiple models to obtain a final prediction. The difference between MoEs and other ensemble models is that the predictions of the individual `experts' are combined using a \textbf{gating/routing function} - typically a neural network - that adapts to the given data point and dynamically determines the weight of each model in the final prediction \cite{chen_towards_2022}.
 
     MoEs are really powerful systems. They have been shown to be able to learn complex multimodal distributions and have been used in a wide variety of applications, including object detection, language modeling, machine translation, and even multiomics \cite{hwang_tutel_2023,mustafa_multimodal_2022,shazeer_outrageously_2017, minoura_scmm_2021}.
     
-    But by far, the biggest advantage of MoEs is that each expert model can be deployed independently, allowing for a more flexible, modular system capable of being distributed and data-parallelized among different hardware resources. 
+    But by far, the most significant advantage of MoEs is that each expert model can be deployed independently, allowing for a more flexible, modular system capable of being distributed and data-parallelized among different hardware resources. 
 
-    The computational sparsity of these systems has shown the capacity of MoEs to scale DNN models to outrageous amounts of parameters. Recently, researchers at Google Brain presented a MoE architecture called Switch Transformers \cite{fedusSwitchTransformersScaling2022a} that allows language models (AI systems that can generate text) to scale to even a trillion parameters at a constant computational cost.
+    The computational sparsity of these systems has shown the capacity of MoEs to scale DNN models to outrageous amounts of parameters. Recently, researchers at Google Brain presented a MoE architecture called Switch Transformers \cite{fedusSwitchTransformersScaling2022a} that allows language models (AI systems that can generate text) to \textbf{scale to even a trillion parameters} at a constant computational cost.
     
-    Furthermore, systems that take advantage of MoEs to scale LLMs (Language Models with a Large number of parameters) already exist and have been deployed to production for applications as big as ChatGPT (GPT-4 is thought to be a MoE with over 8 billion parameters \todo{add citation}).
+    Furthermore, systems that take advantage of MoEs to scale LLMs (Language Models with a Large number of parameters) already exist and have been deployed to production for applications as big as OpenAI's ChatGPT (GPT-4 is thought to be a mixture of 8 experts, each with over 220 \textit{billion} parameters \cite{rickardMixtureExpertsGPT42023}).
     
-    In the context of the area of this work, we consider that MoEs could be used to create a more scalable and robust system that can adapt to new tasks and data distributions. The idea is that the system would be composed of a set of `expert' models, each of which would be specialized in a particular aspect of the input data. The system would then be able to adapt to new tasks by autonomously learning a new expert model or by retraining an existing one when the need arises.
+    In the context of the area of this work, we consider that MoEs could be used to create a more \textbf{scalable and robust adaptable system}. The idea is that it would be composed of a set of `expert' models, each specialized in a particular aspect of the input data. The system would then adapt to new tasks by autonomously learning a new expert model or retraining an existing one when the need arises.
     
-    The main advantage of this approach is that it would allow the system to scale to a large number of tasks and data distributions, only needing to retrain the gating function continually instead of entire models. 
+    The main advantage of this approach is that it could potentially allow the system to \textbf{scale to a large number of tasks and data distributions}, only needing to retrain the gating function continually instead of entire models. 
     
-    Another advantage is the potential for more failsafe systems. By having each model deployed independently in a distributed system, one could devise a mechanism that detects when one of the expert models fails, either due to a hardware/software error or due to a significant performance drop, and automatically replaces the gating function of the current MoE with one (previously trained) that excludes the failing model.
+    Another advantage of MoEs is the potential for more \textbf{failsafe systems}. By having each model deployed independently in a distributed way, one could devise a mechanism that detects when one of the expert models fails, either due to a hardware/software error or due to a significant performance drop, and automatically replaces the gating function of the current MoE with one (previously trained) that excludes the failing model.
     
-    One could even use such a mechanism as a way to save operational costs. The system might monitor the number of instances being routed to each expert model, and if one of the models is not being used, it could be automatically shut down to save resources.
+    One could even use such a mechanism to save operational costs. The system might monitor the number of instances being routed to each expert model, and if one of the models is not being used, it could be automatically shut down to save resources.
 
     Figure \ref{fig:moes} shows a diagram illustrating the concept of a mixture of expert system.
 
@@ -123,7 +122,7 @@
     
     This self-adaptive process would necessarily be based on evaluating the model's performance and a metric of the `necessity' of adaptation/learning that task better, but rather than relying on simple heuristics and a model-agnostic approach, the system would trigger a more complex adaptation process.
 
-    \clearpage
+    % \clearpage
   
     % \subsection{AutoML and Neural Architecture Search} \label{conclusions:research_directions:automl_nas}
 

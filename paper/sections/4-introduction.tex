@@ -39,13 +39,15 @@
     
     ERA4TB's mission statement aligns itself with (and is in response to) the United Nation's (UN) Sustainable Development Goals (SGD) to end the TB epidemic by 2030 \cite{world_health_organization_regional_office_for_europe_tuberculosis_2017}. The project's website reads, `The goal of ERA4TB is to deliver an innovative and differentiated combination regimen for the treatment of TB, which can play a key role in the TB elimination agenda' \cite{noauthor_era4tb}.
 
-    To address some of the challenges of TB drug development and clinical trial design, one of the project's objectives is developing a data-science-specific platform to enable the efficient use of machine learning methods from the collaborative platform. The platform is meant to be used by researchers and other project stakeholders to facilitate the use, development, and evaluation of machine-learning models that can aid in the research of TB.
+    To address some of the challenges of TB drug development and clinical trial design, one of the project's objectives is developing a data-science-specific platform to enable the efficient use of machine learning methods from the collaborative platform. The platform is meant to be used by researchers and other project stakeholders to facilitate the use, development, and evaluation of ML models that can aid in the research of TB.
+
+    \vspace{0.5cm}
 
     Thus, the motivation behind this work comes from the idea of incorporating novel methods into this data-science-specific platform to support researchers and collaborators in their mission to end TB by 2030. The techniques described in this work are designed to improve the performance of supervised models while prioritizing their overall robustness and reliability, aspects that are crucial in the context of healthcare applications.
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.75\textwidth]{figures/ERA4TB_map.png}
+        \includegraphics[width=0.85\textwidth]{figures/ERA4TB_map.png}
         \caption{ERA4TB's Consortium of Partners and Collaborators. Source: \cite{noauthor_era4tb}}
         \label{fig:era4tb}
     \end{figure}
@@ -73,26 +75,26 @@
     Each of these techniques presents its own benefits and limitations. Recently, there have been efforts to develop machine-learning models that can aid in the diagnosis of TB as a way to reduce the need (or provide a first/second opinion) for expert clinicians in the process and improve the speed and/or accuracy of the diagnosis \footnote{A literature review on the topic of TB diagnosis using ML methods is presented in section \ref{sec:ml_tuberculosis_detection}}.
 
     \begin{figure}
-        \begin{subfigure}{130px}
+        \begin{subfigure}{115px}
           \centering
         %   \frame{
-            \includegraphics[width=120px,height=120px]{chest_x_ray.png}
+            \includegraphics[width=110px,height=110px]{chest_x_ray.png}
         %   }
         %   \caption{Chest X-Ray }
           \label{fig:chest_x_ray_example}
         \end{subfigure}%
-        \begin{subfigure}{130px}
+        \begin{subfigure}{115px}
           \centering
         %   \frame{
-          \includegraphics[width=120px,height=120px]{sputum_smear.png}
+          \includegraphics[width=110px,height=110px]{sputum_smear.png}
         %   }
         %   \caption{Sputum Smear with Tuberculosis Bacilli}
           \label{fig:sputum_smear_exmaple}
         \end{subfigure}
-        \begin{subfigure}{130px}
+        \begin{subfigure}{115px}
           \centering
         %   \frame{
-          \includegraphics[width=120px,height=120px]{MTB_RIF_Test.jpeg}
+          \includegraphics[width=110px,height=110px]{MTB_RIF_Test.jpeg}
         %   }
         %   \caption{Example of Procedure of a Molecular Test for MTB}
           \label{fig:molecular_test_example}
@@ -138,7 +140,7 @@
     
     \begin{figure}[H]
         \centering
-        \resizebox*{0.5\columnwidth}{!}{
+        \resizebox*{0.55\columnwidth}{!}{
             % \hspace*{-0.5cm}
             \includegraphics{dnn_example_topol}
         }
@@ -153,21 +155,23 @@
 
     \begin{figure}[h]
         \centering
-        \includegraphics[width=0.8\textwidth]{fda_approved_ml_apps}
+        \includegraphics[width=0.85\textwidth]{fda_approved_ml_apps}
         \caption{Number of FDA-approved AI applications per year since 2005. Data Source: \cite{health_artificial_2022}}
         \label{fig:fda_approved_ml_apps}
     \end{figure}
     
-    Indeed, the recent availability to store and process ever larger amounts of data through the use of Big Data technologies and the development of more powerful hardware and algorithmic techniques have made it possible to train models that can perform complex medical tasks with enough high accuracy and robustness to be considered for use
+    Indeed, the recent availability to store and process ever larger amounts of data through the use of Big Data technologies and the development of more powerful hardware and algorithmic techniques have made it possible to train models that can perform complex medical tasks with enough high accuracy and robustness to be considered for use in that industry
     \cite{topol_high-performance_2019}.
 
+    \vspace{0.75cm}
+    
     Of such techniques, some that have recently disrupted the medical field are those based on \textbf{computer vision}  (CV). CV methods try to develop algorithms that enable computers to solve visual tasks. It is a broad field that has been applied to problems like image classification, object detection, and image segmentation and has seen significant advances in the last decade thanks to the adoption of Deep Learning algorithms \cite{lecun_deep_2015}.
 
     In the context of healthcare, CV techniques have been primarily used in radiology to aid with the diagnosis of diseases and other tasks through the analysis of medical images (e.g., X-rays, CT scans, MRIs, microscopy, etc.) \cite{esteva_deep_2021}. Indeed, over 75\% of all FDA-cleared AI applications have been for radiology use cases \cite{health_artificial_2022}.
     
     One study made in 2018 trained a \textit{Convolutional Neural Network} (CNN), a common DL model popular for computer vision tasks, to detect pneumonia from X-ray images at an Indian hospital. The researchers compared the performance of the algorithm with the findings of four expert radiologists and concluded that the algorithm was comparable to - sometimes even \textit{outperformed} - the radiologist in most cases \cite{wang_chestx-ray8_2017}.
 
-    \clearpage
+    % \clearpage
 
     \begin{table}[h]
        \resizebox{0.95\textwidth}{!}{
@@ -196,14 +200,14 @@
 
     Thus, the design of ml-enabled systems must be mindful of the limitations of such models. Research in the healthcare and AI fields must pave the way to develop workflows that can be trusted by every stakeholder alike to improve the quality of care/research, reduce costs, and overall increase the efficiency of the healthcare system.
 
-
+    \vspace*{-0.5cm}
     \subsection{Continual Learning and Self-Adaptive Systems} \label{sec:lifelong_adaptive_systems}
 
     To address some of the challenges of adopting ML-enabled systems in healthcare, we can take a look at the idea of incorporating \textit{continual learning} and \textit{self-adaptive systems} (SAS) in their design. Continual learning refers to the ability of an ML system to learn continually from new data, adapting to novel changes in the data stream that it may have not been exposed to before \cite{parisi_continual_2019}. 
     
     SAS has a similar definition, but it generalizes to any software systems that continually monitor faults in their operating environment using a closed feedback loop. The system can then modify its behavior at runtime by the execution of so-called \textbf{tactics} in an attempt to fix them, thereby reducing human efforts in the interaction. Nowadays, self-adaptivity is considered a classical concept with ample literature in fields like software engineering and robotics \cite{macias-escrivaSelfadaptiveSystemsSurvey2013,gheibiApplyingMachineLearning2020,casimiro_self-adaptive_2022}.
 
-    \clearpage
+    % \clearpage
     
     The two ideas are closely related, with \textit{continual} (or \textit{lifelong}) learning often used to refer specifically to ML systems while \textit{SAS} to any software that adapts itself to disruptive changes. The core idea of both is the same, though, the ability of a system to `survive' variations in its environment with or without human intervention and continue to perform its intended function \cite{macias-escrivaSelfadaptiveSystemsSurvey2013}. 
     
@@ -215,7 +219,7 @@
 
     % SAS often adopt a feedback-loop architecture known as \textbf{MAPE-K} loops. These systems are based on using some form of \textit{knowledge-base} to continually \textit{monitor} the system, to then evaluate when an \textit{adaptation} is needed, to finally select the best action \textit{plan} and \textit{execute} it (The letters in MAPE stand for the words Monitor, Analyze, Plan, and Execute, and the K stands for Knowledge) \cite{redbooks_practical_2004}.
     
-    On the other side, the design of such systems in practice presents unique challenges that must be addressed. Some experts argue that the questionable robustness of the adaptation process \cite{vokingerContinualLearningMedical2021} is onee of the reasons why \textbf{the FDA has never approved a medical application based on continual learning}.
+    On the other side, the design of such systems in practice presents unique challenges that must be addressed. Some experts argue that the questionable robustness of the adaptation process \cite{vokingerContinualLearningMedical2021} is one of the reasons why \textbf{the FDA has never approved a medical application based on continual learning}.
     
     Indeed, some known problems like \textbf{catastrophic forgetting} (when the model forgets how to perform a task after learning a new one) and \textbf{bias drift} (when the model's predictions suddenly become biased towards a particular class or group of samples) are among the most studied phenomena in continual learning.
     
@@ -224,8 +228,18 @@
     Still, the fact that ML models are often deployed as static components in a dynamic environment with the assumption that the data used to train them is representative of the data it will encounter in the real world is another source of ML degradation \cite{vokingerContinualLearningMedical2021}.
 
     In Table \ref{tab:causes_of_ml_degradation} we describe some relevant causes of degradation of ML systems. It gives an overview of different phenomena that can affect a model's performance and the challenges that must be addressed in the design of an adaptive system.
+    
+    % \vspace*{-0.5cm}
 
-    \begin{table}[t]
+    One important thing to note is that a model experiencing one of the degradation causes listed doesn't mean that it will necessarily fail or that it should be addressed. For example, a model might suffer from catastrophic forgetting after learning new information but that might not affect the performance of the current task in any significant way.
+    
+    This is why a crucial aspect of designing such systems is that of defining the \textit{adaptation criteria} that should be monitored in order to trigger the right \textit{tactics} that will allow the system to adapt to the specific changes in its environment that cause it to degrade.
+    
+    % This criterion should be based on the specific needs of the application and the context in which the system is deployed. An example is that a model trained to detect a specific rare disease might have different criteria than a model trained to detect a more common one (e.g. The first system might be more sensitive to data drift than the latter).
+
+    In chapter \ref{chap:state_of_the_art} we address some state-of-the-art techniques that can be used to deal with the causes of degradation listed in the table. 
+
+    \begin{table}[H]
         \caption{Some causes of Degradation of an ML System and their characteristics.}
         \label{tab:causes_of_ml_degradation}
         \resizebox{\textwidth}{!}{
@@ -265,16 +279,9 @@
         \end{tabular}
     }
     \end{table}
-    % \vspace*{-0.5cm}
-
-    One important thing to note is that a model experiencing one of the degradation causes listed doesn't mean that it will necessarily fail or that it should be addressed. For example, a model might suffer from catastrophic forgetting after learning new information but that might not affect the performance of the current task in any significant way.
-    
-    This is why a crucial aspect of designing such systems is that of defining the \textit{adaptation criteria} that should be monitored in order to trigger the right \textit{tactics} that will allow the system to adapt to the specific changes in its environment that cause it to degrade.
-    
-    % This criterion should be based on the specific needs of the application and the context in which the system is deployed. An example is that a model trained to detect a specific rare disease might have different criteria than a model trained to detect a more common one (e.g. The first system might be more sensitive to data drift than the latter).
-
-    In chapter \ref{chap:state_of_the_art} we address some state-of-the-art techniques that can be used to deal with the causes of degradation listed in the table. 
     % In particular, we will focus on the techniques that have been proposed to address the challenges of data drift and model degradation, as these are the most relevant to the context of this work.
+    
+    \vspace*{-0.9cm}
 
     \section{Objectives} \label{sec:objectives}
 

@@ -5,18 +5,16 @@
 \chapter*{Regulatory Framework} \label{chap:regulatory_framework}
 \addcontentsline{toc}{chapter}{Regulatory Framework}
 
-The material written in this thesis is published under a Creative Commons license. The work here can be shared and distributed for non-commercial purposes as long as attribution is properly credited. The sole copyright and intellectual property belongs to the author. 
+The material written in this thesis is published under a Creative Commons license CC BY-NC. The work here can be shared and distributed for non-commercial purposes as long as attribution is properly credited. Adaptations of the work are also permitted as long as they are shared under the same license. The sole copyright and intellectual property belongs to the author. 
 
 Similarly, the software developed for this work is openly available
 \footnote{All code developed in this work can be found under the following url: \href{}{https://github.com/simonsanvil/...}, for any questions, concerns, or comments, please contact the author at \href{mailto:simonsviloria@gmail.com}{simonsviloria@gmail.com}
 } \change{add url to github repo}
-and licensed under an \href{https://en.wikipedia.org/wiki/Apache_License}{Apache License 2.0}, which grants permission to the use, distribution, and modification of the code for commercial and non-commercial purposes (restrictions apply, see license for details). \\
+and licensed under an \href{https://en.wikipedia.org/wiki/Apache_License}{Apache License 2.0}, which grants permission to the use, distribution, and modification of the code for commercial and non-commercial purposes (restrictions apply, see license for details). 
 
-Any desire to use this work or any material derived from it for commercial and/or monetary purposes should be communicated to the author and made with explicit written permission.
+Any desire to use this work or any material derived from it for commercial and/or monetary purposes should be communicated to the author and made with explicit written permission. Finally, note that the author is not liable for any direct or indirect consequential damages of any kind that arise from the use of any material in this work or from any derivatives of it in which the author is not directly involved.
 
 \todo[inline]{Possible references to current or possible future legislation/regulations about the use of AI for healthcare applications, healthcare data, or other related topics (e.g., GDPR, HIPAA, EU AI Act, etc.)}
-
-Finally, note that the author is not liable for any direct or indirect consequential damages of any kind that arise from the use of any material in this work or from any derivatives of it in which the author is not directly involved.
 
 \section*{Ethical Considerations}  \label{ethics}
 \addcontentsline{toc}{section}{Ethical Considerations}
@@ -48,9 +46,11 @@ Furthermore, the more recent EU AI Act \cite{eu_aiact_2023}\dots
 
 The estimated costs of the realization of this project include those related to the human labor and material costs associated with it.
 
-In terms of human resources, both the student author of the work and the advisor of the thesis are considered to have put hours of labor into the making of this project. We have assumed the salary of the student to be equivalent to the one of a junior engineer of about €15.00 per hour of labor, and the one of the advisor to be equivalent to that of a senior engineer of around €35.00 per hour. 
+In terms of human resources, the student author of the work, and the advisor and co-advisor of the thesis are considered as the main contributors to the project. The student author is considered to have worked part-time on the project for the duration of the work, while the advisor and co-advisor contributed a few hours per week. The salary per hour of each contributor is estimated to be €18, €30, and €60, respectively, to reflect the estimated salaries of a junior researcher, senior researcher, and university professor.
 
-An estimate of xxx hours...
+By analyzing the time planning of the project throughout its duration \todo{include Gannt chart?}, the project is estimated to have lasted approximately eight months. During this time, the author contributed an estimated total of 530 hours, while the advisor and co-advisor contributed 50 and 35 hours, respectively. 
+
+Table \ref{tab:budget-human_resources} shows a summary of the estimated costs of human resources. Thus, we calculate a \textbf{total budget of €13140.00} associated with the labor costs of this work.
 
 \begin{table}[H]
     \centering
@@ -62,38 +62,43 @@ An estimate of xxx hours...
     \toprule
     {} &  \# of Hours &  Salary per hour (€) &  Total Salary (€) \\
     \midrule
-    Author  &                   xxxx &                    yy &        zzzz \\
-    Advisor &                     xxx &                    yy &         zzzz \\
+    Author  &                   530 &                   18 &         9540 \\
+    Co-Advisor &                35 &                    60 &         2100 \\
+    Advisor &                   50 &                    30 &         1500 \\
     \bottomrule
-    {} &  {} & \textbf{Total Cost:} & \textbf{€...}
+    {} &  {} & \textbf{Total Cost:} & \textbf{€13140.00} \\
     \end{tabular}
 \end{table}
-\vspace*{-0.4cm}
 
-In terms of non-human resource costs, the only relevant ones are those associated with the material costs of the hardware utilized throughout the work. This is because only open-source software tools (Python, R, LaTeX) were utilized.
+\vspace{-0.4cm}
 
-...
+In terms of non-human resource costs, the only relevant ones are those associated with the material costs utilized throughout the work. This is because only open-source software tools (Python, LaTeX, Google Colab, etc.) were used. These tools are freely available or under permissive licenses, thus, no costs are associated with them.
 
-% First we take into account the university's server from which the code was written and experiments executed. According to staff, this server is valued at €12,000.00. Therefore, with a 5-year depreciation of €2,400, and considering that the duration of this work was approximately eight months, the costs associated with this asset would be €1600.
+In terms of material costs, we consider the following:
 
-% \looseness=-1 Additionally, we include the cost of the personal computer from which the thesis was written and the remote server accessed to. This computer consisted of a 14" Apple Macbook Pro (2021) valued at €2200 at the time of writing \cite{apple_comprar_2022}. With a 3-year depreciation of €733.33 and dividing by the duration of the project, this would add an additional €489 to the material costs associated with this work.
+\begin{itemize}
+    \item The personal computer from which the thesis was written and experiments designed and executed. The device consisted of a 14" Apple Macbook Pro (2021) valued at €2200 at the time of writing \cite{apple_comprar_2022}. With a 3-year depreciation of €733.33 divided by the duration of the project, this would add €489 to the material costs associated with this work.
+    \item Other equipment, lab materials (e.g., paper, pens, etc.), and other miscellaneous costs are considered negligible and are not included in the budget.
+\end{itemize}
 
-% \begin{table}[H]
-%     \centering
-%     \captionsetup[]{}
-%     \caption{Estimated Material Costs}
-%     \label{tab:budget-material_costs}
-%     % \hspace*{-0.8cm}
-%     \begin{tabular}{lrrrr}
-%     \toprule
-%     {} &  Software \& Liceses &  University Server &  Personal Computer & \textbf{Total} \\
-%     \midrule
-%     Cost (€)  &  0 & 1600 &  489 & \textbf{€2089.00} \\
-%     \end{tabular}
-% \end{table}
+% Table \ref{tab:budget-material_costs} shows a summary of the material costs associated with this project:
+
+\begin{table}[H]
+    \centering
+    \captionsetup[]{}
+    \caption{Estimated Material Costs}
+    \label{tab:budget-material_costs}
+    % \hspace*{-0.8cm}
+    \begin{tabular}{lrrrr}
+    \toprule
+    {} &  Software \& Licenses &  Personal Computer & Miscellaneous  & \textbf{Total} \\
+    \midrule
+    Cost (€)  &  0 & 489 &  0 & \textbf{€489} \\
+    \end{tabular}
+\end{table}
 % \vspace*{-0.4cm}
 
-% Table \ref{tab:budget-material_costs} shows a summary of the material costs associated with this project. If we add both the costs of human resources and the material costs we can calculate a \textbf{total budget of €7072.00} associated with the realization of this work.
+Thus, the total material costs associated with this work are estimated to be €489.00. If we add that to the cost of human resources, we can calculate a \textbf{total budget of €13,629.00} associated with its realization.
 
 
 \section*{Socio-Economic Impact} \label{impact}
