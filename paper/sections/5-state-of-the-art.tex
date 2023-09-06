@@ -103,7 +103,7 @@
     
 
      The study most close to our work comes from Visuña et al. (2023) \cite{visuna_novel_2023}, which presented a DL-based technique to localize tuberculosis present on sputum smear microscopy images. The author used a \textbf{one-stage object detection method} with a Convolutional Neural Network backbone to detect the presence of bacilli in the images. 
-     
+     % vasa  usar el dataset o el algoritmo?? tenia entedido que el modelo pero esa parte aun no esta escrita asique no lo tengo claro
      Visuña first fragmented the image into patches of 80x80 pixels and then \textbf{classified each patch as either containing bacilli or not} for maximum spatial coverage. This study is very relevant to our use case since it uses the same dataset that we will study in this work. Their model was trained on 200 microscopy stain images and, using a 70/30 train/test split, achieved a 99.49\% % precision and 92.86\% % recall on the test set. 
 
     
@@ -210,24 +210,27 @@
 
    Online learning is the second framework. In this case, the model is adapted as soon as new data arrives, with every new instance - or very small batch of instances - being used to update it. This approach is optimal when it is adamant for the model to adapt to the data as soon as it arrives (streaming applications, for example). 
    
-   However, online learning algorithms tend to be more computationally expensive than offline learning and can be less effective than their offline counterparts, they are also likely to suffer even more from catastrophic forgetting \cite{huyen_designing_2022}.
+   However, online learning algorithms tend to be more computationally expensive than offline learning and can be less effective than their offline counterparts. They are also likely to suffer even more from catastrophic forgetting \cite{huyen_designing_2022}.
 
    The work in this thesis is all about adopting continual learning for healthcare applications. 
    % It is not only suitable in applications where data arrives in a stream (e.g., wearable health monitors) but also in cases where the data is collected periodically (e.g., medical imaging). In both cases, the data is likely to change over time, and the model needs to adapt to it. 
    We'll continue this section with techniques that can be used to implement or improve a continual learning system and face the challenges described above.
 
     \subsection{Transfer Learning and Domain Adaptation} \label{sec:transfer_learning} 
-    % \info{1 page}
 
+    % \vspace{-0.7cm}
+    
     Transfer learning is a technique that aims to improve the performance of a model by `transferring' the knowledge of a pre-trained model to a new task. This is achieved by first training the model on a large dataset - that was presumably easy to obtain - from which it can learn general features and patterns of the data modality, and then \textbf{fine-tuning} it on a smaller dataset specific to the new task. Avoiding the need to train the model from scratch on the new dataset allows the model to achieve better performance with less data and training time \cite{panSurveyTransferLearning2010}.
 
-     Nowadays transfer learning has been adopted widely by the Deep Learning community in parts because it allows researchers and practitioners in the industry alike to effectively `recycle' models that have been trained and shared previously on large datasets and apply them for their own purposes. Thus saving the - often prohibitively - expensive time and resources required to train deep-learning models from scratch on such significant amounts of data  \cite{yosinskiHowTransferableAre2014}.
+     Nowadays, transfer learning has been adopted widely by the Deep Learning community in parts because it allows researchers and practitioners in the industry alike to effectively `recycle' models that have been trained and shared previously on large datasets and apply them for their own purposes. Thus saving the - often prohibitively - expensive time and resources required to train deep-learning models from scratch on such significant amounts of data  \cite{yosinskiHowTransferableAre2014}.
 
      Furthermore, it has been shown that initializing a neural network with pre-trained weights (i.e., using transfer learning) can help the model converge faster and achieve better generalization than training it from scratch. Showing the model can leverage the knowledge learned from previous data to learn the new task more efficiently \cite{yosinskiHowTransferableAre2014}.
 
      Transfer Learning is useful for healthcare applications because it allows us to adapt pre-trained models to the medical domain - something referred to as \textbf{domain adaptation}. This is particularly relevant to our problem, we can use transfer learning to adapt models trained on general object detection datasets (e.g., COCO \cite{linMicrosoftCOCOCommon2015}, PASCAL VOC \cite{everinghamPascalVisualObject2010}) to the task of detecting tuberculosis in microscopy images. Something that has been done before in the literature with good results \cite{visuna_novel_2023}.
 
      We can envision this technique as part of a continual system that automatically adapts machine learning components to new tasks using transfer learning, thus reducing the need for human intervention. 
+     
+     \clearpage
 	
     \subsection{Active Learning} \label{sec:active_learning} 
     % \info{1.25 pages}
@@ -304,7 +307,7 @@
     It is important to note, however, that there's generally a \textbf{tradeoff} from using these techniques as they tend to reduce the model's performance. Like in the case of knowledge distillation, one should assess a balance between task performance and computational costs to determine whether the use of these techniques is worth it.
     
     % Thus, rather than using these techniques to improve the model's performance on a particular task, they would be used to possibly reduce the computational or memory cost of the system. 
-    The way we would propose such an adaptation tactic would be to continually evaluate different versions (quantized, not quantized, pruned, not pruned) of the model to determine which one is the most suitable for the given task, and under what circumstances.
+    The way we would propose such an adaptation tactic would be to continually evaluate different versions (quantized, not quantized, pruned, not pruned) of the model to determine which one is the most suitable for the given task and under what circumstances.
 
     For example, we could have a model that is trained on a particular task and then quantized to reduce its computational cost. The system would then evaluate the performance of the quantized model on the task under all monitored aspects and determine whether the performance drop is relevant enough to warrant the use of the quantized model and reduce the computational cost of the overall system.
 

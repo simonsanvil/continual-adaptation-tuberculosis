@@ -9,10 +9,27 @@
 
 % Encontrarás un ejemplo de TFG realizado con esta misma plantilla en la carpeta "_ejemplo_TFG_2019". Consúltalo porque contiene ejemplos útiles para incorporar tablas, figuras, listados de código, bibliografía, etc.
 
-\documentclass[12pt]{report} %fuente a 12pt
+\documentclass[12pt, twoside, openright]{report} %fuente a 12pt
 
 \input{header.tex}
 
+% Cabecera y pie de los capitulos
+\fancyhf{}
+
+\fancyhead[RE]{
+    Continually Adaptive Machine Learning Applied to Healthcare
+}
+\fancyhead[LO]{\leftmark}
+\fancyhead[LE,RO]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+
+\fancypagestyle{plain}{
+\fancyhead[L]{}
+\fancyhead[C]{}
+\fancyhead[R]{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+}
 
 \begin{document}
 \renewcommand{\dobib}{} % Un-define the command
