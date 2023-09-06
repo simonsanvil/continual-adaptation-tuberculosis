@@ -23,6 +23,7 @@ class TBBacilliDataset(DatasetForObjectDetection):
             box_format:str='xyxy', 
             transform:list=None,
             class_name:str="TBbacillus",
+            num_classes:int=2,
             image_dir:str=None,
             db_session=None,
             **kwargs
@@ -42,7 +43,7 @@ class TBBacilliDataset(DatasetForObjectDetection):
                 self._artifact_subsets[tag] = [art for art in artifacts if any(tag==t.tag for t in art.tags)]
 
         odimages = [ImageForObjectDetection.from_db(art, img_dir=image_dir) for art in artifacts]
-        class_mapping = {"N/A":0, class_name:1}
+        class_mapping = {"N/A":0, class_name:1} if num_classes == 2 else {class_name:0}
         self._transform = transform
         self._image_dir = image_dir
         super().__init__(odimages, train=train, box_format=box_format, class_mapping=class_mapping, transform=None, **kwargs)
@@ -63,7 +64,10 @@ class TBBacilliDataset(DatasetForObjectDetection):
         # target['area'] = torch.tensor(target['area'], dtype=torch.float32)
         if target['boxes'].shape[0] == 0:
             # make sure the boxes tensor is not empty and has shape (-1,4)
-            target['boxes'] = torch.zeros((0,4), dtype=torch.float32)
+            # target['boxes'] = torch.zeros((0,4), dtype=torch.float32)
+            target['boxes'] = torch.tensor([[0,0,0,0]],  dtype=torch.float32)
+            target['labels'] = torch.tensor([0])
+            target['area'] = torch.tensor([0])
         target['size'] = target['size'].type(torch.int64)
         target['orig_size'] = target['orig_size'].type(torch.int64)
         target['image_id'] = torch.tensor(target['image_id'], dtype=torch.int64)
@@ -177,5 +181,10 @@ def build(ds_set:Literal["train","val"], args=None) -> TBBacilliDataset:
         tags = ["test"]
     else:
         raise ValueError(f"Unknown dataset set: {ds_set}")
-    ds = TBBacilliDataset(tags, train=(ds_set=="train"), transform=make_ds_transforms(ds_set), image_dir=args.image_dir)
+    ds = TBBacilliDataset(
+        tags, train=(ds_set=="train"), 
+        transform=make_ds_transforms(ds_set), 
+        image_dir=args.image_dir, 
+        num_classes=args.num_classes
+    )
     return ds

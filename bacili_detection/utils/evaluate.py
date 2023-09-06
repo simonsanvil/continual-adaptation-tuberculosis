@@ -29,7 +29,8 @@ def evaluate(
         images = dataset._images[i:i+batch_size]
         imgs = [im.pil() for im in images]
         bboxes = inference_func(imgs)
-        for img, pred_boxes in zip(images, bboxes):
+        for i, img in enumerate(images):
+            pred_boxes = bboxes[i]
             if len(pred_boxes) == 0 and len(img.rects) == 0:
                 iou, precision, recall = 1, 1, 1
             elif len(pred_boxes) == 0 and len(img.rects) > 0:
@@ -46,11 +47,13 @@ def evaluate(
                 # calculate the precision and recall
                 if not hasattr(pred_poly, 'geoms'):
                     pred_poly = geometry.MultiPolygon([pred_poly])
+                if not hasattr(gt_poly, 'geoms'):
+                    gt_poly = geometry.MultiPolygon([gt_poly])
                 # prediction confidence is calculated as the distance between the centroid of the predicted box
                 # and the centroid of the GT box iff the GT box is inside any of the predicted boxes
                 preds = np.array([
                     any(pred.contains(gt.centroid) or pred.distance(gt.centroid) < 5 
-                            for gt in gt_boxes)
+                            for gt in gt_poly.geoms)
                     for pred in pred_poly.geoms
                 ])
                 precision = preds.sum() / len(preds)

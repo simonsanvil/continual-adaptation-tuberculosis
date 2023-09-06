@@ -15,7 +15,7 @@ from ..models.detr import SetCriterion, build_matcher
 
 def compute_losses(
         model,
-        criterion,
+        criterion:SetCriterion,
         data_loader: torch.utils.data.DataLoader,
         device: torch.device,
         notebook: bool = False,
@@ -37,8 +37,14 @@ def compute_losses(
         samples = samples.to(device)
         targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
 
-        outputs = model(samples)
-        loss_dict = criterion(outputs, targets)
+        try:
+            outputs = model(samples)
+            loss_dict = criterion(outputs, targets)
+        except Exception as e:
+            image_ids = [t['image_id'].item() for t in targets]
+            print(f'Error on sample {counter} with image ids: {image_ids}')
+            print(targets[0])
+            raise e
         weight_dict = criterion.weight_dict
         loss = sum(loss_dict[k] * weight_dict[k] for k in loss_dict.keys() if k in weight_dict)
         losses[counter] = {

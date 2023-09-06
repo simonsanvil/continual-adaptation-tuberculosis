@@ -59,6 +59,7 @@ class TBBacilliDataset(DatasetForObjectDetection):
 
     def __getitem__(self, idx: int) -> Any:
         img, target = super().__getitem__(idx)
+            
         return img, target
 
     def postprocess(self, img:torch.Tensor, target:dict):
