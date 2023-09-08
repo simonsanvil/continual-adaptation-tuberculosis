@@ -160,7 +160,8 @@ def main(args):
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, args.lr_drop)
 
     if args.tags:
-        dataset_train = build_dataset(args.tags, args=args, train=True)
+        tr_tags = args.tags.split(',')
+        dataset_train = build_dataset(tr_tags, args=args, train=True)
     else:
         dataset_train = build_dataset('train', args=args, train=True)
     dataset_val = build_dataset('val', args=args)

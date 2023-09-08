@@ -469,8 +469,8 @@ def interpolate(input, size=None, scale_factor=None, mode="nearest", align_corne
 
 
 def get_args_parser():
-    import argparse
-    import logging
+    import argparse, logging
+    
     parser = argparse.ArgumentParser('Set transformer detector', add_help=False)
     parser.add_argument('--lr', default=1e-4, type=float)
     parser.add_argument('--lr_backbone', default=1e-5, type=float)
@@ -562,5 +562,11 @@ def get_args_parser():
 
     # number of classes
     parser.add_argument('--num_classes', default=2, type=int)
+
+    # tags of the dataset
+    parser.add_argument('--tags', default=None, type=str)
+
+    # config path for a custom config
+    parser.add_argument('--config', default=None, type=str, help="Path to a JSON config file")
 
     return parser
