@@ -1,5 +1,5 @@
 import os, dotenv, sys
-from typing import Any, Dict, List, Literal
+from typing import Any, Dict, List, Literal, Union
 from pathlib import Path
 from PIL import Image
 
@@ -172,18 +172,20 @@ def get_artifacts_with_tags(tags:List[str], db_session, project_name:str="Bacill
         .all()
     return artifacts
 
-def build(ds_set:Literal["train","val"], args=None) -> TBBacilliDataset:
+def build(ds_set:Union[Literal["train","val"], list], args=None, train:bool=False) -> TBBacilliDataset:
     if ds_set == "train":
         tags = ["train"]
     elif ds_set == "val":
         tags = ["val"]
     elif ds_set == "test":
         tags = ["test"]
+    elif isinstance(ds_set, (list, tuple)):
+        tags = list(ds_set)
     else:
         raise ValueError(f"Unknown dataset set: {ds_set}")
     ds = TBBacilliDataset(
         tags, train=(ds_set=="train"), 
-        transform=make_ds_transforms(ds_set), 
+        transform=make_ds_transforms("train" if train else "val"), 
         image_dir=args.image_dir, 
         num_classes=args.num_classes
     )

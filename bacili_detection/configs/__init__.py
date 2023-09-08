@@ -1,0 +1,1 @@
+from .loss_pred import DETRLossPredictionExperimentConfig

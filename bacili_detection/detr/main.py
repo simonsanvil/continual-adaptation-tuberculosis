@@ -114,7 +114,7 @@ def get_args_parser():
     parser.add_argument('--num_classes', default=2, type=int)
 
     # tags of the dataset
-    parser.add_argument('--tags', default='all', type=str)
+    parser.add_argument('--tags', default=None, type=str)
 
     # config path for a custom config
     parser.add_argument('--config', default=None, type=str, help="Path to a JSON config file")
@@ -159,7 +159,10 @@ def main(args):
                                   weight_decay=args.weight_decay)
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, args.lr_drop)
 
-    dataset_train = build_dataset('train', args=args)
+    if args.tags:
+        dataset_train = build_dataset(args.tags, args=args, train=True)
+    else:
+        dataset_train = build_dataset('train', args=args, train=True)
     dataset_val = build_dataset('val', args=args)
 
     if args.distributed:

@@ -1,6 +1,3 @@
-"""
-Plotting utilities to visualize training logs.
-"""
 import torch
 import pandas as pd
 import numpy as np
@@ -10,7 +7,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path, PurePath
 
 
-def plot_logs(logs, fields=('class_error', 'loss_bbox_unscaled', 'mAP'), ewm_col=0, log_name='log.txt'):
+def plot_logs(logs, fields=('class_error', 'loss_bbox_unscaled', 'mAP'), ewm_col=0, nrows=1, log_name='log.txt'):
     '''
     Function to plot specific fields from training log(s). Plots both training and test results.
 
@@ -52,7 +49,8 @@ def plot_logs(logs, fields=('class_error', 'loss_bbox_unscaled', 'mAP'), ewm_col
     # load log file(s) and plot
     dfs = [pd.read_json(Path(p) / log_name, lines=True) for p in logs]
 
-    fig, axs = plt.subplots(ncols=len(fields), figsize=(16, 5))
+    ncols = len(fields) // nrows
+    fig, axs = plt.subplots(nrows, ncols, figsize=(8, 10))
 
     for df, color in zip(dfs, sns.color_palette(n_colors=len(logs))):
         for j, field in enumerate(fields):
@@ -71,7 +69,6 @@ def plot_logs(logs, fields=('class_error', 'loss_bbox_unscaled', 'mAP'), ewm_col
     for ax, field in zip(axs, fields):
         ax.legend([Path(p).name for p in logs])
         ax.set_title(field)
-
 
 def plot_precision_recall(files, naming_scheme='iter'):
     if naming_scheme == 'exp_id':
