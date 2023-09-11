@@ -114,7 +114,7 @@ def continual_learning_experiment(
                     "new_artifacts_ids": artifacts_ids,
                     "timestamp": f"{datetime.now()}",
                     "tags_to_train_on": tags,
-                    "number_of_objects_in_db_with_tag": len(TBBacilliDataset(tags)),
+                    "number_of_objects_in_db_with_tag": len(TBBacilliDataset(tags, db_session=session, image_dir=image_dir)),
                     "checkpoint_trained_on": prev_checkpoint,
                 },
                 f,
@@ -164,9 +164,9 @@ def init_experiment_db(session):
     Initialize the holdout and incremental_training tags in the database
     """
     # first make sure that no holdout or incremental_training tags exist
-    holdout_ds = TBBacilliDataset('holdout', db_session=session)
+    holdout_ds = TBBacilliDataset('holdout', db_session=session, image_dir=image_dir)
     print("Found {} holdout artifacts to begin with".format(len(holdout_ds)))
-    train_cl_ds = TBBacilliDataset('incremental_training', db_session=session)
+    train_cl_ds = TBBacilliDataset('incremental_training', db_session=session, image_dir=image_dir)
     print("Found {} incremental_training artifacts to begin with".format(len(train_cl_ds)))
     tags_deleted = 0
     for imod in (holdout_ds + train_cl_ds)._images:
@@ -181,7 +181,7 @@ def init_experiment_db(session):
     session.commit()
     print("Deleted {} holdout and incremental_training tags".format(tags_deleted))
     # now add the holdout tag to half amount of training images
-    tr_ds = TBBacilliDataset('train', db_session=session)
+    tr_ds = TBBacilliDataset('train', db_session=session, image_dir=image_dir)
     train_artifacts = [imod.artifact for imod in tr_ds._images]
     inds = np.arange(len(train_artifacts))
     holdout_artifacts_inds = np.random.choice(inds, size=len(train_artifacts)//2, replace=False)
