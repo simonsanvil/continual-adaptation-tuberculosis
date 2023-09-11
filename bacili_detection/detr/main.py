@@ -238,6 +238,7 @@ def main(args):
         test_stats, coco_evaluator = evaluate(
             model, criterion, postprocessors, data_loader_val, base_ds, device, args.output_dir
         )
+        coco_evaluator = None # TODO: remove this line
 
         log_stats = {**{f'train_{k}': v for k, v in train_stats.items()},
                      **{f'test_{k}': v for k, v in test_stats.items()},

@@ -13,8 +13,8 @@ from sqlalchemy.orm import sessionmaker
 from tqdm import tqdm
 import sys
 
-sys.path.append("/Users/simon/Documents/Projects/TFM/")
-sys.path.append("/Users/simon/Documents/Projects/TFM/bacili_detection/detr")
+sys.path.append("/content/continual-adaptation-tuberculosis/bacili_detection/detr")
+sys.path.append("/content/continual-adaptation-tuberculosis")
 
 from bacili_detection.utils.evaluate import evaluate_trained_model
 from bacili_detection.detr.datasets.tb_bacillus import TBBacilliDataset
@@ -34,10 +34,12 @@ def continual_learning_experiment(
     tags: str = "incremental_training",
     start_with: str = None,
     incremental_epochs: bool = True,
+    from_scratch: bool = False,
 ):
     dotenv.load_dotenv(".env")
     session = db.get_session(os.environ.get("DATABASE_URI"))
-    init_experiment_db(session)
+    if from_scratch:
+        init_experiment_db(session, image_dir)
     holdout_artifacts = (
         session.query(db.Artifact)
         .join(db.Project)
@@ -50,7 +52,9 @@ def continual_learning_experiment(
 
     total_num_images = len(holdout_artifacts)
     artifacts_for_increment = []
-    epochs_per_increment = epochs if incremental_epochs is True else int(incremental_epochs)
+    epochs_per_increment = (
+        epochs if incremental_epochs is True else int(incremental_epochs)
+    )
 
     if total_num_images == 0:
         print("No images to train on, exiting...")
@@ -75,11 +79,16 @@ def continual_learning_experiment(
     for i, percentage in tqdm(
         enumerate(frac), desc="Training on incremental fractions of images"
     ):
-        num_images = int(percentage * total_num_images)
+        if percentage > 0:
+            num_images = percentage
+        else:
+            num_images = int(percentage * total_num_images)
 
         # Select new artifacts from holdout for this training iteration
         new_artifacts_for_increment = np.random.choice(
-            holdout_artifacts, size=min(num_images, len(holdout_artifacts)), replace=False
+            holdout_artifacts,
+            size=min(num_images, len(holdout_artifacts)),
+            replace=False,
         )
         artifacts_for_increment += list(new_artifacts_for_increment)
 
@@ -95,7 +104,7 @@ def continual_learning_experiment(
 
         session.commit()
 
-         # If this is the first iteration, start with a pretrained model
+        # If this is the first iteration, start with a pretrained model
         if prev_checkpoint is None and start_with:
             prev_checkpoint = start_with
 
@@ -112,9 +121,11 @@ def continual_learning_experiment(
                     "num_images_added": num_images,
                     "percentage": percentage,
                     "new_artifacts_ids": artifacts_ids,
-                    "timestamp": f"{datetime.now()}",
+                    "timestamp_start": f"{datetime.now()}",
                     "tags_to_train_on": tags,
-                    "number_of_objects_in_db_with_tag": len(TBBacilliDataset(tags, db_session=session, image_dir=image_dir)),
+                    "number_of_objects_in_train": len(
+                        TBBacilliDataset(tags, db_session=session, image_dir=image_dir)
+                    ),
                     "checkpoint_trained_on": prev_checkpoint,
                 },
                 f,
@@ -123,20 +134,23 @@ def continual_learning_experiment(
 
         # the train script should be in the same directory as this script
         train_sh_dir = os.path.dirname(os.path.realpath(__file__))
+        cmd = [
+            f"{train_sh_dir}/train.sh",
+            dataset_file,
+            image_dir,
+            str(output_dir_exp),
+            prev_checkpoint,
+            log_file,
+            epochs,
+            num_classes,
+            batch_size,
+            device,
+            tags,
+        ]
+        print(f"started running training iteration {i} at: {datetime.now():%Y-%m-%d %H:%M:%S}")
+        tstart = datetime.now()
         proc = subprocess.Popen(
-            [
-                f"{train_sh_dir}/train.sh",
-                dataset_file,
-                image_dir,
-                str(output_dir_exp),
-                prev_checkpoint,
-                log_file,
-                epochs,
-                num_classes,
-                batch_size,
-                device,
-                tags,
-            ],
+            cmd,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
         )
@@ -148,10 +162,22 @@ def continual_learning_experiment(
                 break
             if output:
                 print(output.strip())
-            rc = proc.poll() # returns None while subprocess is running
-
+            rc = proc.poll()  # returns None while subprocess is running
+        print(f"Finished training iteration {i} at: {datetime.now():%Y-%m-%d %H:%M:%S}")
+        print(f"Training iteration {i} took: {datetime.now() - tstart}")
+        # reload the experimental_details.json file and add the timestamp_end
+        with open(f"{output_dir_exp}/experiment_details.json", "r") as f:
+            experiment_details = json.load(f)
+        experiment_details["timestamp_end"] = f"{datetime.now()}"
+        with open(f"{output_dir_exp}/experiment_details.json", "w") as f:
+            json.dump(experiment_details, f, indent=4)
         # Evaluate and store results
-        evaluate_trained_model(checkpoint_dir=Path(prev_checkpoint).parent if i!=0 else output_dir_exp, file=f"{output_dir_exp}/eval.csv", device=device)
+        evaluate_trained_model(
+            checkpoint_dir=Path(prev_checkpoint).parent if i != 0 else output_dir_exp,
+            file=f"{output_dir_exp}/eval.csv",
+            device=device,
+            image_dir=image_dir,
+        )
         prev_checkpoint = f"{output_dir_exp}/{checkpoint}"
 
         if incremental_epochs:
@@ -159,15 +185,20 @@ def continual_learning_experiment(
 
     print("Finished continual learning experiment successfully!!!")
 
-def init_experiment_db(session):
+
+def init_experiment_db(session, image_dir):
     """
     Initialize the holdout and incremental_training tags in the database
     """
     # first make sure that no holdout or incremental_training tags exist
-    holdout_ds = TBBacilliDataset('holdout', db_session=session, image_dir=image_dir)
+    holdout_ds = TBBacilliDataset("holdout", db_session=session, image_dir=image_dir)
     print("Found {} holdout artifacts to begin with".format(len(holdout_ds)))
-    train_cl_ds = TBBacilliDataset('incremental_training', db_session=session, image_dir=image_dir)
-    print("Found {} incremental_training artifacts to begin with".format(len(train_cl_ds)))
+    train_cl_ds = TBBacilliDataset(
+        "incremental_training", db_session=session, image_dir=image_dir
+    )
+    print(
+        "Found {} incremental_training artifacts to begin with".format(len(train_cl_ds))
+    )
     tags_deleted = 0
     for imod in (holdout_ds + train_cl_ds)._images:
         artifact = imod.artifact
@@ -181,10 +212,12 @@ def init_experiment_db(session):
     session.commit()
     print("Deleted {} holdout and incremental_training tags".format(tags_deleted))
     # now add the holdout tag to half amount of training images
-    tr_ds = TBBacilliDataset('train', db_session=session, image_dir=image_dir)
+    tr_ds = TBBacilliDataset("train", db_session=session, image_dir=image_dir)
     train_artifacts = [imod.artifact for imod in tr_ds._images]
     inds = np.arange(len(train_artifacts))
-    holdout_artifacts_inds = np.random.choice(inds, size=len(train_artifacts)//2, replace=False)
+    holdout_artifacts_inds = np.random.choice(
+        inds, size=len(train_artifacts) // 2, replace=False
+    )
     # tag them as holdout
     for i in holdout_artifacts_inds:
         artifact = train_artifacts[i]
@@ -201,21 +234,43 @@ def init_experiment_db(session):
 
 
 if __name__ == "__main__":
+    # dataset_file = "bacilli_detection"
+    # image_dir = "/Users/simon/Documents/Projects/TFM/"
+    # output_dir = "bacili_detection/detr/outputs"
+    # checkpoint = "checkpoint.pth"
+    # log_file = "train.log"
+    # epochs = "1"
+    # num_classes = "2"
+    # batch_size = "2"
+    # device = "mps"
+    # tags = "incremental_training"
+    # # frac = [0, 0.2, 0.5, 0.75, 1]
+    # frac = [0, 0.2, 0.3, 0.25, 0.25]
+    # start_with = "/Users/simon/Documents/Projects/TFM/bacili_detection/detr/detr-r50_no-class-head.pth"
     dataset_file = "bacilli_detection"
-    image_dir = "/Users/simon/Documents/Projects/TFM/"
-    output_dir = "bacili_detection/detr/outputs"
+    image_dir = "/gdrive/MyDrive/Projects/TFM/"
     checkpoint = "checkpoint.pth"
     log_file = "train.log"
-    epochs = "1"
+    epochs = "25"
     num_classes = "2"
     batch_size = "2"
-    device = "mps"
     tags = "incremental_training"
-    # frac = [0, 0.2, 0.5, 0.75, 1]
-    frac = [0, 0.2, 0.3, 0.25, 0.25]
-    start_with = "/Users/simon/Documents/Projects/TFM/bacili_detection/detr/detr-r50_no-class-head.pth"
+    frac = [0.1, 0.2, 0.2, 0.25, 0.25]
+    start_with = "detr-r50_no-class-head.pth"
+    device = "cuda"
+    output_dir = "/gdrive/MyDrive/Projects/TFM/outputs/"
+    DATA_PATH = Path("/gdrive/MyDrive/Projects/TFM/data")
+    DB_PATH = DATA_PATH / "annotations.db"
+    from_scratch = False
 
-    print("Starting continual learning experiment for dataset: ", dataset_file, "at workdir: ", os.getcwd())
+    os.environ["DATABASE_URI"] = f"sqlite:///{DB_PATH}"
+    session = db.get_session(os.environ["DATABASE_URI"])
+    print(
+        "Starting continual learning experiment for dataset: ",
+        dataset_file,
+        "at workdir: ",
+        os.getcwd(),
+    )
     continual_learning_experiment(
         dataset_file=dataset_file,
         frac=frac,
@@ -230,4 +285,5 @@ if __name__ == "__main__":
         tags=tags,
         start_with=start_with,
         incremental_epochs=True,
+        from_scratch=from_scratch,
     )

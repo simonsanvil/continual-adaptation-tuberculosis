@@ -1,0 +1,28 @@
+{
+    "holdout_step": 0,
+    "incremental": true,
+    "num_train_instances": 15,
+    "new_artifacts_ids": [
+        33,
+        109,
+        163,
+        237,
+        252,
+        337,
+        377,
+        528,
+        597,
+        646,
+        684,
+        775,
+        880,
+        1031,
+        1086
+    ],
+    "timestamp_start": "2023-09-11 22:17:00.599067",
+    "tags_to_train_on": [
+        "holdout:0"
+    ],
+    "checkpoint_trained_on": "/Users/simon/Documents/Projects/TFM/bacili_detection/detr/outputs/checkpoint.pth",
+    "config": "batch_size: 2\ndevice: mps\nepochs: 23\nholdout_step: 0\nimage_dir: /Users/simon/Documents/Projects/TFM\nincremental: true\nlogging_file: /Users/simon/Documents/Projects/TFM/bacili_detection/detr/outputs/cl-exp-1/steps_0/log.txt\nlr: 0.0001\nlr_backbone: 1.0e-05\noutput_dir: /Users/simon/Documents/Projects/TFM/bacili_detection/detr/outputs/cl-exp-1/steps_0\nresume: /Users/simon/Documents/Projects/TFM/bacili_detection/detr/outputs/checkpoint.pth\ntags: holdout:0\nweight_decay: 0.0001\n"
+}
