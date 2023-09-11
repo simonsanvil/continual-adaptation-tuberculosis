@@ -65,6 +65,7 @@ def step(
     device:str="cuda",
     batch_size:int=2,
     image_dir:str="",
+    **kwargs
 ):
     dotenv.load_dotenv(".env")
     if session is None:
@@ -107,6 +108,7 @@ def step(
     config['logging_file'] = str(dirpath / 'log.txt')
     config['holdout_step'] = holdout_step
     config['incremental'] = incremental
+    config.update(kwargs)
     save_config(config, dirpath, model_checkpoint, session=session)
     # run the training script
     config = run_train_script(config)
@@ -115,10 +117,10 @@ def step(
     # evaluate the model
     evaluate_trained_model(
         str(config.output_dir),
-        file=str(config.output_dir / 'eval.csv'),
-        image_dir=str(config.image_dir),
+        file=str(dirpath / 'eval.csv'),
         device=config.device,
     )
+    print("Results saved to: ", dirpath)
 
 
 def save_config(config, dirpath, checkpoint:str, session=None):

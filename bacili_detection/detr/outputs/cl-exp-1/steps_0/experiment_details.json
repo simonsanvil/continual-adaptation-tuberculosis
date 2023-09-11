@@ -19,10 +19,10 @@
         1031,
         1086
     ],
-    "timestamp_start": "2023-09-11 22:17:00.599067",
+    "timestamp_start": "2023-09-11 22:27:47.556913",
     "tags_to_train_on": [
         "holdout:0"
     ],
     "checkpoint_trained_on": "/Users/simon/Documents/Projects/TFM/bacili_detection/detr/outputs/checkpoint.pth",
-    "config": "batch_size: 2\ndevice: mps\nepochs: 23\nholdout_step: 0\nimage_dir: /Users/simon/Documents/Projects/TFM\nincremental: true\nlogging_file: /Users/simon/Documents/Projects/TFM/bacili_detection/detr/outputs/cl-exp-1/steps_0/log.txt\nlr: 0.0001\nlr_backbone: 1.0e-05\noutput_dir: /Users/simon/Documents/Projects/TFM/bacili_detection/detr/outputs/cl-exp-1/steps_0\nresume: /Users/simon/Documents/Projects/TFM/bacili_detection/detr/outputs/checkpoint.pth\ntags: holdout:0\nweight_decay: 0.0001\n"
+    "config": "batch_size: 2\ndevice: mps\nepochs: 1\nholdout_step: 0\nimage_dir: /Users/simon/Documents/Projects/TFM\nincremental: true\nlogging_file: /Users/simon/Documents/Projects/TFM/bacili_detection/detr/outputs/cl-exp-1/steps_0/log.txt\nlr: 0.0001\nlr_backbone: 1.0e-05\noutput_dir: /Users/simon/Documents/Projects/TFM/bacili_detection/detr/outputs/cl-exp-1/steps_0\nresume: /Users/simon/Documents/Projects/TFM/bacili_detection/detr/outputs/cl-exp-1/steps_0/checkpoint.pth\ntags: holdout:0\ntimestamp_end: '2023-09-11 22:27:47.512878'\nweight_decay: 0.0001\n"
 }
