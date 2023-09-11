@@ -15,16 +15,16 @@ from bacili_detection.detr.util.metrics import evaluate_prediction
 from bacili_detection.detr.models import detr_inference
 
 
-def evaluate_trained_model(output_dir:str, device:str='cpu'):
+def evaluate_trained_model(checkpoint_dir:str, file:str='eval.csv', device:str='cpu'):
     # should receive the experiment params as  arguments
     # load the model from checkpoint
-    checkpoint_path = f'{output_dir}/checkpoint.pth'
+    checkpoint_path = f'{checkpoint_dir}/checkpoint.pth'
     checkpoint = torch.load(checkpoint_path, map_location=device)
     m = torch.hub.load('facebookresearch/detr:main', 'detr_resnet50', 
     pretrained=False, num_classes=2)
     m.load_state_dict(checkpoint['model'])
     m.eval();
-
+    print("model loaded at epoch: ", checkpoint['epoch'])
     test_dataset = TBBacilliDataset(['test'], transform=None)
     transform = T.Compose([T.Resize(800), T.ToTensor(), T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) ])
     detr_inference_func = partial(
@@ -36,7 +36,12 @@ def evaluate_trained_model(output_dir:str, device:str='cpu'):
     )
     metrics = evaluate(test_dataset, detr_inference_func, batch_size=1, iou_thresholds=[0.3, 0.5])
     metrics_df = pd.DataFrame(metrics)
-    metrics_df.to_csv(f'{output_dir}/result_metrics.csv')
+    if file is not None:
+        if file.endswith('.csv'):
+            metrics_df.to_csv(f'{file}', index=False)
+        elif file.endswith('.json'):
+            metrics_df.to_json(f'{file}', orient='records')
+    return metrics_df
 
 def evaluate(
         dataset:DatasetForObjectDetection, 

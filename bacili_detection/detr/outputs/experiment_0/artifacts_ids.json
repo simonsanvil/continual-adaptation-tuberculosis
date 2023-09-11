@@ -1,9 +1,0 @@
-{
-    "iteration_number": 0,
-    "num_images": 0,
-    "percentage": 0,
-    "artifacts_ids": [],
-    "timestamp": "2023-09-11 05:33:36.528004",
-    "tags_to_train_on": "incremental_training",
-    "number_of_objects_in_db_with_tag": 101
-}

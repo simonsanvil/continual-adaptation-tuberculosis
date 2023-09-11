@@ -182,10 +182,11 @@ def main(args):
                                  drop_last=False, collate_fn=utils.collate_fn, num_workers=args.num_workers)
 
 
-    if isinstance(dataset_train, DatasetForObjectDetection):
-        base_ds = (dataset_train + dataset_val).to_coco(as_dict=False)
-    else:
-        base_ds = get_coco_api_from_dataset(dataset_val)
+    # if isinstance(dataset_train, DatasetForObjectDetection):
+    #     base_ds = (dataset_train + dataset_val).to_coco(as_dict=False)
+    # else:
+    #     base_ds = get_coco_api_from_dataset(dataset_val)
+    base_ds = None
 
     if args.frozen_weights is not None:
         checkpoint = torch.load(args.frozen_weights, map_location='cpu')

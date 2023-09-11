@@ -1,0 +1,11 @@
+{
+    "iteration_number": 0,
+    "num_images_started": 101,
+    "num_images_added": 0,
+    "percentage": 0,
+    "new_artifacts_ids": [],
+    "timestamp": "2023-09-11 07:26:01.056781",
+    "tags_to_train_on": "incremental_training",
+    "number_of_objects_in_db_with_tag": 101,
+    "checkpoint_trained_on": "/Users/simon/Documents/Projects/TFM/bacili_detection/detr/detr-r50_no-class-head.pth"
+}

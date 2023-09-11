@@ -1,0 +1,32 @@
+{
+    "iteration_number": 1,
+    "num_images_started": 101,
+    "num_images_added": 20,
+    "percentage": 0.2,
+    "new_artifacts_ids": [
+        1159,
+        337,
+        1030,
+        90,
+        453,
+        1130,
+        1122,
+        406,
+        571,
+        492,
+        1175,
+        241,
+        416,
+        887,
+        568,
+        1097,
+        781,
+        1167,
+        1239,
+        17
+    ],
+    "timestamp": "2023-09-11 07:27:49.294722",
+    "tags_to_train_on": "incremental_training",
+    "number_of_objects_in_db_with_tag": 121,
+    "checkpoint_trained_on": "/Users/simon/Documents/Projects/TFM/bacili_detection/detr/outputs/experiment_0/checkpoint.pth"
+}
