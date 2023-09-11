@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path, PurePath
 
 
-def plot_logs(logs, fields=('class_error', 'loss_bbox_unscaled', 'mAP'), ewm_col=0, nrows=1, log_name='log.txt'):
+def plot_logs(logs, fields=('class_error', 'loss_bbox_unscaled', 'mAP'), ewm_col=0, nrows=1, log_name='log.txt', figsize=(8, 10), **kwargs):
     '''
     Function to plot specific fields from training log(s). Plots both training and test results.
 
@@ -50,7 +50,7 @@ def plot_logs(logs, fields=('class_error', 'loss_bbox_unscaled', 'mAP'), ewm_col
     dfs = [pd.read_json(Path(p) / log_name, lines=True) for p in logs]
 
     ncols = len(fields) // nrows
-    fig, axs = plt.subplots(nrows, ncols, figsize=(8, 10))
+    fig, axs = plt.subplots(nrows, ncols, figsize=figsize, **kwargs)
 
     for df, color in zip(dfs, sns.color_palette(n_colors=len(logs))):
         for j, field in enumerate(fields):
