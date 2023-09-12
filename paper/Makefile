@@ -33,6 +33,17 @@ push: ## Push the paper to the repository
 	make clean-all
 	cd .. && git add paper && git commit -m "Updated paper" && git push
 
+figures_preview: ## Convert the figures in the full_figures/ directory to preview resolution figures in the prev_figures/ directory
+	./convert_figures_to_preview.sh
+
+figures_full: ## Make the figures/ directory be a symlink to the full_figures/ directory that contains the full resolution figures
+	rm -rf figures
+	ln -s full_figures figures
+
+figures_prev: ## Make the figures/ directory be a symlink to the preview_figures/ directory that contains the preview resolution figures
+	rm -rf figures
+	ln -s prev_figures figures
+
 help: ## self documenting Makefile based on http: marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 

@@ -9,11 +9,11 @@
 
     \chapter{State of the Art} \label{chap:state_of_the_art} 
 
-    The following chapter provides an overview of the current environment and state of the art in the topics related to this work. The goal is to provide a better understanding of the techniques that can be used to address the problem introduced in the previous chapter, highlighting emerging methods and their relevance to the problem.
+    The following chapter provides an overview of the current environment and state of the art in the topics related to this thesis. The goal is to provide a better understanding of the techniques that can be used to address the problem introduced in the previous chapter, highlighting emerging methods and their relevance to the problem.
     
-    We begin with a review of prior studies relevant to the topics of this thesis that have achieved state-of-the-art performance or have done similar work as the one proposed here. We go into detail about the implementation of the techniques used in each study, their overall contributions to the field, and how they relate to our work.
+    We begin with a review of prior studies relevant to the topics of this thesis that have historically achieved state-of-the-art performance or have done similar work as the one proposed here. We go into detail about the implementation of the techniques used in each study, their overall contributions to the field, and how they relate to our work.
     
-    Then, in section \ref{sec:relevant_techniques}, we give a high-level description of known machine learning paradigms and techniques that have been proposed in the literature to address continual adaptation and the degradation of ML systems deployed to real-world scenarios, highlighting their application in the healthcare domain.
+    Then, in section \ref{sec:relevant_techniques}, we give a high-level description of known machine learning paradigms and techniques that have been proposed in the literature to address continual adaptation and the degradation of ML systems that we consider relevant to our solution, highlighting their application in the healthcare domain.
 
     % Finally, we conclude the chapter with table \ref{tab:sota_summary}, which lists the studies discussed in this chapter that we consider to be the most relevant to our work. 
     
@@ -30,15 +30,15 @@
     \label{sec:computer_vision_sota}
     % \vspace*{-0.2cm}
 
-    This thesis focuses on applying computer vision (CV) techniques to detect Tuberculosis. Thus, we consider it essential to give an overview of the most critical work in the literature in CV with the goal that the discussion here also serves as a good reference for the proposed solution and the techniques that will be introduced in the upcoming sections. 
+    This thesis focuses on continual learning applied to computer vision (CV) techniques to detect Tuberculosis. Thus, we consider it important to first review the CV literature with the goal that the discussion here serves as a good reference for the proposed solution and the techniques that will be used in the upcoming chapters. 
     
-    CV techniques cover a vast field. Since the problem in this work relates more to the tasks of image classification and object detection using Deep Learning (DL) algorithms (to identify Tuberculosis), we will limit our scope to the most relevant work in those areas.
+    Note that CV techniques cover a vast field, since the problem in this work relates mainly to image classification and object detection using Deep Learning (DL) algorithms (to identify Tuberculosis), we will limit our scope to the most relevant work in those areas.
 
     First, it's important to highlight the importance of DL techniques in CV. The immense popularity that DL has gained in the area of CV can be traced back to 2012 when Convolutional Neural Network (CNN) architectures like AlexNet \cite{dengImageNetLargescaleHierarchical2009} started showing breakthrough performance for solving image classification tasks in recognized competitions like the ImageNet Large Scale Visual Recognition Challenge (ISLVR) \cite{krizhevskyImageNetClassificationDeep2012}.
     
-    CNNs are a type of neural network that uses \textit{convolutional layers}, which can be thought of as a set of functions that learn image filters through the use of convolutional operations, to extract features from an input image \autocite{goodfellowDeepLearning2016}. CNNs were first introduced by Yann LeCun in 1989 \cite{lecunBackpropagationAppliedHandwritten1989} (30 years before ImageNet), and they have since been used to achieve SOTA performance on a wide range of CV tasks, including object-detection \cite{zouObjectDetection202023b,goodfellowDeepLearning2016,lecun_deep_2015}.
+    CNNs are a type of neural network that uses \textit{convolutional layers}, which can be thought of as a set of functions that learn image filters through the use of convolutional operations, to extract features from an input image \autocite{goodfellowDeepLearning2016}. CNNs were first introduced by Yann LeCun in 1989 (30 years before ImageNet), and they have since been used to achieve SOTA performance on a wide range of CV tasks, including object-detection \cite{lecunBackpropagationAppliedHandwritten1989, zouObjectDetection202023b,goodfellowDeepLearning2016,lecun_deep_2015}.
 
-    Thus, bringing the focus specifically to Deep Learning for object detection tasks - and ignoring others like image segmentation, captioning, or image generation where CNNs have also achieved SOTA -  we can find that most literature is divided into two main approaches to the problem: \textit{two-stage} and \textit{one-stage} object detectors.
+    Thus, bringing the focus specifically to Deep Learning for object detection tasks - and ignoring others like image segmentation, captioning, or image generation where CNNs have also achieved SOTA -  we identify from the literature two main approaches to dealing with the problem: \textit{two-stage} and \textit{one-stage} object detectors.
     
     \textbf{Two-stage object detection} methods first propose a set of candidate regions in the image (the \textit{region proposal} stage) and then classify each region as either containing an object or not (the \textit{classification} stage). \textbf{One-stage object detection} methods, on the other hand, directly predict the bounding boxes and class labels of the objects in the image \cite{zouObjectDetection202023b}. Figure \ref{fig:fastrcnn_vs_yolo} shows a comparison between the two approaches.
     
@@ -57,20 +57,25 @@
         % The two-stage detector requires two forward passes through the network, while the one-stage detector only requires one. 
         }
         \label{fig:fastrcnn_vs_yolo}
-        \vspace*{-0.25cm}
+        \vspace*{-0.6cm}
     \end{figure}
+    
+    \vspace{1.1cm}
 
-    \vspace{0.75cm}
-    The success of RCNN for object detection tasks was followed by SPP-Net (2014), which introduced a Spatial Pyramid Pooling (SPP) layer to allow the model to process images of arbitrary sizes without rescaling them \cite{heSpatialPyramidPooling2014}. Then came \textbf{Fast RCNN} and \textbf{Faster R-CNN} in 2015 \cite{girshickFastRCNN2015,renFasterRCNNRealTime2016}, who respectively improved on RCNN by training the detector and bounding box regressor jointly, and by using a Region Proposal Network (RPN) to replace the much slower selective search algorithm used by previous models. 
+    The success of RCNN for object detection tasks was followed by SPP-Net (2014), which introduced a Spatial Pyramid Pooling (SPP) layer to allow the model to process images of arbitrary sizes without rescaling them \cite{heSpatialPyramidPooling2014}. 
     
-    While two-stage detectors were achieving state-of-the-art performance in terms of accuracy, they were not fast enough to be used for real-time applications or on embedded devices such as smartphones. This led to the need to develop faster object detection methods that could be used for such purposes \cite{zouObjectDetection202023b}.
+    Then came \textbf{Fast RCNN} and \textbf{Faster R-CNN} in 2015, which respectively improved on RCNN by training the detector and bounding box regressor jointly, and by using a Region Proposal Network (RPN) to replace the much slower selective search algorithm used by previous models \cite{girshickFastRCNN2015,renFasterRCNNRealTime2016}. 
     
-    It wasn't until 2016 that one-stage object detectors reached this milestone with the proposal of the \textbf{YOLO} (You Only Look Once) model \cite{redmonYouOnlyLook2016}. Unlike RCNN-based approaches, YOLO poses the task as a regression problem, where the model directly predicts the bounding boxes and class probabilities of the objects in one evaluation, allowing the system to be optimized in an end-to-end fashion. 
+    But while two-stage detectors were achieving state-of-the-art performance in terms of accuracy, they were not fast enough to be used for real-time applications or on embedded devices such as smartphones. The demand for methods that work for these devices led to the research on faster object detection methods that could be used for such purposes \cite{zouObjectDetection202023b}.
+    
+    It wasn't until 2016 that one-stage object detectors reached this milestone with the proposal of the \textbf{YOLO} (You Only Look Once) model \cite{redmonYouOnlyLook2016}. Unlike RCNN-based approaches, YOLO poses the task as a regression problem, where the model directly predicts the bounding boxes and class probabilities of the objects in one evaluation, allowing the system to be optimized in an end-to-end fashion. (Figure \ref{fig:fastrcnn_vs_yolo} shows YOLO's architecture).
     % This approach allowed YOLO to achieve real-time performance comparable to Faster R-CNN.
 
      YOLO marked a turning point in the field, a surge in the popularity of one-stage detectors led to more methods being proposed in the following years, from more adequate loss functions like RetinaNet's Focal Loss \cite{linFocalLossDense2018} to subsequent developments to YOLO's architecture like YOLO9K (2016), YOLOv3 (2018), and YOLOv8 (2023) \cite{redmonYOLO9000BetterFaster2016, redmonYOLOv3IncrementalImprovement2018, Jocher_YOLO_by_Ultralytics_2023} that improved on the original model's performance, allowing it to retain SOTA performance.
      
-     In this age, single-stage object detectors dominate the general benchmarks (e.g., ISLVR, COCO \cite{linMicrosoftCOCOCommon2015}, PASCAL VOC \cite{everinghamPascalVisualObject2010}) in both accuracy and speed. More recent methods use Transformer architectures \cite{vaswaniAttentionAllYou2017} to overcome the limitations of traditional CNNs in terms of parallelization and locally restrictive receptive field, showing that abandoning convolutions in favor of an attention-only approach can also achieve SOTA \cite{ carionEndtoEndObjectDetection2020,zhuDeformableDETRDeformable2021}.
+     In this age, single-stage object detectors dominate the general benchmarks (e.g., ISLVR, COCO \cite{linMicrosoftCOCOCommon2015}, PASCAL VOC \cite{everinghamPascalVisualObject2010}) in both accuracy and speed. More recent methods like Meta's \textbf{DETR} uses a Transformer architecture \cite{vaswaniAttentionAllYou2017} to overcome the limitations of traditional CNNs in terms of parallelization and locally restrictive receptive field, showing that abandoning convolutions in favor of an attention-only approach can also achieve SOTA \cite{ carionEndtoEndObjectDetection2020,zhuDeformableDETRDeformable2021}.
+
+     \vspace{-0.5cm}
     
     \subsection{Tuberculosis Detection using Machine Learning Methods} \label{sec:ml_tuberculosis_detection}
 
@@ -81,9 +86,13 @@
 
     Furthermore, two-stage object detections like YOLO tend to perform poorly when applied to images containing small objects (e.g., cells, bacteria, etc.)  because their region proposal mechanism favors larger objects with a clear distinction from the background. 
 
-    These latter issues present a problem with the type of datasets usually available for medical applications, where images are typically taken in a more controlled environment and contain objects that only experts in the specific domain can identify. Furthermore, it is likely for objects of interest in medical images to be small and difficult to distinguish, as the need for specialized devices - often noise-prone and with low spatial resolution - is a common thing in the field.
+    These latter issues present a problem with the type of datasets usually available for medical applications, where images are typically taken in a more controlled environment and contain objects that only experts in the specific domain can identify. 
+    
+    Furthermore, it is likely for objects of interest in medical images to be small and difficult to distinguish, as the need for specialized devices - often noise-prone and with low spatial resolution - is a common thing in the field.
 
-    This is the case of the kind of dataset used for TB detection, which is of interest in this work. \textbf{In sputum-microscopy images}, for example, the objects of interest are the bacilli that cause tuberculosis, tiny bacteria that are small and challenging to distinguish from other organic materials that surround them \cite{osman_tuberculosis_2011}. This makes the detection of tuberculosis a task that requires more specialized methods to achieve good performance.
+    This is the case of the kind of dataset used for TB detection, which is of interest in this work. \textbf{In sputum-microscopy images}, for example, the objects of interest are the bacilli that cause tuberculosis, tiny bacteria that are small and challenging to distinguish from other organic materials that surround them \cite{osman_tuberculosis_2011}. 
+    
+    This makes the detection of tuberculosis a task that requires more specialized techniques to achieve good performance.
 
     \vspace{0.75cm}
     But even though the models that achieve SOTA in general benchmarks tend to fail for medical applications right out of the box, that doesn't mean that they cannot be adapted to more specialized datasets. In fact, the same methods have also been shown to perform well for medical applications when \textbf{adapted} to the task, and TB detection is no exception.
@@ -104,15 +113,16 @@
 
      The study most close to our work comes from Visuña et al. (2023) \cite{visuna_novel_2023}, which presented a DL-based technique to localize tuberculosis present on sputum smear microscopy images. The author used a \textbf{one-stage object detection method} with a Convolutional Neural Network backbone to detect the presence of bacilli in the images. 
      % vasa  usar el dataset o el algoritmo?? tenia entedido que el modelo pero esa parte aun no esta escrita asique no lo tengo claro
+     
      Visuña first fragmented the image into patches of 80x80 pixels and then \textbf{classified each patch as either containing bacilli or not} for maximum spatial coverage. This study is very relevant to our use case since it uses the same dataset that we will study in this work. Their model was trained on 200 microscopy stain images and, using a 70/30 train/test split, achieved a 99.49\% % precision and 92.86\% % recall on the test set. 
 
     
     \subsection{Continually Adaptive Systems} \label{sec:continually_adaptive_systems_sota} 
     % \todo{0.5 pages}
 
-    Continually adaptive systems are systems that can adapt to changes in their environment instantly or over time. They are often used in applications where the environment is constantly changing, such as in robotics or autonomous vehicles. The thesis of this work is about considering their use case in a healthcare setting. 
+    Continually adaptive systems are systems that can adapt to changes in their environment instantly or over time, they are often used in applications where the environment is constantly changing, such as in robotics or autonomous vehicles \cite{gheibiApplyingMachineLearning2020,casimiro_self-adaptive_2022}. The thesis of this work is about considering their use case in a healthcare setting. Thus, we consider it appropriate to review some of the relevant literature in the topic. 
 
-    Casimiro et al. (2022) discusses the challenges and opportunities of self-adaptive systems (SAS) in machine learning. The authors propose a framework for the development of SAS that rely on ML components. This framework is based on the concept of \textbf{MAPE-K} loops \cite{kephartVisionAutonomicComputing2003}, which consists of a set of modules that allow the system to \textbf{M}onitor, \textbf{A}nalyze, \textbf{P}lan, and \textbf{E}xecute changes to itself (\textit{tactics}) with the help of a \textbf{K}nowledge base that tracks the system's behavior (see figure \ref{fig:mape-k}).
+    Casimiro et al. (2022) discusses the challenges and opportunities of self-adaptive systems (SAS) in machine learning. The authors propose a framework for the development of SAS that rely on ML components. This framework is based on the concept of \textbf{MAPE-K} loops \cite{kephartVisionAutonomicComputing2003}, which consists of a set of modules that allow the system to \textbf{M}onitor, \textbf{A}nalyze, \textbf{P}lan, and \textbf{E}xecute changes to itself (\textit{tactics}) with the help of a \textbf{K}nowledge base that tracks the system's behavior (a MAPE-K loop is depicted in Figure \ref{fig:mape-k}).
 
     \begin{figure}[h]
         \centering
@@ -122,15 +132,15 @@
     \end{figure}
     
     \vspace{0.5cm}
-    The authors discuss the required changes to the traditional MAPE-K loop and the challenges associated with developing such systems for ML applications. They motivate their ideas by presenting a case study of SAS in the enterprise (ES) and cyber-physical (CPS) system domains. Table \ref{tab:casimiro_problems} shows an example of the problems they identified in these domains along with the learning-based tactics considered to solve them.
+    Casimiro discusses the required changes to the traditional MAPE-K loop and the challenges associated with developing such systems for ML applications. They motivate their ideas by presenting a case study of SAS in the enterprise (ES) and cyber-physical (CPS) system domains. Table \ref{tab:casimiro_problems} shows an example of the problems they identified in these domains along with the learning-based tactics considered to solve them.
     
-    Note how rather than focusing on how to obtain a plan to adapt the system, Casimiro et al.'s approach is to identify first the specific \textbf{causes of degradation} within each domain to then characterize the appropriate \textbf{adaptation tactics}. 
+    Note how rather than focusing on how to obtain a plan to adapt the system, the authors approach is to identify first the specific \textbf{causes of degradation} within each domain to then characterize the appropriate \textbf{adaptation tactics}. 
 
     Similar works such as Gheibi et al. (2020) \cite{gheibiApplyingMachineLearning2020}, which makes a review of the literature on machine learning applied to self-adaptive systems, also focuses on the use of MAPE-K loops to develop such systems. However, the scope of the study is about using ML to support SAS rather than using the latter to support the learning process.
     
-    Note that the difference between the two approaches is subtle but important. In the first case, the problem is about using learning algorithms as a means to support the adaptive system without considering the tasks that it executes. The task of the ML model, then, is to improve one or more functions of the MAPE loop. For example, to predict the best tactic to use in a given situation (Planning) or detecting anomalies in the behavior of the system (Monitoring).
+    Note that the difference between the two approaches is subtle but important. In the first case, the problem is about using learning algorithms as a means to support the adaptive system. The task of the ML model, then, is to improve one or more functions of the MAPE loop. For example, to predict the best tactic to use in a given situation (Planning) or detecting anomalies in the behavior of the system (Monitoring), without considering the tasks that it executes.
 
-    In the second case, the one we care about, the problem is about using the MAPE-K loop as a means to \textbf{improve the learning process} of an ML model. That is, we are putting the learning process at the center of the system, and the task of the MAPE-K loop is to support it with any tactic (learning-based or not) that can help improve the performance and/or efficiency of the model. 
+    The second problem - the one we concern about in this work - is about using the MAPE-K loop as a means to \textbf{improve the learning process} of an ML model. That is, we are putting the learning process at the center of the system, and the task of the MAPE-K loop is to support it with any tactic (learning-based or not) that can help improve its performance and/or efficiency. 
 
     % In the first case, the problem is about using ML to improve the adaptation process of the system, for example, to 
 
@@ -165,7 +175,7 @@
     The idea of bringing MAPE-K loops to the context of this work is that much like traditional software systems, ML can also benefit from the study of SAS techniques (and the ample literature that exists on the topic) to improve their performance and robustness.
     % Indeed, the idea of continual adaptation is not new to the ML field, with well-known researchers arguing that it is a fundamental aspect of intelligence \cite{kirsch_self-referential_2022,thrun_lifelong_1995, parisi_continual_2019}. 
 
-    In her book `Designing Machine Learning Systems' \cite{huyen_designing_2022}, Chip Huyen presents the challenges and patterns of deploying ML Systems. Like Casimiro et al., she stresses the importance of monitoring a model's behavior to identify causes of degradation and continually update them. She also discusses how having humans in the loop who can provide feedback to the system is essential for their reliability in high-stakes domains.
+    In her book `Designing Machine Learning Systems' \cite{huyen_designing_2022}, Chip Huyen presents the challenges and patterns of deploying ML Systems. Like Casimiro et al., she stresses the importance of monitoring a model's behavior to identify causes of degradation and continually update them. She also discusses how having \textbf{humans in the loop} who can provide feedback to the system is essential for their reliability in high-stakes domains.
 
     Vokinger et al. (2021) makes further discussion about the reliability of continually-adapted systems in healthcare, arguing that the risk that such systems pose in such a domain is likely the reason why the FDA has not approved any continual-learning systems for medical use \cite{vokingerContinualLearningMedical2021}. The authors highlight problems like \textbf{catastrophic forgetting} and \textbf{bias induction} as two inherent risks of continual learning systems to address.
 
@@ -173,7 +183,7 @@
     
     A different approach to self-adaptivity comes from the authors of MsO-KELM \cite{haoTechnologyOrientedPathwayAuxiliary2022}, a system that takes a kernel extreme learning machine (KELM) model \cite{xiaEvolvingKernelExtreme2022} and introduces a swarm intelligence algorithm to optimize its hyperparameters in a self-adaptive manner. The authors show that their system can achieve better performance than other KELM-based models. This approach, however, suffers from the lack of flexibility MAPE-K loops provide, as it is not clear how this system would adapt to other problems or models.
     
-    In the next section, we will characterize some adaptation techniques and learning paradigms proposed in the literature that could be used as \textit{tactics} of a continual-learning system that tackles the problems described in this work.
+    In the next section, we will characterize some adaptation techniques and learning paradigms proposed in the literature that could be used as \textit{tactics} of a continual-learning system based on MAPE-K loops that tackle the problems with ML systems that have been described.
     
     \vspace{-0.3cm}
     \section{Adaptation Techniques and Learning Paradigms} \label{sec:relevant_techniques} 
@@ -198,23 +208,26 @@
 
     Problems with DNN plasticity have been studied before, Ash et. al's (2019) \cite{ashWarmStartingNeuralNetwork2020} was a very influential paper that discussed the failure of warm-starting neural networks, and proposed a regularization method consisting of shrinking and perturbing slightly the weights of the network at every optimization step, which improved significantly the performance of continual learning tasks.
 
-    Related to plasticity is \textbf{catastrophic forgetting}, when models forget previously learned information when trained on new data, which is another well-studied problem with ML algorithms \cite{mccloskeyCatastrophicInterferenceConnectionist1989,huyen_designing_2022,parisiContinualLifelongLearning2019}. Beyond that, there are other myriads of issues to face when implementing a continual learning setting: how to select the optimal samples to train the model with, dealing with class imbalance, improving hardware efficiency, how to store and manage the data and evaluate performance, to name a few.
-
-     Adding more to their complexity, we can consider two frameworks for implementing continual learning in a machine-learning system: \textit{offline} and \textit{online} continual learning. 
+    Related to plasticity is \textbf{catastrophic forgetting}, when models forget previously learned information when trained on new data, which is another well-studied problem with ML algorithms \cite{mccloskeyCatastrophicInterferenceConnectionist1989,huyen_designing_2022,parisiContinualLifelongLearning2019}. 
     
-    Learning offline is the most typical example where the model is updated periodically using a batch of data obtained over time, i.e., the model is updated only when a certain amount of \textit{new} data has been collected (and labeled, in the supervised case). This is the most common approach in the literature and also the easiest to implement.
+    Beyond that, there are other myriads of issues to face when implementing a continual learning setting: how to select the optimal samples to train the model with, dealing with class imbalance, improving hardware efficiency, how to store and manage the data and evaluate performance, to name a few.
+
+   %  \todo{siento que nada de lo siguiente aplica mucho a la solucion presentada}
+   %  Adding more to their complexity, we can consider two frameworks for implementing continual learning in a machine-learning system: \textit{offline} and \textit{online} continual learning. 
     
-    % Offline learning can be additionally subdivided into two categories based on how data is monitored before updating a model: \textit{passive} and \textit{active} continual learning.
+   %  Learning offline is the most typical example where the model is updated periodically using a batch of data obtained over time, i.e., the model is updated only when a certain amount of \textit{new} data has been collected (and labeled, in the supervised case). This is the most common approach in the literature and also the easiest to implement.
+    
+   %  % Offline learning can be additionally subdivided into two categories based on how data is monitored before updating a model: \textit{passive} and \textit{active} continual learning.
 
-    % The model is updated passively when the data is collected over a fixed period of time (e.g., every six months) or after a fixed number of instances have been processed and labeled (e.g., every 1000 new instances). Conversely, the model is updated actively when we update only when the model's performance drops below a certain threshold or when the system detects a significant change in the data distribution \cite{huyen_designing_2022}.
+   %  % The model is updated passively when the data is collected over a fixed period of time (e.g., every six months) or after a fixed number of instances have been processed and labeled (e.g., every 1000 new instances). Conversely, the model is updated actively when we update only when the model's performance drops below a certain threshold or when the system detects a significant change in the data distribution \cite{huyen_designing_2022}.
 
-   Online learning is the second framework. In this case, the model is adapted as soon as new data arrives, with every new instance - or very small batch of instances - being used to update it. This approach is optimal when it is adamant for the model to adapt to the data as soon as it arrives (streaming applications, for example). 
+   % Online learning is the second framework. In this case, the model is adapted as soon as new data arrives, with every new instance - or very small batch of instances - being used to update it. This approach is optimal when it is adamant for the model to adapt to the data as soon as it arrives (streaming applications, for example). 
    
-   However, online learning algorithms tend to be more computationally expensive than offline learning and can be less effective than their offline counterparts. They are also likely to suffer even more from catastrophic forgetting \cite{huyen_designing_2022}.
+   % However, online learning algorithms tend to be more computationally expensive than offline learning and can be less effective than their offline counterparts. They are also likely to suffer even more from catastrophic forgetting \cite{huyen_designing_2022}.
 
    The work in this thesis is all about adopting continual learning for healthcare applications. 
-   % It is not only suitable in applications where data arrives in a stream (e.g., wearable health monitors) but also in cases where the data is collected periodically (e.g., medical imaging). In both cases, the data is likely to change over time, and the model needs to adapt to it. 
-   We'll continue this section with techniques that can be used to implement or improve a continual learning system and face the challenges described above.
+   % % It is not only suitable in applications where data arrives in a stream (e.g., wearable health monitors) but also in cases where the data is collected periodically (e.g., medical imaging). In both cases, the data is likely to change over time, and the model needs to adapt to it. 
+   We'll continue this section with techniques that can be used to implement or improve a continual learning system to face some of the challenges described above.
 
     \subsection{Transfer Learning and Domain Adaptation} \label{sec:transfer_learning} 
 
@@ -230,43 +243,48 @@
 
      We can envision this technique as part of a continual system that automatically adapts machine learning components to new tasks using transfer learning, thus reducing the need for human intervention. 
      
-     \clearpage
+     % \clearpage
 	
     \subsection{Active Learning} \label{sec:active_learning} 
     % \info{1.25 pages}
  
-     Active learning strategies selectively acquire data based on their informativeness or uncertainty to the model. Its value comes from allowing the model to guide its own data acquisition process, thus potentially reducing the need for vast - or unnecessary - amounts of pre-labeled data before a model is trained or updated \cite{huyen_designing_2022, chen_study_2015, figueroa_predicting_2012}. 
-    %  This is particularly important in health applications, as the availability of annotated medical data is often limited due to privacy concerns, expert time constraints, and the complexity of pathological findings.
+     Active learning strategies selectively acquire data based on their informativeness or uncertainty to the model. Its value comes from allowing the model to guide its own data acquisition process which can potentially reduce the need for vast amounts of pre-labeled data before a model is trained or updated by ignoring those samples that are unimportant/redundant to learn from. 
     
-    Active learning is a technique that has been used in the literature to improve the performance of ML models in medical applications. Chen et al. (2015) \cite{chen_study_2015}, for example, used active learning to improve the performance of a named entity recognition (NER) model to extract important entities from clinical texts (diseases, medications, procedures). 
+    We can find examples in the literature where Active learning has demonstrated its potential for medical applications. Chen et al. (2015), for example, used active learning to improve the performance of a named entity recognition (NER) model to extract important entities from clinical texts (diseases, medications, procedures) \cite{chen_study_2015}. 
     
-    The authors used three different data sampling strategies to select the most informative instances to label. To achieve an F-measure of 0.80, their method required 66\% fewer labeled instances than a baseline model trained on randomly selected data.
+    The authors used three different data sampling strategies to select the most informative data to label. To achieve an F-measure of 0.80, their method required 66\% fewer labeled instances than a baseline model trained on randomly selected data.
 
-    In the literature on active learning, we can identify three main strategies for selecting the most informative instances to label \cite{huyen_designing_2022, chen_study_2015, settlesActiveLearning2012}. We describe them as follows:
+    Going more in depth about how active learning is implemented, we identify from the literature (\cite{huyen_designing_2022, chen_study_2015, settlesActiveLearning2012}) three main strategies that are commonly used for choosing which instances are the most important for an ML model to learn from. These are:
     
-    \begin{itemize}
-        \item \textbf{Uncertainty sampling} is a strategy that selects the instances that the model is most uncertain about. It is usually done by selecting samples for which the model's prediction is closest to its decision boundary (i.e., where the model is most unsure about its prediction). For example, for a probabilistic binary classification model, you would sample from instances where the model is closest to 0.5 probability.
-        \item \textbf{Expected model change} is a strategy that selects the instances for which the model's parameters are most likely to change. The way this is done depends on the model. For example, for a typical DNN trained with gradient descent methods, this can be done by sampling samples for which the gradient of the loss function might be the largest. 
-        \item  \textbf{Query by committee} is a strategy used mostly in ensemble learning that selects the instances for which the model's predictions are most diverse. This is done by training multiple models on the same dataset and selecting samples that the ensemble disagrees with most.
-    \end{itemize}
+    \begin{enumerate}
+        \item \textbf{Uncertainty sampling}: This strategy attempts to sample the instances that the model is most uncertain about. It is usually done by selecting samples for which the model's prediction is closest to its decision boundary (i.e., where the model is most unsure about its prediction). For example, for a probabilistic binary classification model, you would sample from instances where the model is closest to 0.5 probability.
+        \item \textbf{Expected model change}: This one selects the instances for which the model's parameters are most likely to change. The way this is done depends on the model. For example, for a typical DNN trained with gradient descent methods, we may priorize the samples for which the gradient of the loss function might be the largest. 
+        \item  \textbf{Query by committee} \todo{No hago nada con query by committee, pero aún así creo que esta bien dejarlo} is a strategy used mostly in ensemble learning that selects the instances for which the model's predictions are most diverse. This is done by training multiple models on the same dataset and selecting the samples that the ensemble disagrees with the most.
+    \end{enumerate}
 
-    \vspace{0.5cm}
+    % \vspace{0.5cm}
     
-    In the context of this project, active learning enables the development of accurate models using significantly less labeled data, paving the way for more efficient and cost-effective healthcare systems. For this reason, it is a technique that we consider to be of great relevance to developing the system proposed in this work.
+    In the context of this project, active learning is relevant because it may enable the development of more cost-effective ML models that require significantly less annotation effort. Thus, we consider it aligns well with the objectives of our work, making it of great relevance to developing the proposed system.
 
 
      \subsection{Knowledge Distillation} \label{sec:knowledge_distillation} 
     %  \info{0.5 pages}
 
-    Knowledge distillation is a technique that aims to improve the performance of a model by transferring the knowledge of a larger model (teacher) to a smaller model (student). This is achieved by training the student model to mimic the predictions of the teacher model. 
+    One drawback of Deep Learning models is that they often require a large number of parameters just to achieve decent performance on tasks like Computer Vision or Natural Language Processing, which makes them significantly computationally expensive.
     
-    The student model is trained on the same data as the teacher model but is trained to predict the probabilities of the teacher model's predictions instead of the actual labels. This allows the student model to learn from the teacher model's mistakes and improve its performance on the given task \cite{hinton_distilling_2015}.
-
-    While conceptually simple, knowledge distillation can be a very effective technique to improve the efficiency of an ML system by reducing the computational costs associated. The key, in this case, is to find the right balance between the size of the teacher and student models, as the student model needs to be small enough to be more efficient than the teacher model but large enough to be able to learn from it \cite{hinton_distilling_2015}.
-
-    Knowledge distillation fits well in a continual adaptation setting. We can envision a knowledge distillation tactic that is executed when a model is too large to be constantly deployed in a resource-constrained environment. 
+    However, in situations like this, one technique from the ML literature we can take advantage of is \textit{knowledge distillation}, in which we attempt to improve the efficiency of the ML system by transferring the knowledge of a large `teacher' model to another `student' model with a much lower parameter count \cite{hinton_distilling_2015}.
+    % are focused on building ML models that can perform just as good    but with many parameters Knowledge distillation is a technique that aims to improve the performance of a model by transferring the knowledge of a larger model (teacher) to a smaller model (student). This is achieved by training the student model to mimic the predictions of the teacher model. 
     
-    The system may trigger the training of a smaller model that mimics the predictions of the larger one and use it in its place if it is deemed to be more efficient and - approximately - as accurate as the previous model.
+    This `distillation' process is achieved by training the student to mimic the prediction of the teacher model by feedings it the same type of data and penalizing predictions that are different from 
+    the output of the bigger model in its optimization process. Figure \ref{fig:relevant_ml_paradigms} shows an example of this process.
+    
+    % The student model is trained on the same data as the teacher model but is trained to predict the probabilities of the teacher model's predictions instead of the actual labels. This allows the student model to learn from the teacher model's mistakes and improve its performance on the given task \cite{hinton_distilling_2015}.
+
+    While conceptually simple, knowledge distillation can be a very effective technique to improve the efficiency of an ML system by reducing the computational costs associated to it. The important part of the process is to find the right balance between the size of the teacher and student models, the student needs to be small enough to be more efficient than the teacher model but also have sufficient parameters to be able to learn reliably from it \cite{hinton_distilling_2015}.
+
+    We consider that this technique fits well in a continual adaptation setting. We envision a knowledge distillation tactic that is executed when a model is too large to be constantly deployed in a resource-constrained environment. 
+    
+    In such cases, the system may trigger the training of a smaller model that mimics the predictions of the larger one and use it in its place if it is deemed to be more efficient and - at least approximately - as accurate as the previous model.
 
     % \subsection{Unlearning} \label{sec:unlearning}
     
@@ -276,7 +294,7 @@
     \subsection{Adversarial Training} \label{sec:adversarial_training} 
     % \unsure{Unsure about keeping this section}
 
-    Adversarial attacks on machine learning occur when an attacker produces inputs intentionally designed to be misclassified by a specific ML model. They are created by adding small perturbations to the input data that may be imperceptible to humans but can cause the model to make a wrong prediction. % Figure \ref{fig:medical_adversarial_attacks} shows examples of adversarial examples in health .
+    Adversarial attacks on machine learning occur when an attacker produces samples intentionally designed to be misclassified by an specific ML model. They are created by adding small perturbations to the input data that may be imperceptible to humans but can `confuse' the model enough to make wrong predictions. % Figure \ref{fig:medical_adversarial_attacks} shows examples of adversarial examples in health .
     
     \begin{figure}[h]
         \includegraphics[width=0.63\linewidth]{figures/medical-adversarial-attacks.jpeg}
@@ -286,7 +304,7 @@
     \end{figure}
     \vspace{-0.25cm}
 
-    Adversarial attacks are a major concern in healthcare applications. An attacker may purposely create these types of examples to fool an ML system into making incorrect decisions, which can have severe consequences like misdiagnosing a patient or prescribing them unnecessary treatment. 
+    Adversarial attacks can be a cause for major concern in healthcare applications. An attacker may purposely create these types of examples to fool an ML system into making incorrect decisions, which can have severe consequences like misdiagnosing a patient or prescribing them unnecessary treatment. 
     
     Furthermore, adversarial examples shine a light on the black-box nature of several types of ML models. The fact that these models can be fooled by small changes that are not perceptible by any expert raises questions about their general \textbf{reliability and trustworthiness.} This is why this phenomenon is an active area of research in the field \cite{finlayson_adversarial_2019}.
     
@@ -294,8 +312,7 @@
     
     Another popular approach to make ML models more robust to these attacks is to feed adversarial examples directly into their training data. This is known as \textbf{adversarial training}. Methods like the Fast Gradient Sign Method \cite{goodfellowExplainingHarnessingAdversarial2015} (FGSM) or the more recent Projected Gradient Descent (PGD) \autocite{madryDeepLearningModels2019}  can be used to generate adversarial examples and train the model on them. 
     
-    
-    For use cases where the vulnerability of healthcare systems is considered important, one could try to integrate adversarial training into the continual learning process, for example, by incorporating adversarial samples into a fine-tuning dataset, as a way to improve the robustness of the model to adversarial attacks. 
+    For use cases where the vulnerability of healthcare systems is considered important, We consider the possibility of integrating adversarial training into a continual learning process. This can be done by continually incorporating - or generating - adversarial samples into a dataset prior to retraining/fine-tuning, in an attempt to improve the robustness of the model to adversarial attacks. 
 
     \subsection{Dynamic Quantization and Network Pruning} \label{sec:dynamic_quantization_pruning_sparsification} 
     % \info{0.5 pages}

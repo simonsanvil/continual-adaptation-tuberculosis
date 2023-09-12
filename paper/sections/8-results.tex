@@ -1,0 +1,129 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{../imagenes/}}}
+
+\begin{document}
+
+\chapter{Results} \label{chap:results}
+
+ % In this chapter, we present a rundown of the results obtained from evaluating all the experiments. First, an analysis of the results of testing our system... 
+
+\vspace{-0.5cm}
+In this chapter, we present a thorough overview of the results we obtained from our evaluation, including the training and validation processes carried out throughout our study and a comparative analysis of the system's performance across different experimental conditions. 
+
+This chapter aims to provide an understanding of how well the system proposed performs for its designated task, as well as its effectiveness in learning continually from new data. 
+
+Note the focus of our evaluation was not only to see if the system could correctly identify the presence of TB Bacilli but also to evaluate how well the iterative training and variations in the active continual learning strategies could affect its performance, as per the objectives of this thesis.
+
+\section{Bacilli Detection Model Performance} \label{results:training}
+
+We start with the results of training our DETR model with the data selected data we obtained from our Tuberculosis Image Dataset. Like mentioned in the previous chapter we report the results of the training process in terms of the Average Precision (AP), Average Recall (AR) at IoU thresholds of 0.3 and 0.5 to assess how good the model is at detecting the presence of TB Bacilli in the images.
+
+For a good comparison of our results, we also include the performance of our model with the Mobile NasNet developed by Visuña et al, which was trained to detect bacilli with the same data but using a different model architecture and training process. 
+
+As a reference, we also include the performance of the DETR model trained only with half of the training data, which we will refer to as the `base' model. This model will be used as a reference to observe if other models can improve by applying the continual learning tactics we propose.
+
+We consider it a success if a tactic can get close (or better) to the results of the baseline while using significantly \textit{less} samples to train.
+
+% 0.446915	0.733548	0.726301	0.399714	0.401171 <- Mobile NasNet (Visuña et al.)
+% 0.824	0.874	0.731	0.776	0.579 <- DETR (Ours)
+
+\begin{table}[h!]
+\caption{Baseline results of different models trained with the Tuberculosis Image Dataset}
+\label{tab:eval_metrics}
+\begin{tabular}{llllll}
+\toprule
+Model & AP@50 & \textbf{AP@30} & AR@50 & AR@30 & Avg IoU \\
+\midrule
+DETR (Full) & 0.824 & \textbf{0.874} & 0.731 & 0.776 & 0.579 \\
+Mobile NasNet (Visuña et al.) & 0.451 & 0.801 & 0.450 & 0.781 & 0.47 \\
+DETR (50\%) & 0.731 &	0.798 & 0.687 &	0.735 &	0.543 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% p30, r30, p50, r50, iou
+% 0.733548	0.726301	0.399714	0.401171 0.446915
+
+Note that the approach used to train the Mobile NasNet above uses tiling and stitching to select the final bounding box predictions, which results in less precise bounding boxes, especially when multiple bacilli are together but still shows a good ability to generally localize them in the images. This explains the remarkable difference between its AP@50 and AP@50 scores compared to its @30 counterparts. 
+
+In their paper, the only criteria they used to assess a positive performance was if the center of the ground truth bounding box was within the predicted bounding box, based on that criteria, they obtained accuracy and recall scores over 0.9.
+
+
+
+\section{Results of the Adaptation Tactics} \label{results:continual_learning}
+
+% To this point, we conducted a total of 8 experiments: 5 for continual learning and 3 for active learning. 
+As mentioned in the previous chapter, for all experiments, half of the images in the training set were put aside as holdout data to progressively train the base model (DETR 50\%). Then, each \textbf{step} in the experiment used a successive fraction from it to incrementally train the model. 
+
+For active learning, we employed the same holdout sizes and training patterns, but this time instead of taking a random fraction of the data in the holdout, we used the uncertainty sampling technique described in \ref{sec:adaptive_experiments} to deliberately select the samples assumed to be the most important for the model in terms of learning value. 
+
+
+\begin{table}[h!]
+    \centering
+    \caption{Evaluation metrics for the trained model}
+    \label{tab:eval_metrics}
+    \begin{tabular}{lrrrrr}
+    \toprule
+    {} &  AP@50 &  AP@30 &  AR@50 &  AR@30 &  Avg IoU \\
+    Experiment         &        &        &        &        &          \\
+    \midrule
+    \textbf{DETR (Full)} & \textbf{0.824} & \textbf{0.874} & \textbf{0.731} & \textbf{0.776} & \textbf{0.579} \\
+    RS - step:50\%+1+2+3   &  0.766 &  0.873 &  0.690 &  0.774 &    0.549 \\
+    AL - step:50\%+1 &  0.794 &  0.869 &  0.574 &  0.617 &    0.438 \\
+    AL - step:1        &  0.806 &  0.869 &  0.695 &  0.744 &    0.552 \\
+    RS - step:3        &  0.803 &  0.865 &  0.541 &  0.573 &    0.458 \\
+    AL - step:50\%+1+2+3 &  0.446 &  0.733 &  0.726 &  0.399 &    0.401 \\
+    AL - step:2        &  0.713 &  0.847 &  0.573 &  0.696 &    0.468 \\
+    RS - step:3 &  0.761 &  0.842 &  0.704 &  0.773 &    0.540 \\
+    AL - step:3        &  0.729 &  0.840 &  0.575 &  0.656 &    0.465 \\
+    AL - step:4        &  0.718 &  0.824 &  0.691 &  0.788 &    0.540 \\
+    RS - step:1        &  0.727 &  0.818 &  0.703 &  0.784 &    0.548 \\
+    RS - step:50\%+0+1 &  0.713 &  0.807 &  0.728 &  0.813 &    0.530 \\
+    \textbf{DETR (50\%)} & \textbf{0.731 }&	\textbf{0.798 }& \textbf{0.687} &	\textbf{0.735} &	\textbf{0.543} \\
+    RS - step:2        &  0.595 &  0.641 &  0.239 &  0.260 &    0.222 \\
+    RS - step:50\%+0+1+2+3 &  0.446 &  0.733 &  0.726 &  0.399 &    0.401 \\
+    \bottomrule
+    \end{tabular}
+    \end{table}
+
+
+The performance of the model for each of these experiments was evaluated based on the metrics of Average Precision (AP), Average Recall (AR) at IoU thresholds of 0.3 and 0.5, and Average Intersection over Union (Avg IoU) of the bounding boxes.
+
+The results of each experiment with regard to these metrics have been captured in Table \ref{tab:eval_metrics}. The same models mentioned before are also highlighted in this table for comparison.
+
+We also highlight our `base' model, the one trained with only 50\% of the training without including any of the holdout data, which will be used as a reference to observe the improvement of the other models that include the continual tactics. We consider it a success if a tactic can improve the results of the baseline while using significantly \textit{less} samples to train.
+
+% \begin{table}[h!]
+% \caption{Evaluation metrics for the models trained on each in each experiment}
+% \label{tab:eval_metrics}
+% \begin{tabular}{llllll}
+% \toprule
+% Experiment & AP@50 & AP@30 & AR@50 & AR@30 & Avg IoU \\
+% \midrule
+% \textbf{Baseline} & 0.796 & \textbf{0.843} & 0.746 & \textbf{0.789} & 0.568 \\
+% % Continual Learning 1 & - & - & - & - & - \\
+% % Continual Learning 2 & - & - & - & - & - \\
+% % Continual Learning 3 & - & - & - & - & - \\
+% % Continual Learning 4 & - & - & - & - & - \\
+% % Continual Learning 5 & - & - & - & - & - \\
+% % Active Learning A & - & - & - & - & - \\
+% % Active Learning B & - & - & - & - & - \\
+% % Active Learning C & - & - & - & - & - \\
+% % Other results of the experiments...
+% \bottomrule
+% \end{tabular}
+% \end{table}
+
+Next, we will proceed with an analysis of these results, along with a short discussion about how we can interpret them.
+
+
+\section{Analysis of the results} \label{results:analysis}
+
+The first obvious  we can make from these results is the expected that models trained in an incremental manner tend to perform better than the ones 
+
+we obtained from our experiments is that the continual learning tactics we proposed were able to improve the performance of the base model in most cases, with the exception of a few experiments where they actually performed worse, likely due to the model overfitting to the data.
+
+
+
+% \printbibliography
+\end{document}

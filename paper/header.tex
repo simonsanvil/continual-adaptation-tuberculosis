@@ -17,6 +17,8 @@ hmargin=3cm
 ]{geometry}
 % \usepackage{subfig}
 \usepackage{caption}
+% \usepackage{algpseudocode}
+\usepackage[ruled]{algorithm2e}
 \usepackage{subcaption}
 \usepackage{mathtools}% Loads amsmath
 % \usepackage[subtle]{savetrees}
@@ -53,6 +55,7 @@ hmargin=3cm
 \usepackage[english]{babel} 
 \usepackage[babel, english=american]{csquotes}
 \AtBeginEnvironment{quote}{\small}
+\usepackage{setspace}
 
 % diseño de PIE DE PÁGINA
 \usepackage{fancyhdr}
@@ -61,6 +64,8 @@ hmargin=3cm
 \renewcommand{\headrulewidth}{0pt}
 \rfoot{\thepage}
 \fancypagestyle{plain}{\pagestyle{fancy}}
+
+
 
 % DISEÑO DE LOS TÍTULOS de las partes del trabajo (capítulos y epígrafes o subcapítulos)
 \usepackage{titlesec}
@@ -227,8 +232,8 @@ hmargin=3cm
 %\usepackage[style=apa, backend=biber, natbib=true, hyperref=true, uniquelist=false, sortcites]{biblatex}
 %\DeclareLanguageMapping{spanish}{spanish-apa}
 
-\addbibresource{/Users/simon/Documents/Projects/TFM/paper/bibliography/bibliography.bib}
-\addbibresource{/Users/simon/Documents/Projects/TFM/paper/bibliography/TFM.bib}
+\addbibresource{bibliography/bibliography.bib}
+\addbibresource{bibliography/TFM.bib}
 % \addbibresource{bibliography/bibliography}
 % \addbibresource{bibliography/TFG.bib} % llama al archivo bibliografia.bib que utilizamos de ejemplo
 % \addbibresource{bibliography/TFM.bib}
@@ -269,6 +274,23 @@ hmargin=3cm
 % \appto{\skip@preamble}{\let\printbibliography\nobibliography}
 
 % \makeatother
+
+% \algocf@newcmdside@kobe{LetIn@let}{%
+%     \KwSty{let}%
+%     \ifArgumentEmpty{#1}\relax{ #1}%
+%     \algocf@group{#2}%
+%     \par
+% }
+% \algocf@newcmdside@kobe{LetIn@in}{%
+%     \KwSty{in}%
+%     \ifArgumentEmpty{#1}\relax{ #1}%
+%     \algocf@block{#2}{end}{#3}%
+%     \par
+% }
+% \newcommand\LetIn[2]{%
+%     \LetIn@let{#1}%
+%     \LetIn@in{#2}%
+% }
 
 %%% Default start and end for each subfile
 \AtBeginDocument{}

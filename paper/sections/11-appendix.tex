@@ -1,0 +1,112 @@
+\documentclass[../main.tex]{subfiles}
+\graphicspath{{\subfix{../figures/}}}
+\begin{document}
+
+\chapter*{Appendix A} \label{appendix:db_er_diagram}
+\addcontentsline{toc}{chapter}{Appendix}
+
+\section*{Entity Mapping Diagram of the Knowledge Database} 
+
+This appendix contains the Entity Mapping (EM) Diagram of the PostgreSQL Database that we implemented in our solution system based on the design of $\mathcal{K}$ as described in chapter \ref{chap:solution_design}.  An EM Diagram is a visual representation of the schema of a relational database, which is composed of a set of tables and their relationships.
+
+\begin{figure}[h] 
+    \centering
+    \caption{Entity Mapping (EM) Diagram of the Knowledge Database ($\mathcal{K}$)}
+    \resizebox*{1.1\columnwidth}{!}{
+        \includegraphics{knowledge_db_schema.pdf}
+    }
+    % \label{fig:knowledge_db_schema}
+\end{figure}
+
+The tables in the `global' scope (shown in yellow) like \textit{project}, \textit{annotator} and so on store information that is not exclusive to any single task, or that is shared between them. Meanwhile, the tables in the `project' scope (shown in green) like \textit{annotation} and \textit{artifact} store information that is specific to an application. 
+
+Then, assuming the schema above, an example of a query like the one shown in section \ref{sec:knowledge_db} but using SQL syntax  would be:
+
+
+\begin{lstlisting}[language=SQL]
+    SELECT * FROM annotation
+    JOIN annotation_property
+    ON annotation.id = annotation_properties.annotation_id
+    WHERE annotation_properties.name = 'label';
+\end{lstlisting}
+
+In the notation used in chapter \ref{chap:solution_design}, we assume this query to be equivalent to:
+
+\[\mathcal{A}_{labels} = \{annotation \in \mathcal{K} \mid \text{`label'} \in \{annotation \Rightarrow properties \Rightarrow property.name\}\}\]
+
+Which returns all annotations in $\mathcal{K}$ that have a property with the name `label'.
+
+
+\chapter*{Appendix B} \label{appendix:further_research}
+
+The following are some of the recent and upcoming research directions in machine learning that we consider relevant to the work presented in this thesis.
+    
+The idea is that these directions could used as a starting point for future research (i.e., a Ph.D. thesis) on the topics presented, either as a continuation of some of the work in this thesis or as a completely new approach to the problem. We make no claims about the feasibility of these ideas but rather present why I consider them interesting.
+
+    % \subsection{Future directions in Tuberculosis AI Research}  \todo{Probablemente quite esta sección, no creo que aporte demasiado al tema } \label{conclusions:future_work:tb_ai} \info{<1 pág}
+    
+    % Detection will soon be a solved problem thanks to NAATs (or rather, more of a money problem than a technical one). Thus, the emphasis should be less on CV-based detectors and more to advances in drug discovery, finding new biomarkers, etc. \dots
+
+    % Elisa one could use VAEs and models like that to discover biomarkers in voxel images of lungs that could be used to evaluate the severity of the disease, discover new patterns to diagnose the disease, or find new drugs to treat it.
+    
+    % \clearpage
+
+
+    \subsection{Scalable Adaptability through Mixtures of Experts} \label{conclusions:research_directions:moes} \info{1.5 pág}
+
+    Mixture of experts (MoE) systems are a type of ensemble model that combines the predictions of multiple models to obtain a final prediction. The difference between MoEs and other ensemble models is that the predictions of the individual `experts' are combined using a \textbf{gating/routing function} - typically a neural network - that adapts to the given data point and dynamically determines the weight of each model in the final prediction \cite{chen_towards_2022}.
+
+    MoEs are really powerful systems. They have been shown to be able to learn complex multimodal distributions and have been used in a wide variety of applications, including object detection, language modeling, machine translation, and even multiomics \cite{hwang_tutel_2023,mustafa_multimodal_2022,shazeer_outrageously_2017, minoura_scmm_2021}.
+    
+    An advantage of a MoE is that each expert model can be deployed independently, allowing for a more flexible, modular system capable of being distributed and data-parallelized among different hardware resources. 
+
+    Recently, MoEs have become popular due to the fact that the computational sparsity of these systems can be used to scale DNN models to outrageous amounts of parameters at a constant computational cost. Recently, researchers at Google Brain presented a MoE architecture called Switch Transformers \cite{fedusSwitchTransformersScaling2022a} that allows language models (AI systems that can generate text) to scale to a \textbf{trillion parameters}.
+    
+    Indeed, systems that take advantage of MoEs to scale LLMs (Language Models with a Large number of parameters) already exist and have been deployed to production for applications as big as OpenAI's ChatGPT (GPT-4 is thought to be a mixture of 8 experts, each with over 220 \textit{billion} parameters \cite{rickardMixtureExpertsGPT42023}).
+    
+    In the context of the area of this work, we consider that MoEs could be used to create a more \textbf{scalable and robust adaptable system}. The idea is that it would be composed of a set of `expert' models, each specialized in a particular aspect of the input data. The system would then adapt to new tasks by autonomously learning a new expert model or retraining an existing one when the need arises.
+    
+    The main advantage of this approach is that it could potentially allow the system to \textbf{scale to a large number of tasks and data distributions}, only needing to retrain the gating function continually instead of entire models. 
+    
+    Another advantage of MoEs is the potential for more \textbf{failsafe systems}. By having each model deployed independently in a distributed way, one could devise a mechanism that detects when one of the expert models fails, either due to a hardware/software error or due to a significant performance drop, and automatically replaces the gating function of the current MoE with one (previously trained) that excludes the failing model.
+    
+    One could even use such a mechanism to save operational costs. The system might monitor the number of instances being routed to each expert model, and if one of the models is not being used, it could be automatically shut down to save resources.
+
+    Figure \ref{fig:moes} shows a diagram illustrating the concept of a mixture of expert system.
+
+    \begin{figure}[H]
+        \centering
+        \caption{Diagram of a mixture of experts (MoE) system.}
+        \resizebox*{0.8\linewidth}{!}{
+            \input{../figures/moes_tikz.tex}
+        }
+        \label{fig:moes}
+    \end{figure}
+
+    % Another interesting research direction would be to explore the use of MoEs to handle multimodal data. In \cite{mustafa_multimodal_2022}, researchers at Google Brain used MoEs to train an architecture that accepts both image and text inputs and outputs a single prediction by 
+  
+    \subsection{Meta-Learning and L2L Systems} \label{conclusions:research_directions:l2l} \info{1 pág}
+
+    Much like human learners, who, building from previous knowledge, continuously seek and filter information that could be useful to learn new concepts and skills, an area of research in machine learning concerns the design of programs/systems that can efficiently improve their learning process without the need for explicit human intervention. This area of research is known as \textbf{meta-learning}, and it is a very active area in AI \todo{add citation}.
+    
+    Meta-learning is a technique that aims to improve the performance of machine-learning models by `learning to learn' (L2L) a certain task. Such ideas have been successfully applied to a wide range of problems, including computer vision, natural language processing, robotics, video games, and more \cite{hospedales_meta-learning_2020}.
+    
+    The way meta-learning is formulated is by training a model on a variety of tasks and then using the knowledge gained from those to improve its performance on new tasks or learn it faster / more sample-efficiently than if it had been trained only on a single one \cite{hospedales_meta-learning_2020}.
+    
+    This idea is regarded to have been first introduced by Dr. Jurgen Schmidhuber in 1987 with his thesis `Evolutionary Principles in Self-Referential Learning'. In which he proposed an algorithm that adaptively improves its learning skills by recursively applying genetic programming to itself and ensuring that only `useful' modifications (made by the program to itself) `survive' in an evolutionary fashion \cite{schmidhuber_evolutionary_1987}.
+    
+    Recently, Finn et al. (2017) \cite{finn_model-agnostic_2017} proposed a model-agnostic framework for meta-learning that can be applied to any deep-learning architecture and learning task. Which may serve as an interesting basis for applying such concepts to the kind of models we used in this thesis.
+
+    At the core of the L2L framework is the idea of building a model that can continually improve its learning process over time, which is of course at the core of the ideas we present in this work. This is the reason why we consider it an interesting topic for further research.
+
+    % As a low-hanging fruit, we can envision the design of a system similar to the one proposed in this work that integrates and builds upon concepts from meta-learning, unlearning, knowledge distillation, and transfer learning \footnote{See section \ref{sec:relevant_techniques}}, that enables model that can more sophisticatedly adapt to new problems. 
+    
+    % This self-adaptive process would necessarily be based on evaluating the model's performance and a metric of the `necessity' of adaptation/learning that task better, but rather than relying on simple heuristics and a model-agnostic approach, the system would trigger a more complex adaptation process.
+
+    % \clearpage
+  
+    % \subsection{AutoML and Neural Architecture Search} \label{conclusions:research_directions:automl_nas}
+
+    % AutoML and Neural Architecture Search (NAS) are other two areas of research that have been gaining a lot of traction in the last few years. The idea behind these approaches is to automate the design of machine learning models by using optimization techniques to search for the best model architecture and hyperparameters for a given task.
+
+\end{document}
