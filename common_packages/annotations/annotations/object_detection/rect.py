@@ -189,7 +189,30 @@ class Rect(BaseModel):
                 )
             else:
                 raise ValueError("Invalid bbox. Must be either a dict or an iterable in the order (xmin, ymin, width, height)")
-    
+        elif bbox_format == "cxcywh":
+            if isinstance(bbox, dict):
+                return cls(
+                    left=bbox.get("cx", bbox.get("x")),
+                    top=bbox.get("cy", bbox.get("y")),
+                    width=bbox["width"],
+                    height=bbox["height"],
+                    label=label,
+                    meta=kwargs
+                )
+            elif isinstance(bbox, Iterable):
+                return cls(
+                    left=bbox[0] - bbox[2]/2,
+                    top=bbox[1] - bbox[3]/2,
+                    width=bbox[2],
+                    height=bbox[3],
+                    label=label,
+                    meta=kwargs
+                )
+            else:
+                raise ValueError("Invalid bbox. Must be either a dict or an iterable in the order (cx, cy, width, height)")
+        else:
+            raise ValueError(f"Invalid bbox_format. Must be one of ['xyxy', 'xywh', 'cxcywh']. {bbox_format} given.")
+        
     @classmethod
     def create(cls, *args, **kwargs) -> "Rect":
         if len(args) == 0:

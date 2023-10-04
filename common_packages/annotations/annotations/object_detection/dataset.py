@@ -132,14 +132,20 @@ class DatasetForObjectDetection:
         else:
             return [img.pil() for img in self._images]
     
-    def display(self, nrows=1, ncols=1, figsize=(10,10), **kwargs):
+    def display(self, nrows=1, ncols=1, range_=None, *, figsize=(10,10), **kwargs):
         import matplotlib.pyplot as plt
         fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=figsize)
-        for i, ax in enumerate(axs.flat):
+        axes = axs.flat
+        if range_ is None:
+            range_ = range(nrows*ncols)
+        for i, ax in zip(range_, axes):
             self._images[i].display(ax=ax, **kwargs)
             ax.axis('off')
-        plt.tight_layout()
-        plt.show()
+            # reduce axes padding
+            ax.set_axis_off()
+            ax.autoscale(False)
+        fig.tight_layout()
+        return fig
 
     def box_format(self, box_format:Literal['xywh', 'xyxy', 'cxcywh']):
         self._box_format = box_format

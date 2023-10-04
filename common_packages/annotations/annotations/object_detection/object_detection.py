@@ -159,12 +159,14 @@ class ImageForObjectDetection(BaseModel):
         image_path = img_path.resolve()
         image = plt.imread(image_path)
         if ax is None:
-            fig, ax = plt.subplots(1, 1)
+            fig, ax = plt.subplots(1, 1, frameon=False)
         ax.imshow(image)
-
+        # make the image fill the whole plot
+        ax.set_xlim(0, image.shape[1])
+        ax.set_ylim(image.shape[0], 0)
+        # remove border around image
         if self.artifact is None:
             return ax
-        
         if annotations:
             for i, rect in enumerate(self.rects):
                 label = kwargs.pop('label', rect.label if labels and i==0 else None)
@@ -173,7 +175,6 @@ class ImageForObjectDetection(BaseModel):
                 ax.legend()
         ax.axis(axis)
         plt.tight_layout()
-        
         return ax
     
     @classmethod
