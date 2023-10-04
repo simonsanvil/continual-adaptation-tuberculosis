@@ -23,10 +23,8 @@
  The platform proposed here is meant to be integrated into a Healthcare and Data Portal that is being developed as part of an ongoing European project for the research of Tuberculosis, and it might serve as a tool to test and validate the use of machine learning models for its diagnosis. 
 
  As such, in an effort to research the competence of continual adaptation methods in that context, the platform incorporates a system that is designed to continually adapt to new data as it becomes available and to ease labeling efforts by prioritizing the acquisition of the most informative data samples, including a front-end interface for the visualization of the detection, labeling, and interaction with the models.
+ \clearpage
  
- We evaluate the system's performance on a real dataset and compare it to a baseline model that doesn't use adaptation techniques.  Our results show that the use of these methods outperforms the baseline in terms of robustness and sample efficiency while maintaining a similar level of accuracy on the test set. Furthermore, the system proposed can automatically adapt to new data and improve its performance over time. 
- 
- These results demonstrate the potential of incorporating these techniques into designing real-world systems for healthcare applications and other high-stake domains. The final chapter of this work includes a discussion about possible future work and improvements to the system that might facilitate its integration into other projects and a broader discussion about the potential of these techniques, going beyond the scope of this thesis.
     
  \section{Context and Motivation} \label{sec:motivation}
 %  \section{An ML Platform to aid on the research of Mycobacterial Tuberculosis (TB)}
@@ -44,6 +42,7 @@
     \vspace{0.5cm}
 
     Thus, the motivation behind this work comes from the idea of incorporating novel methods into this data-science-specific platform to support researchers and collaborators in their mission to end TB by 2030. The techniques described in this work are designed to improve the performance of supervised models while prioritizing their overall robustness and reliability, aspects that are crucial in the context of healthcare applications.
+    \clearpage
 
     \begin{figure}[H]
         \centering
@@ -61,6 +60,7 @@
     Tuberculosis is caused by the bacillus (bacteria) \textit{Mycobacterium tuberculosis} (MTB), which is transmitted when people who are sick with TB expel the bacteria into the air by coughing, sneezing, or spitting. The disease is preventable with the administration of a vaccine and curable with the use of antibiotics over a significant period (although drug-resistant strains of the bacteria are becoming increasingly common) \cite{who_tuberculosis_2023}.
     
     Nonetheless, the disease is often underdiagnosed and undertreated, especially in low-resource settings (i.e., developing countries, rural areas, and marginalized/impoverished communities), where the disease is more prevalent, calling for the development of more efficient and cost-effective methodologies to diagnose and treat the disease \cite{who_global_2022, imi_era4tb_2020,  who_tuberculosis_2023}.
+    \vspace{1cm}
 
     Some of the diagnosis techniques to detect TB include chest X-rays, sputum smear microscopy, and molecular tests. \textit{Chest X-rays} are a common procedure to diagnose any signs of tuberculosis due to the wide availability of radiology devices, but they are often inconclusive and require expert radiologists to interpret the results \cite{escalante_tuberculosis_2009}.
     
@@ -72,7 +72,7 @@
     
     NAATs are by far the most reliable method to diagnose TB and have the advantage of being rapid and fully automated. However, they are also expensive to produce and require specialized equipment, making them less accessible in low-resource settings \cite{albert_development_2016, maclean_advances_2020}. Indeed, a study conducted in 2018 showed that the ratio of smear microscopy tests to NAATs in countries with a high burden of TB was 6:1 \cite{cazabon_market_2018, maclean_advances_2020}.
 
-    Each of these techniques presents its own benefits and limitations. Recently, there have been efforts to develop machine-learning models that can aid in the diagnosis of TB as a way to reduce the need (or provide a first/second opinion) for expert clinicians in the process and improve the speed and/or accuracy of the diagnosis \footnote{A literature review on the topic of TB diagnosis using ML methods is presented in section \ref{sec:ml_tuberculosis_detection}}.
+    Recently, there have been efforts to develop machine-learning models that can aid in the diagnosis of TB as a way to reduce the need (or provide a first/second opinion) for expert clinicians in the process and improve the speed and/or accuracy of the diagnosis \footnote{A literature review on the topic of TB diagnosis using ML methods is presented in section \ref{sec:ml_tuberculosis_detection}}.
 
     \begin{figure}
         \begin{subfigure}{115px}
@@ -105,13 +105,13 @@
         }
         \label{fig:tuberculosis_diagnosis_examples}
     \end{figure}
-    
+
+    \vspace{-0.8cm}
     \subsection{Supervised and Semi-Supervised Machine-Learning} \label{sec:supervised_ml}
 
     Machine Learning (ML) is a subfield of Artificial Intelligence (AI) that studies the design of algorithms that can learn from data and make predictions based on it. ML algorithms are fed a set of data samples (often called the training set) and learn a function that maps the input data to a desired output. The goal is then to learn a function that can generalize well to unseen data and make accurate predictions. 
 
-    % \clearpage
-
+    
     Supervised learning is a paradigm of ML where the goal is to fit a function $f: x \rightarrow \hat{y}$ that maps a given input, $x$, to a `prediction' output, $\hat{y}$, based on an available finite set of input-output pairs $(x_i, y_i)$ that are passed to a learnable model as `training' data. The function is learned by minimizing a loss function $L(y, \hat{y})$ that measures the difference between the `predicted' output and the actual one and returns a value that represents the error of the prediction, which is then used to update the model's parameters.
     
     \begin{figure}[h]
@@ -123,10 +123,9 @@
         \caption{Illustrative example of a supervised machine-learning pipeline.}
         \label{fig:supervised_learning}
     \end{figure}
-
-
     The most common supervised learning tasks are classification and regression, where the goal is to predict discrete and continuous outputs, respectively. Conversely, the aforementioned loss function is often defined based on the task at hand and the type of data available (e.g., cross-entropy loss for classification tasks, mean squared error for regression tasks, etc.).
 
+    \clearpage
     The presence of a known output (or label) for each input is what makes this paradigm `supervised'. For example, in healthcare, supervised learning might be used to predict the presence of a disease or condition based on a set of features extracted (or learned) from the patient's data. A model can be trained to predict the presence or severity of a disease based on a set of symptoms, clinical history, or imaging data.
 
     Besides its many benefits, the most significant disadvantage of supervised learning is that it often needs large amounts of labeled samples to produce accurate and robust results \cite{lecun_deep_2015}, 
@@ -136,11 +135,11 @@
     
     % which is especially challenging in the healthcare field where the data is scarce, expensive to obtain, or difficult to label.
     
-    In the last decade, one set of algorithms that have enabled significant advances in Machine Learning, allowing to solve very difficult problems, is \textbf{deep learning}. Deep learning is a subfield of ML that studies the design of algorithms that can learn complex representations of data by hierarchically composing simpler functions in an architecture inspired by the structure of the human brain known as `Deep Neural Networks' (DNN)  \cite{lecun_deep_2015}.
+    In the last decade, one set of algorithms that have enabled significant advances in Machine Learning, allowing to solve very difficult problems, is \textbf{deep learning}. Deep learning is a subfield of ML that studies the design of algorithms that can learn complex representations of data by hierarchically composing simpler functions in an architecture inspired by the human brain known as Deep Neural Networks (DNN) \cite{lecun_deep_2015}.
     
     \begin{figure}[H]
         \centering
-        \resizebox*{0.55\columnwidth}{!}{
+        \resizebox*{0.5\columnwidth}{!}{
             % \hspace*{-0.5cm}
             \includegraphics{dnn_example_topol}
         }
@@ -148,7 +147,7 @@
         \label{fig:dnn_example}
     \end{figure}
 
-    % \clearpage
+    \clearpage
     \subsection{Challenges and Potential of Adopting ML-enabled Systems in Healthcare}
 
     ML techniques have seen their adoption in many applications, from malware and spam detection to self-driving cars and environmental modeling. The healthcare field is no exception. In the 20 years between 1995 and 2015, the FDA had approved fewer than 30 algorithms for medical use. In contrast, only in the last 5 years, the total count of new approvals has reached over \textit{10 times} that amount (see Figure \ref{fig:fda_approved_ml_apps}). 
@@ -163,7 +162,7 @@
     Indeed, the recent availability to store and process ever larger amounts of data through the use of Big Data technologies and the development of more powerful hardware and algorithmic techniques have made it possible to train models that can perform complex medical tasks with enough high accuracy and robustness to be considered for use in that industry
     \cite{topol_high-performance_2019}.
 
-    \vspace{0.75cm}
+    % \vspace{0.5cm}
     
     Of such techniques, some that have recently disrupted the medical field are those based on \textbf{computer vision}  (CV). CV methods try to develop algorithms that enable computers to solve visual tasks. It is a broad field that has been applied to problems like image classification, object detection, and image segmentation and has seen significant advances in the last decade thanks to the adoption of Deep Learning algorithms \cite{lecun_deep_2015}.
 
@@ -174,7 +173,7 @@
     % \clearpage
 
     \begin{table}[h]
-       \resizebox{0.95\textwidth}{!}{
+       \resizebox{0.92\textwidth}{!}{
            \begin{tabular}{lrll}
                \toprule
                Company &  Year & Usecase & Panel \\
@@ -191,7 +190,7 @@
            \caption{Examples of FDA-approved AI applications for medical use. S\lowercase{ource: \cite{health_artificial_2022}}}
        }
    \end{table}
-
+    \vspace{-0.5cm}
     Other AI systems such as Google Deepmind's \textit{AlphaFold} \cite{yang_alphafold2_2023} have been shown to predict the 3D structure of proteins with high accuracy, solving a problem that had been considered to be one of the most challenging in computational biology for over 50 years. Such breakthrough is thought to have a significant impact in applications like drug discovery in the near future \cite{jumper_highly_2021}.
     
     Results like these shine a light on the potential that AI techniques have in the medical field. However, the adoption of such technologies doesn't come with new challenges. Experts have emphasized the importance of improving aspects of these models like their lack of interpretability, robustness to unseen data, and the difficulty of integrating them into existing workflows before they can be widely adopted in clinical settings \cite{esteva_deep_2021, topol_high-performance_2019}.
@@ -202,7 +201,7 @@
 
     \vspace*{-0.5cm}
     \subsection{Continual Learning and Self-Adaptive Systems} \label{sec:lifelong_adaptive_systems}
-
+    \vspace{-0.3cm}
     To address some of the challenges of adopting ML-enabled systems in healthcare, we can take a look at the idea of incorporating \textit{continual learning} and \textit{self-adaptive systems} (SAS) in their design. Continual learning refers to the ability of an ML system to learn continually from new data, adapting to novel changes in the data stream that it may have not been exposed to before \cite{parisi_continual_2019}. 
     
     SAS has a similar definition, but it generalizes to any software systems that continually monitor faults in their operating environment using a closed feedback loop. The system can then modify its behavior at runtime by the execution of so-called \textbf{tactics} in an attempt to fix them, thereby reducing human efforts in the interaction. Nowadays, self-adaptivity is considered a classical concept with ample literature in fields like software engineering and robotics \cite{macias-escrivaSelfadaptiveSystemsSurvey2013,gheibiApplyingMachineLearning2020,casimiro_self-adaptive_2022}.
@@ -239,7 +238,7 @@
 
     In chapter \ref{chap:state_of_the_art} we address some state-of-the-art techniques that can be used to deal with the causes of degradation listed in the table. 
 
-    \begin{table}[H]
+    \begin{table}[p]
         \caption{Some causes of Degradation of an ML System and their characteristics.}
         \label{tab:causes_of_ml_degradation}
         \resizebox{\textwidth}{!}{
@@ -281,27 +280,28 @@
     \end{table}
     % In particular, we will focus on the techniques that have been proposed to address the challenges of data drift and model degradation, as these are the most relevant to the context of this work.
     
-    \vspace*{-0.9cm}
+    % \vspace*{-0.9cm}
 
     \section{Objectives} \label{sec:objectives}
 
     \subsection*{Main objective} \label{sec:main_goal}
 
-    The main objective of this work is to research the most relevant techniques on continual adaptation methods in Machine Learning, make a comparative analysis of the most relevant techniques and their relevance for health applications, and design and implement a system for the diagnosis of tuberculosis that incorporates these techniques into its design that can be integrated into the ERA4TB platform. 
+    The main objective of this work is to devise and implement a reliable system for the diagnosis of tuberculosis that incorporates continual Machine Learning techniques to improve the performance of ML models for these types of applications.
     
-    The platform should allow its users to incorporate machine-learning models into the platform, facilitate their use, and allow collaboration between researchers and other stakeholders.
+    We aim to investigate, through research on the existing state-of-the-art literature and through our own experimental results, how impactful such systems can be for aiding in the task of tuberculosis detection using computer vision techniques and, generally, for other real-world use cases. 
+    \clearpage
 
-    \subsection*{Specific objectives} \label{sec:specific_objectives}
+    % \subsection*{Specific objectives} \label{sec:specific_objectives}
 
-    Auxiliary to the main objective, the following specific objectives have been defined to guide the development of the work and evaluate its success:
+    % Auxiliary to the main objective, the following specific objectives have been defined to guide the development of the work and evaluate its success:
 
-    \begin{enumerate}
-        \item The system should be capable of automatically triggering the continual learning process when new data is available or when the model's performance degrades based on a predefined metric.
-        \item The platform must implement a feedback loop between the data annotation process and model training that prioritizes the acquisition of the most informative data samples to improve the model's performance (Active Learning).
-        \item Develop a front-end interface that allows users to interact with the machine-learning models by selecting or submitting new data samples and visualizing the model's predictions.
-        \item Consider the limitations of the proposed system and the ethical implications of its use and present a well-founded outline of necessary future work to address these limitations or improve the system in a way that aligns with the project's mission statement.
-        \item Evaluate possible future research directions that could be explored in the area of continual and dynamic adaptation in Machine Learning, highlighting the contributions that have a higher potential for impact in healthcare or other high-stake domains.
-    \end{enumerate}
+    % \begin{enumerate}
+    %     \item The system should be capable of automatically triggering the continual learning process when new data is available or when the model's performance degrades based on a predefined metric.
+    %     \item The platform must implement a feedback loop between the data annotation process and model training that prioritizes the acquisition of the most informative data samples to improve the model's performance (Active Learning).
+    %     \item Develop a front-end interface that allows users to interact with the machine-learning models by selecting or submitting new data samples and visualizing the model's predictions.
+    %     \item Consider the limitations of the proposed system and the ethical implications of its use and present a well-founded outline of necessary future work to address these limitations or improve the system in a way that aligns with the project's mission statement.
+    %     \item Evaluate possible future research directions that could be explored in the area of continual and dynamic adaptation in Machine Learning, highlighting the contributions that have a higher potential for impact in healthcare or other high-stake domains.
+    % \end{enumerate}
 
     % \clearpage
 

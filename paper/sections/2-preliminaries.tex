@@ -13,15 +13,18 @@
 	
 % 	% ESCRIBIR EL RESUMEN AQUÍ
 
-% The advent of machine learning has brought significant advancements to various domains, including healthcare. In recent years, the use of machine learning (ML) in health applications has increased exponentially, resulting in improved diagnostics, 
-% personalized treatment plans, and more efficient resource allocation. However, due to the big risk of deploying ML models for high-stake decisions, together with the dynamic and data-rich nature of healthcare data, it becomes of special importance to building more robust and reliable systems for these applications. 
-% Integrating continuous, active, and online learning (CAOL) techniques in the design of machine-learning platforms can further enhance the robustness of actively deployed models against mispredictions, data/concept drifts, and misalignment. This work reviews the theoretical aspects and potential benefits of employing CAOL 
-% in developing machine-learning systems and applying it to a platform that hosts models mainly trained in the context of Tuberculosis detection. 
-% We address the key characteristics of these methods and propose some promising techniques for their implementation.
+The advent of machine learning (ML) has brought significant advancements to virtually every domain, with healthcare being no exception. However, due to the big risk of deploying ML models to make or aid in making high-stake decisions, together with the dynamic and data-rich nature of healthcare data, it becomes of special importance to design more robust and reliable systems for these applications.
 
+Integrating techniques that allow ML models to continually adapt to the data they are continuously fed to presents a potential to mitigate these risks. However, it is important to evaluate how well these techniques perform and how they can be integrated into existing workflows ensuring that the utility of the models is not compromised in the process.
+
+In this work, we combine ideas from self-adaptive system design and continual machine-learning literature to propose a framework for the continual adaptation of ML models. We implement our solution into a healthcare platform for the detection of Tuberculosis (TB), which is meant to be integrated into a data portal in the context of the ERA4TB project, a European initiative to accelerate the development of new drugs to treat TB. The platform includes a web-based interface for the annotation of medical images, a data management system, and a pipeline for the continual training and evaluation of ML models.
+
+We evaluated our solution on a pre-trained deep-learning model (DETR), adapting it to reliably identify TB bacteria in sputum-smear microscopy images. We trained this model incrementally, applying active learning tactics to select the most informative samples for each next training round. Our experiments were conducted using as a baseline a DETR model trained on 202 images and achieved an AP@50 score of 0.824 on the test set.
+
+With the proposed techniques, we were able to train a model that achieved comparable performance to the baseline while being trained on 40\% fewer images. We discuss the challenges and potential of using continual learning techniques in this context, and how certain limitations can be addressed in future work.
 
 \textbf{Keywords:}
-tuberculosis, machine learning, data analysis, era4tb, healthcare
+Machine Learning, Continual Learning, Tuberculosis, Computer Vision, Self-Adaptive Systems, System Design, Healthcare
 % 	% Escribir las palabras clave aquí
 	
 	\vfill
@@ -34,34 +37,34 @@ tuberculosis, machine learning, data analysis, era4tb, healthcare
 %----------
 %	DEDICATORIA
 %----------	
-\chapter*{Dedication}
+% \chapter*{Dedication}
 
-\setcounter{page}{5}
+% \setcounter{page}{5}
 	
-% ESCRIBIR LA DEDICATORIA AQUÍ	
+% % ESCRIBIR LA DEDICATORIA AQUÍ	
 
-% To my family members, teachers, colleagues, etc...
-Special thanks to my advisor, for guiding me and supporting me at every step in the making of this thesis \dots
+% % To my family members, teachers, colleagues, etc...
+% Special thanks to my advisor, for guiding me and supporting me at every step in the making of this thesis \dots
 
-\vspace*{\fill}
-\begin{quote}
-	``You must know no one rejects, dislikes, or avoids pain because it is pain, but because occasionally circumstances occur in which toil and pain can procure great pleasure
-	% Who of us ever undertake laborious exercise, except to obtain some advantage from it? 
-	% At the same time, who has any right to find fault with someone who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?
-	[\ldots]
-	In a time of freedom, when our power of choice is untrammeled and when nothing prevents us from doing what we like best, every pleasure is to be welcomed and every pain avoided [\ldots]
-	% But owing to the claims of duty it will frequently occur that pleasures have to be repudiated and annoyances accepted. 
-	But the wise man should always hold himself to the following principle of selection: \textit{Reject pleasure to secure greater pleasures, or else endure pains to avoid worse pains.}''
+% \vspace*{\fill}
+% \begin{quote}
+% 	``You must know no one rejects, dislikes, or avoids pain because it is pain, but because occasionally circumstances occur in which toil and pain can procure great pleasure
+% 	% Who of us ever undertake laborious exercise, except to obtain some advantage from it? 
+% 	% At the same time, who has any right to find fault with someone who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?
+% 	[\ldots]
+% 	In a time of freedom, when our power of choice is untrammeled and when nothing prevents us from doing what we like best, every pleasure is to be welcomed and every pain avoided [\ldots]
+% 	% But owing to the claims of duty it will frequently occur that pleasures have to be repudiated and annoyances accepted. 
+% 	But the wise man should always hold himself to the following principle of selection: \textit{Reject pleasure to secure greater pleasures, or else endure pains to avoid worse pains.}''
 	
-	\begin{flushright}
-		\textit{- Marcus Tullius Cicero, 45 BC}
-	\end{flushright}
-\end{quote}
-\vfill
+% 	\begin{flushright}
+% 		\textit{- Marcus Tullius Cicero, 45 BC}
+% 	\end{flushright}
+% \end{quote}
+% \vfill
 
-\newpage % página en blanco o de cortesía
-\thispagestyle{empty}
-\mbox{}
+% \newpage % página en blanco o de cortesía
+% \thispagestyle{empty}
+% \mbox{}
 
 	
 \end{document}

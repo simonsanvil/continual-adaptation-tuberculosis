@@ -87,7 +87,7 @@
  
     \begin{figure}[ht]
      \centering
-     \includegraphics[width=0.95\linewidth]{figures/tbbacilus-dataset.png}
+     \includegraphics[width=0.93\linewidth]{figures/tbbacilus-dataset.png}
      \caption{Example of some smear-sputum microscopy images in the dataset. Boxes show the presence of TB Bacilli }
      \label{fig:tbbacillus_image_examples}
  \end{figure}
@@ -116,7 +116,7 @@
     \end{tabular}
 \end{table}
 
-\vspace{-0.4cm}
+\vspace{-0.6cm}
  \section{ML model Training and Evaluation}
 \vspace{-0.4cm}
 
@@ -124,7 +124,7 @@
 
  The idea is that this baseline model could be used to compare the performance of the system with and without the adaptive tactics we implemented. Other models were also trained using different data subsets and hyperparameter configurations depending on the technique being evaluated and compared with this one. In section \ref{sec:adaptive_experiments}, we discuss the details of the experiments we conducted and the models we trained.
 
- The deep learning model that we chose to train for this task was DETR (Detection Transformer) \cite{carionEndtoEndObjectDetection2020}, an end-to-end computer vision model that was introduced in 2020 by researchers at Meta AI. \footnote{We originally considered using the same Nas-Net Mobile model used in \cite{visuna_novel_2023}. As we've established, this model was trained on the same dataset we used. However, we found that the inference speed of this model was too slow for the workflows we wanted to evaluate, and its performance was not significantly better than that of DETR. We discuss the details of the experiments we conducted with this model and why we consider DETR to be a better approach in appendix \ref{appendix:nasnet_experiments}.}
+ The deep learning model that we chose to train for this task was DETR (Detection Transformer) \cite{carionEndtoEndObjectDetection2020}, an end-to-end computer vision model that was introduced in 2020 by researchers at Meta AI. \footnote{We originally considered using the same Nas-Net Mobile model used in \cite{visuna_novel_2023}. As we've established, this model was trained on the same dataset we used. However, we found that the inference speed of this model was too slow for the workflows we wanted to evaluate, and its performance was not significantly better than that of DETR. We show the performance of this model compared to our model in chapter \ref{chap:results}.}
 
  DETR leverages the transformer architecture \cite{vaswaniAttentionAllYou2017}, widely recognized for its prevalent use in natural language processing tasks, and extends its use to the CV domain. The model discards complex pipeline mechanisms such as non-maximum suppression used in object detectors like Faster R-CNN (see section \ref{sec:computer_vision_sota} in the state-of-the-art chapter) and operates end-to-end, treating object detection as a direct set prediction problem.
 
@@ -146,7 +146,7 @@
  
  Thus, we proceeded to fine-tune this pre-trained model on our selected dataset. Our training script was adapted from the one included in their official repository but modified to directly pull the data from our database that was specifically tagged to be used for training. We also modified the script to use the hyperparameters that we selected.
 
- Since the original code was written to train the model with the COCO dataset, we had to adapt it to work with our data. This included creating our own data loading mechanisms that grab the relevant images from the database and apply the necessary transformations, which for DETR included resizing the images to 800x1333 pixels, normalizing them to $[0, 1]$, and converting them to PyTorch tensors in the same output format as COCO \todo{You could include an example in the appendix}. 
+ Since the original code was written to train the model with the COCO dataset, we had to adapt it to work with our data. This included creating our own data loading mechanisms that grab the relevant images from the database and apply the necessary transformations, which for DETR included resizing the images to 800x1333 pixels, normalizing them to $[0, 1]$, and converting them to PyTorch tensors in the same output format as COCO. 
 
  While the original paper includes the training-time data augmentations of randomly cropping a part of the image and applying color jittering (randomly changing the brightness, contrast, saturation, and hue of the image), we realized these augmentations wouldn't be suitable to our data.  
  
@@ -205,67 +205,88 @@ Since the performance difference was not significant enough to justify the extra
     \section{Experiments with Continual Adaptation} \label{sec:adaptive_experiments}
     \vspace{-0.2cm}
 
-    In addition to the initial model training and evaluation, we also conducted a set of experiments targeting the continual adaptation of our model to reveal how our model can be improved by learning continuously from new data. These experiments incorporated the use of a portion of the training dataset reserved for active learning processes to examine the impact of adaptive techniques on the model's performance.
-
-    The experiments were designed to test the performance of the model after being adapted using continual and active learning techniques.
+    In addition to the initial model training and evaluation, we also conducted a set of experiments targeting the continual adaptation of our model to reveal how it can be improved by learning continuously from new data. These experiments were designed to test the performance of the model after being adapted using \textbf{continual and active learning techniques}.
     
-    For all experiments, we took a portion of the training dataset and reserved it for continual learning. This set we denominated as our \textbf{holdout data}. Then, each experiment used a successive fraction from it to incrementally train the model. 
+    For all experiments, we took a portion of the training dataset and reserved it for continual learning, then, each experiment used a successive fraction from that dataset to incrementally train the previous model.
     
-    The way we approached this was by first fine-tuning a new DETR model again with the same characteristics as the one we trained as the baseline, but this time only with a random 50\% of the original training data. We used this model as a base to test the adaptation tactics, which gives us a way to analyze how much the adaptation process can affect a model.
+    The way we approached this was by first fine-tuning a new DETR model again with the same characteristics as the one we trained as the baseline, but this time only with a random 50\% of the original training data, while the other 50\% we reserved as our \textbf{holdout data}. We used this model as a base to test the adaptation tactics implemented.
 
-    To simulate a continual learning (CL) process, the base model was incrementally trained on additional holdout data from the original training dataset, adding a fixed number of images from this set at a time. The model was then evaluated on the test set after each incremental training step to assess its performance. This process was repeated until all the holdout data was used.
+    To simulate a continual learning (CL) process, this base model was incrementally trained on holdout data, adding a fixed number of images from this set at a time. The model was then evaluated on the test set after each incremental training step to assess its performance. This process was repeated until all the holdout data was used.
 
-    We characterize the CL experiments as follows:
+    The scheduled fractions of the holdout data that we used for each incremental training step were 25\%, 25\%, 30\%, and 20\%, meaning that after our base model is trained with half of the training data, a \textit{random} 25\% of the holdout set would be used for training in the first step of the experiment, then another 25\% in the second step, then 30\%, and so on until all the data was included (note the values in the schedule sum to 100\%).
+
+    We characterize this CL experiments as follows:
 
     \begin{itemize}
-        \item The fractions of the holdout data used for each incremental training step were [0.25, 0.25, 0.3, 0.2], meaning that after our base model had been trained (with half of the training data), a \textit{random} 25\% of the holdout was added to it for training the second experiment, then another 25\%, and 30\%, and so on until all the data was included (note the values in the schedule sum up to one).
-        \item Two continual learning tactics per step were tested: fine-tuning the base model from scratch (all training plus a fraction of the holdout) and fine-tuning the base model incrementally in a transfer-learning fashion (only with the holdout).
+        \item Two continual learning tactics are tested per each step: The first is to retrain the DETR model from scratch (from the pre-trained version prior to adapting it with our data) using 50\% of the original training data plus the corresponding fraction of the holdout set, the second tactic was to fine-tune the base model incrementally with the corresponding fraction of the holdout set excluding any other data in the training process.
+        \item Active learning (AL) experiments were carried out following the same procedure as above but instead of grabbing random instances from the holdout data, we queried the most `important' samples to train the model with as determined by the active learning strategy.
         \item This process was repeated three times using different random seeds and averaged the results for a more robust evaluation.
     \end{itemize}
 
+    These continual learning experiments simulated a scenario whereby the model is continually exposed to new data over time, either passively receiving it or actively querying it (AL). Each experiment step is meant to simulate a training round where a portion of the data available that is associated with the model has been annotated and is ready to be used for training the model (which follows from the design of the platform we proposed in the previous chapter).
     
-    Active learning (AL) experiments followed the same steps as above but instead of grabbing random instances from the holdout data, we queried the most `important' samples to train the model with as determined by the active learning strategy.
+    \clearpage
+    As for the active learning tactic, we used margin sampling, a technique that selects the samples with the lowest margin of confidence between positive and negative classes to train the model with.
     
-    After these instances were identified by the strategy, their labels would be provided to the model and continual learning would proceed in the same way as above. We utilized margin sampling, a technique that selects the samples with the lowest margin of confidence between positive and negative classes (bacilli and background in our case)\footnote{
-        Another sampling strategy we attempted to implement was one involving expected model change sampling. To do this we built a DNN that would take the CNN backbone features of the relevant images from our DETR model and target the model's actual loss function, similarly attempted by  \cite{yooLearningLossActive2019}. We would then use it to predict the loss of the model if we were to add a new sample to the training set and rank the samples according to that. However, we were unable to get this to work properly and decided to leave it out of the experiments.
-    }
+    To implement it, we wrote a function that takes an image from our tuberculosis dataset and makes a forward pass of the DETR model on it. After the forward pass, we obtain the class scores of each bounding box predicted by DETR and normalize them by applying a \textit{softmax function}, which takes the unnormalized log scores from the model (class logits) and outputs a vector of probabilities that sum to 1. The formula for the softmax function is shown in equation \ref{eq:softmax}.
+    
+    We then compute the margin of confidence between the two classes (bacilli and background) by subtracting the probability of the background class from the probability of the bacilli class and ranking the samples whose margin of confidence is the smallest.
 
-    We obtained the probabilities from DETR by applying a softmax function to the class logits predicted by the model. Additional to this we decided to take a different approach based on our knowledge of the data and the model we were using. 
+    Then, the process of obtaining the margin of confidence (MoC) is shown in equation \ref{eq:margin_confidence}. Where we let $p_{N\times2}$ be a vector with the class scores of each of the \textbf{N} bounding boxes predicted by DETR, with $p_{i,1}$ being the probability of the background class, and $p_{i,1}$ the probability of the background class.
 
-    One thing we noticed is that the most challenging images in our dataset tended to be the ones where our model would estimate a large amount of bacilli in the image. Since most of our images contain a small amount that are spread apart, we would expect the bounding boxes predicted by the model to overlap. When this might not be the case, it might mean that the model is overestimating the amount of bacilli in the image (see figure \ref{fig:overtargeting}).
-
-    The metric we used to rank this "lack of overlap" was the \textit{Jaccard Dissimilarity} between the top 20-50 boxes with the smallest margin of confidence. The formula of that metric is shown in equation \ref{eq:overlap}.
 
     \begin{equation}
-        \text{Simmetric Difference Ratio} = \frac{\text{Area of Union} - \text{Area of Intersection}}{\text{Area of Union}}
-        \label{eq:overlap}
+        \text{Softmax}(p_{N\times2}) = \frac{e^{p_{N\times2}}}{\sum_{i=1}^{N} e^{p_{i,1}}}
+        \label{eq:softmax}
     \end{equation}
 
-    
-    In an attempt to mitigate this, we added a step to the margin sampling strategy where we would get the top 20-50 boxes corresponding with the smallest margin of confidence and then compute the area of their union minus their intersection and divide it by the total area of the union. This would give us a measure of how much the boxes overlapped with each other. 
-    
-    \begin{figure}
-        \centering
-        \includegraphics[width=1\linewidth]{figures/overtargeting.png}
-        \caption{Example of overestimations in the model's predictions.
-        The model predicts a large amount of bacilli spread apart while the ground truth only contains a few.
-        }
-        \label{fig:overtargeting}
-    \end{figure}
-    
-    
-    An image where all boxes overlap in one area would have a smaller value than one that is more spread apart. This gave us a function to rank images according to this 
+    \begin{equation}
+        \text{MoC}(p_{N\times2}) = \frac{1}{N} \sum_{i=1}^{N} |p_{i,1} - p_{i,2}|
+        \label{eq:margin_confidence}
+    \end{equation}
 
-    These continual learning experiments simulated a scenario whereby the model is continually exposed to new data over time, either passively receiving it or actively querying it, reflecting the evolving and dynamic nature of real-world applications. 
+    After obtaining the margin of confidence for each box, we would take the values of the 20 smallest margins in the image (out of 100 bounding boxes due to the number of queries selected to train DETR) and compute the average of their values, which is what we would use to rank the images from the holdout set from most to least confidence. We would then take the top n images from that ranking (n being the number of images the holdout set was split into for that step) and use them to train the model.
+
+    Note this process fits perfectly into the algorithm for active learning we designed in the previous chapter (see algorithm \ref{alg:active_learning}). 
+    \clearpage
+
+    Another sampling strategy we attempted to implement was one involving expected model change sampling. To do this we built a DNN that would take the CNN backbone features of the relevant images from our DETR model and target the model's actual loss function, similarly attempted by  \cite{yooLearningLossActive2019}. We would then use it to predict the loss of the model if we were to add a new sample to the training set and rank the samples according to that. However, we were unable to get this to work properly and decided to leave it out of the experiments.
+
+
+    % One thing we noticed is that the most challenging images in our dataset tended to be the ones where our model would estimate a large amount of bacilli in the image. Since most of our images contain a small amount that are spread apart, we would expect the bounding boxes predicted by the model to overlap. When this might not be the case, it might mean that the model is overestimating the amount of bacilli in the image (see figure \ref{fig:overtargeting}).
+
+    % The metric we used to rank this "lack of overlap" was the \textit{Jaccard Dissimilarity} between the top 20-50 boxes with the smallest margin of confidence. The formula of that metric is shown in equation \ref{eq:overlap}.
+
+    % \begin{equation}
+    %     \text{Simmetric Difference Ratio} = \frac{\text{Area of Union} - \text{Area of Intersection}}{\text{Area of Union}}
+    %     \label{eq:overlap}
+    % \end{equation}
+
     
-    The performance of our adaptive system was, again, evaluated using the performance metrics AP and AR at IoU thresholds of 0.3 and 0.5. This allowed us to measure the incremental improvement in the model’s performance as a result of the continuous learning process.
+    % In an attempt to mitigate this, we added a step to the margin sampling strategy where we would get the top 20-50 boxes corresponding with the smallest margin of confidence and then compute the area of their union minus their intersection and divide it by the total area of the union. This would give us a measure of how much the boxes overlapped with each other. 
+    
+    % \begin{figure}
+    %     \centering
+    %     \includegraphics[width=1\linewidth]{figures/overtargeting.png}
+    %     \caption{Example of overestimations in the model's predictions.
+    %     The model predicts a large amount of bacilli spread apart while the ground truth only contains a few.
+    %     }
+    %     \label{fig:overtargeting}
+    % \end{figure}
+    
+    
+    % An image where all boxes overlap in one area would have a smaller value than one that is more spread apart. This gave us a function to rank images according to this 
+
+    
+    
+    % The performance of our adaptive system was, again, evaluated using the performance metrics AP and AR at IoU thresholds of 0.3 and 0.5. This allowed us to measure the incremental improvement in the model’s performance as a result of the continuous learning process.
     
 
-    % With regards to 
+    % % With regards to 
 
-    % The following table summarises the structure and design of the experiments.
+    % % The following table summarises the structure and design of the experiments.
     
-    \todo[inline]{si tienes tiempo añade un diagrama detallando este proceso}
+    % \todo[inline]{si tienes tiempo añade un diagrama detallando este proceso}
 
 
 % \printbibliography

@@ -14,7 +14,7 @@ This chapter aims to provide an understanding of how well the system proposed pe
 
 Note the focus of our evaluation was not only to see if the system could correctly identify the presence of TB Bacilli but also to evaluate how well the iterative training and variations in the active continual learning strategies could affect its performance, as per the objectives of this thesis.
 
-\section{Bacilli Detection Model Performance} \label{results:training}
+\section{Baseline Results} \label{results:baseline}
 
 We start with the results of training our DETR model with the data selected data we obtained from our Tuberculosis Image Dataset. Like mentioned in the previous chapter we report the results of the training process in terms of the Average Precision (AP), Average Recall (AR) at IoU thresholds of 0.3 and 0.5 to assess how good the model is at detecting the presence of TB Bacilli in the images.
 
@@ -52,15 +52,17 @@ In their paper, the only criteria they used to assess a positive performance was
 
 \section{Results of the Adaptation Tactics} \label{results:continual_learning}
 
-% To this point, we conducted a total of 8 experiments: 5 for continual learning and 3 for active learning. 
-As mentioned in the previous chapter, for all experiments, half of the images in the training set were put aside as holdout data to progressively train the base model (DETR 50\%). Then, each \textbf{step} in the experiment used a successive fraction from it to incrementally train the model. 
+Besides the baseline models, we carried out the training process of 12 additional Bacilli Detection models under different data selection and training conditions to assess the effectiveness of the continual learning tactics we proposed in this thesis.
 
-For active learning, we employed the same holdout sizes and training patterns, but this time instead of taking a random fraction of the data in the holdout, we used the uncertainty sampling technique described in \ref{sec:adaptive_experiments} to deliberately select the samples assumed to be the most important for the model in terms of learning value. 
+As mentioned in the previous chapter, we designed a series of experiments where half of the images in the training set were put aside as holdout data to progressively train a base model, DETR 50\%, with it. At each \textit{step} of the `holdout schedule', we used a successive fraction from that data to incrementally train the model.
 
+Just like with the baseline results, we evaluated the performance of these models based on the metrics of average precision and recall at IoU thresholds of 0.3 and 0.5, we also report the average Intersection over Union (Avg IoU) of the bounding boxes predicted by each model.
+
+The results of each experiment on these metrics are shown in Table \ref{tab:eval_metrics}, where we also include the performance of the models mentioned in \ref{results:baseline} for comparison (DETR, DETR 50\%).
 
 \begin{table}[h!]
     \centering
-    \caption{Evaluation metrics for the trained model}
+    \caption{Evaluation metrics for the trained model. Ranked by AP@30}
     \label{tab:eval_metrics}
     \begin{tabular}{lrrrrr}
     \toprule
@@ -68,62 +70,68 @@ For active learning, we employed the same holdout sizes and training patterns, b
     Experiment         &        &        &        &        &          \\
     \midrule
     \textbf{DETR (Full)} & \textbf{0.824} & \textbf{0.874} & \textbf{0.731} & \textbf{0.776} & \textbf{0.579} \\
-    RS - step:50\%+1+2+3   &  0.766 &  0.873 &  0.690 &  0.774 &    0.549 \\
-    AL - step:50\%+1 &  0.794 &  0.869 &  0.574 &  0.617 &    0.438 \\
+    RS - (Retr) step:1+2+3   &  0.766 &  0.873 &  0.690 &  0.774 &    0.549 \\
+    AL - (Retr) step:1 &  0.794 &  0.869 &  0.574 &  0.617 &    0.438 \\
     AL - step:1        &  0.806 &  0.869 &  0.695 &  0.744 &    0.552 \\
     RS - step:3        &  0.803 &  0.865 &  0.541 &  0.573 &    0.458 \\
-    AL - step:50\%+1+2+3 &  0.446 &  0.733 &  0.726 &  0.399 &    0.401 \\
+    AL - (Retr) step:1+2+3 &  0.446 &  0.733 &  0.726 &  0.399 &    0.401 \\
     AL - step:2        &  0.713 &  0.847 &  0.573 &  0.696 &    0.468 \\
-    RS - step:3 &  0.761 &  0.842 &  0.704 &  0.773 &    0.540 \\
+    RS - step:4 &  0.761 &  0.842 &  0.704 &  0.773 &    0.540 \\
     AL - step:3        &  0.729 &  0.840 &  0.575 &  0.656 &    0.465 \\
     AL - step:4        &  0.718 &  0.824 &  0.691 &  0.788 &    0.540 \\
     RS - step:1        &  0.727 &  0.818 &  0.703 &  0.784 &    0.548 \\
-    RS - step:50\%+0+1 &  0.713 &  0.807 &  0.728 &  0.813 &    0.530 \\
+    RS - (Retr) step:1 &  0.713 &  0.807 &  0.728 &  0.813 &    0.530 \\
     \textbf{DETR (50\%)} & \textbf{0.731 }&	\textbf{0.798 }& \textbf{0.687} &	\textbf{0.735} &	\textbf{0.543} \\
     RS - step:2        &  0.595 &  0.641 &  0.239 &  0.260 &    0.222 \\
-    RS - step:50\%+0+1+2+3 &  0.446 &  0.733 &  0.726 &  0.399 &    0.401 \\
     \bottomrule
     \end{tabular}
     \end{table}
 
 
-The performance of the model for each of these experiments was evaluated based on the metrics of Average Precision (AP), Average Recall (AR) at IoU thresholds of 0.3 and 0.5, and Average Intersection over Union (Avg IoU) of the bounding boxes.
+The experiments that employed the active learning tactic with our uncertainty sampling technique were marked with the prefix `AL', while the ones that used random sampling were marked with `RS'. `Retr' indicates that the model was \textit{retrained} from scratch using the initial weights of DETR (prior to domain adapting it to our task) and including the other 50\% of the data subset instead of fine-tuning the base model (DETR 50\%).
 
-The results of each experiment with regard to these metrics have been captured in Table \ref{tab:eval_metrics}. The same models mentioned before are also highlighted in this table for comparison.
+Furthermore, experiments without the `Retr' prefix were fine-tuned from the previous step of the holdout schedule - starting with the base model (DETR 50\%) for those in step 1. So, for example, `AL - step:2' was trained by fine-tuning the model trained previously in `AL - step:1', which was itself a fine-tuned version of the base model (DETR 50\%). 
 
-We also highlight our `base' model, the one trained with only 50\% of the training without including any of the holdout data, which will be used as a reference to observe the improvement of the other models that include the continual tactics. We consider it a success if a tactic can improve the results of the baseline while using significantly \textit{less} samples to train.
+The numbers after the `step:' suffix indicate the index of the corresponding fraction of the holdout data that was used to train the corresponding model. We use the fraction schedule that was mentioned in the methodology chapter: 25\%, 25\%, 30\%, and 20\% of the holdout data respectively for each step.
 
-% \begin{table}[h!]
-% \caption{Evaluation metrics for the models trained on each in each experiment}
-% \label{tab:eval_metrics}
-% \begin{tabular}{llllll}
-% \toprule
-% Experiment & AP@50 & AP@30 & AR@50 & AR@30 & Avg IoU \\
-% \midrule
-% \textbf{Baseline} & 0.796 & \textbf{0.843} & 0.746 & \textbf{0.789} & 0.568 \\
-% % Continual Learning 1 & - & - & - & - & - \\
-% % Continual Learning 2 & - & - & - & - & - \\
-% % Continual Learning 3 & - & - & - & - & - \\
-% % Continual Learning 4 & - & - & - & - & - \\
-% % Continual Learning 5 & - & - & - & - & - \\
-% % Active Learning A & - & - & - & - & - \\
-% % Active Learning B & - & - & - & - & - \\
-% % Active Learning C & - & - & - & - & - \\
-% % Other results of the experiments...
-% \bottomrule
-% \end{tabular}
-% \end{table}
+% Note that all models were trained incrementally so, for example, models in step 2 were trained with the data from step 1 and step 2 (50\% of the holdout data), and models in step 3 were trained with the data from step 1, 2, and 3 (80\% of the holdout data).
 
-Next, we will proceed with an analysis of these results, along with a short discussion about how we can interpret them.
+Additionally, since retraining from scratch was much more computationally expensive than fine-tuning the base model, we only retrained on the first and second-to-last steps of the holdout schedule (the last step would be omitted anyway since it implies retraining the full model).
 
+ 
+% We highlight our `base' model, the one trained with only 50\% of the training without including any of the holdout data, which will be used as a reference to observe the improvement of the other models that include the continual tactics. 
+
+\clearpage
 
 \section{Analysis of the results} \label{results:analysis}
 
-The first obvious  we can make from these results is the expected that models trained in an incremental manner tend to perform better than the ones 
+The first insight we can draw from these results is that, as expected, the models trained with larger subsets of the data tended to perform better than the ones trained with fewer samples: with only one exception, all models performed better than the base DETR that was only trained with 50\% of the available samples.
 
-we obtained from our experiments is that the continual learning tactics we proposed were able to improve the performance of the base model in most cases, with the exception of a few experiments where they actually performed worse, likely due to the model overfitting to the data.
+The most interesting results are the ones obtained from the models that used the active learning tactic with our uncertainty sampling technique. The models that included the first batch (step 1) of samples selected with this technique - the 25\% of the holdout data that was considered the most important to the model - achieved higher AP@50 scores than the random sampling approach that was retrained with 80\% of all available data.
+
+What this insight shows is that by only \textit{fine tuning} our base model on the 25 (25\% out of 101 images in the holdout set) most important samples, we were able to achieve a better or comparative performance than a model that had to be retrained \textit{from scratch} using seven times more data and including 55 more samples from the holdout set.
+
+This is a very promising result that shows the potential of continual learning approaches to improve the performance of a model with a fraction of the data that would otherwise be required to manually annotate and train. Furthermore, it also shows the effectiveness of our uncertainty sampling technique to select samples that are useful for the model to learn from.
+
+Another less intuitive observation we could draw from these results related with the models that used the active learning approach, is that those models that included the first batch of samples selected with our uncertainty sampling technique (step: 1), whether retrained from scratch or fine-tuned, achieved higher scores than the ones that fine-tuned the base model with samples that came later in the holdout schedule.
+
+Not only that but it seems that with this strategy the more advanced we get in the holdout schedule, the more the performance degrades. This is especially evident when we compare the model that was fine-tuned in step 3 using the random sampling approach (`RS - step:3') with the one that was fine-tuned using the active learning approach in step 4 (`AL - step:4'). The former achieved a significantly better AP@30 score, despite not having seen the remaining 20\% of the holdout data that the latter did.
 
 
+This result can be attributed to the common issue of \textit{catastrophic forgetting} that is inherent to continual learning approaches and that we discussed extensively in chapter \ref{chap:state_of_the_art}. 
+
+As our models adapted to the new, less 'important' data, they gradually forgot the knowledge they had acquired from the previous samples that allowed them to achieve a better performance. Incremental (fine-tuning) training processes, as opposed to those that retrain from scratch, are less robust to this issue (but are also much less computationally expensive).
+
+This we can consider a tradeoff of sorts for active learning techniques - even though we were able to identify the most important samples for our pool of unseen data and were able to harness them effectively at the beginning of the continual learning process, subsequent queries from the same pool of data only yielded diminishing returns when trained in an incremental (fine-tuning) fashion.
+
+The models that were specialized (fine-tuned) with the most important samples first were able to achieve a better performance than the ones that were trained with the same samples but in a different order. But, likewise, the models specialized on the \textit{least} important samples were the ones that achieved the worst performance.
+
+Even then, based on this information we can confirm even further the effectiveness of our uncertainty sampling technique in selecting the most important samples for the model to learn from, as well as the importance of the order in which the samples are presented to the model. 
+
+
+In the conclusions chapter we will discuss this issue in more detail and propose some ideas to address it in future work, as well as consider other potential research directions that we consider to be interesting in that area.
+
+Finally, with regards to the models that used the random sampling approach, we can see that they achieved a better performance than the base model (DETR 50\%) but were outperformed by the models that used the active learning approach on the same data.
 
 % \printbibliography
 \end{document}
