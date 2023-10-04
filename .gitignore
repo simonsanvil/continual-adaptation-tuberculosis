@@ -131,6 +131,7 @@ local.settings.json
 
 #Data files
 data/
+paper/prev_figures/
 
 #test files
 test.http
