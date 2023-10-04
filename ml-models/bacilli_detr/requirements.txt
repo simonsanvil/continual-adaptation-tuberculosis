@@ -2,7 +2,7 @@ torch
 pillow
 numpy
 torchvision
-fastapi 
+fastapi
 typer
 uvicorn
 packaging
