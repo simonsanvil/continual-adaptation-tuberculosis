@@ -1,5 +1,5 @@
 *.ipynb linguist-vendored
 bacili_detection/notebooks/ linguist-vendored
-paper/sections/ linguist-vendored
-paper/snippets/ linguist-vendored
-paper/figures/ linguist-vendored
+paper/sections/*.tex linguist-vendored
+paper/snippets/*.tex linguist-vendored
+paper/figures/*.tex linguist-vendored
