@@ -2,4 +2,5 @@
 bacili_detection/notebooks/ linguist-vendored
 paper/sections/*.tex linguist-vendored
 paper/snippets/*.tex linguist-vendored
-paper/figures/*.tex linguist-vendored
+paper/full_figures/*.tex linguist-vendored
+paper/prev_figures/*.tex linguist-vendored
