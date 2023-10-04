@@ -1,4 +1,4 @@
-import os, dotenv
+import os, dotenv, json
 import logging
 from pathlib import Path
 
@@ -24,7 +24,7 @@ ANNOTATIONS_DIR = Path(os.environ.get("ANNOTATIONS_DIR", './'))
 WORKING_DIR = Path(os.environ.get("WORKING_DIR", './'))
 # labels per annotation project
 ANNOTATION_TASKS = {
-    "Sputum Detection": [
+    "Bacilli Detection": [
         "Sputum",
     ],
     "Covid Detection": [
@@ -32,11 +32,18 @@ ANNOTATION_TASKS = {
     ],
 }
 # models for autolabeling and their URIs
-MODEL_INFO = {
-    "rCNN Sputum Detector v1": 
-        {
-            "name": os.environ.get("MODEL_NAME", "rcnn_MNasNet_2"),
-            "model": os.environ.get("MODEL_URI","models:/sputum_detector/13"),
-            "uri": os.environ.get("MODEL_INVOCATIONS_URI","http://127.0.0.1:8888/predict"),
-        }
-}
+MODEL_INFO = json.load(open(os.environ.get("MODEL_INFO_PATH", "model_info.json"), "r"))
+
+# {
+#     "DETR Bacilli Detector": {
+#         "name": "detr_resnet50",
+#         "model": "models:/bacilli_detector/1",
+#         "uri": "http://127.0.0.1:8889/predict"
+#     },
+#     "rCNN Sputum Detector v1": 
+#         {
+#             "name": os.environ.get("MODEL_NAME", "rcnn_MNasNet_2"),
+#             "model": os.environ.get("MODEL_URI","models:/sputum_detector/13"),
+#             "uri": os.environ.get("MODEL_INVOCATIONS_URI","http://127.0.0.1:8888/predict"),
+#         }
+# }

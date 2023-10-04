@@ -8,7 +8,7 @@ batch_size=$5
 device=$6
 tags=$7
 
-cd /Users/simon/Documents/Projects/TFM/bacili_detection/detr &&  python main.py \
+cd bacili_detection/detr &&  python main.py \
     --dataset_file bacilli_detection \
     --image_dir $image_dir \
     --output_dir $output_dir \

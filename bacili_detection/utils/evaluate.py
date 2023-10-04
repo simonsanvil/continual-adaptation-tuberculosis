@@ -15,7 +15,7 @@ from bacili_detection.detr.util.metrics import evaluate_prediction
 from bacili_detection.detr.models import detr_inference
 
 
-def evaluate_trained_model(checkpoint_dir:str, file:str='eval.csv', device:str='cpu'):
+def evaluate_trained_model(checkpoint_dir:str, file:str='eval.csv', device:str='cpu', image_dir=''):
     # should receive the experiment params as  arguments
     # load the model from checkpoint
     checkpoint_path = f'{checkpoint_dir}/checkpoint.pth'
@@ -25,7 +25,7 @@ def evaluate_trained_model(checkpoint_dir:str, file:str='eval.csv', device:str='
     m.load_state_dict(checkpoint['model'])
     m.eval();
     print("model loaded at epoch: ", checkpoint['epoch'])
-    test_dataset = TBBacilliDataset(['test'], transform=None)
+    test_dataset = TBBacilliDataset(['test'], transform=None, image_dir=image_dir)
     transform = T.Compose([T.Resize(800), T.ToTensor(), T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) ])
     detr_inference_func = partial(
         detr_inference, 

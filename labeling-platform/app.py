@@ -166,6 +166,9 @@ with st.sidebar:
     logging.info(f'Selected image: { file_paths[st.session_state["artifact_index"]]}')
     st.session_state["currect_artifact"] = project_artifacts[st.session_state["artifact_index"]]
 
+    # show annotations in the db?
+    show_annotations = st.checkbox("Show True annotations", value=False)
+
     # select model for auto-annotation
     anno_labels = conf.ANNOTATION_TASKS[project.name]
     available_annotation_models = [a.name for a in project.annotators if a.automatic]
@@ -259,10 +262,15 @@ logging.info(f"Selected artifact: {selected_artifact}")
 logging.info(f"Artifact has {len(selected_artifact.annotations)} annotations:")
 img_path = os.path.join(conf.WORKING_DIR, selected_artifact.uri)
 im = ImageManager(img_path, annotations_dir=conf.ANNOTATIONS_DIR)
-db_rects = utils.parse_rects_from_annotations(selected_artifact.annotations)
+if show_annotations:
+    db_rects = utils.parse_rects_from_annotations(selected_artifact.annotations)
+else:
+    db_rects = Rects([])
+
 auto_annotated_rects = st.session_state["automatic_annotations"].get(selected_artifact.name, [])
 artifact_rects = db_rects + auto_annotated_rects
 rects = [r.todict() for r in artifact_rects]
+
 # if os.environ.get("RESIZED_IMG",'false').lower().startswith(('t','1')):
 #     # resize image and rects if necessary
 #     img =  im.resizing_img(1224, 1632) 

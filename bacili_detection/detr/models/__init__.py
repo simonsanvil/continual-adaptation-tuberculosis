@@ -46,15 +46,16 @@ def detr_inference(
     boxes_per_img = []
     labels_per_img = []
     for i, img in enumerate(imgs):
-        labels = outputs['pred_logits'][i, keep[i]].argmax(-1)
+        labels = outputs['pred_logits'][i, keep[i]]#.argmax(-1)
         im_bboxes = bboxes[i, keep[i]] * torch.tensor([img.width, img.height, img.width, img.height])
         im_bboxes = im_bboxes.numpy().astype(np.int16)
-        if id2label is not None:
-            labels = [id2label[label.item()] for label in labels]
-        else:
-            labels = [label.item() for label in labels]
+        # if id2label is not None:
+        #     labels = [id2label[label.item()] for label in labels]
+        # else:
+        label_probs = outputs['pred_logits'].softmax(-1)[i, keep[i]].cpu().numpy()
+        # [label.item() for label in labels]
         boxes_per_img.append(im_bboxes)
-        labels_per_img.append(labels)
+        labels_per_img.append(label_probs)
     
     if return_labels:
         return boxes_per_img, labels_per_img

@@ -21,6 +21,7 @@ from sklearn.model_selection import train_test_split
 from annotations import db
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import torch
 from tqdm import tqdm
 import sys
 
@@ -46,13 +47,13 @@ incremental_config = ConfigDict({
     'lr' : 1e-4, #0.0001,
     'weight_decay' : 1e-4,
     'lr_backbone' : 1e-5,
-    'epochs' :8,
+    'epochs' :5,
 })
 nonincremental_config = ConfigDict({
     'lr' : 1e-4, #0.0001,
     'weight_decay' : 1e-4,
     'lr_backbone' : 1e-5,
-    'epochs' :15,
+    'epochs' :8,
 })
 
 def step(
@@ -82,22 +83,29 @@ def step(
         # incremental means retraining only on the holdout step
         config = incremental_config.copy_and_resolve_references()
         tags_to_train_on += [f"{holdout_tag}:{holdout_step}"]
-        config.epochs += holdout_step * config.epochs
-        config.epochs += 15
+    
     # config.epochs 
     # make the holdout step directory
-    tagsteps = '_'.join(range(holdout_step + 1)) if not incremental else str(holdout_step)
+    tagsteps = '_'.join(str(i) for i in range(-1,holdout_step + 1)) if not incremental else str(holdout_step)
     dirpath = Path(experiment_dir) / f"steps_{tagsteps}"
+    while dirpath.exists():
+        # we need to make sure we don't overwrite a previous step
+        dirpath = Path(str(dirpath) + '_new')
+
     dirpath.mkdir(exist_ok=True, parents=True)
     dirpath = dirpath.resolve()
-    if model_checkpoint=='checkpoint.pth' and holdout_step > 0 and incremental:
+    if model_checkpoint=='checkpoint.pth' and holdout_step >= 0 and incremental:
         # if we are not starting from scratch, we need to find the previous checkpoint
         model_checkpoint = Path(experiment_dir) / f"steps_{holdout_step-1}" / model_checkpoint
     elif model_checkpoint=='checkpoint.pth' and incremental:
         model_checkpoint = dirpath / model_checkpoint
     else:
         model_checkpoint = Path(model_checkpoint)
-        
+    
+    checkpoint_epochs = get_epoch_from_checkpoint(model_checkpoint)
+    print("checkpoint_epochs", checkpoint_epochs)
+    # set the number of epochs to train for based on the checkpoint
+    config['epochs'] = checkpoint_epochs + config.epochs
     # make the config file
     config['tags'] = ','.join(tags_to_train_on)
     config['output_dir'] = str(dirpath)
@@ -111,6 +119,7 @@ def step(
     config.update(kwargs)
     save_config(config, dirpath, model_checkpoint, session=session)
     # run the training script
+    print("attempting to train epochs", config.epochs)
     config = run_train_script(config)
     # save the config again
     save_config(config, dirpath, model_checkpoint, session=session)
@@ -119,8 +128,14 @@ def step(
         str(config.output_dir),
         file=str(dirpath / 'eval.csv'),
         device=config.device,
+        image_dir=config.image_dir,
     )
     print("Results saved to: ", dirpath)
+
+
+def get_epoch_from_checkpoint(checkpoint:str):
+    checkpoint = torch.load(checkpoint, map_location='cuda')
+    return checkpoint.get('epoch', 0)
 
 
 def save_config(config, dirpath, checkpoint:str, session=None):
@@ -179,6 +194,21 @@ def run_train_script(config):
     config['timestamp_end'] = f"{datetime.now()}"
     return config
 
+
+if __name__ == "__main__":
+  baseline_checkpoint = "/gdrive/MyDrive/Projects/TFM/outputs-dcn/checkpoint.pth"
+  no_headh_cp = Path("bacili_detection/detr/detr-r50_no-class-head.pth").resolve()
+  DATA_PATH = Path("/gdrive/MyDrive/Projects/TFM/data")
+  DB_PATH = DATA_PATH / 'annotations.db'
+  os.environ['DATABASE_URI'] = f"sqlite:///{DB_PATH}"
+  for i in range(3):
+    step(i, 
+      "/gdrive/MyDrive/Projects/TFM/outputs/cl-exp-1", 
+      device='cuda', 
+      model_checkpoint=str(no_headh_cp), 
+      incremental=False,
+      image_dir="/gdrive/MyDrive/Projects/TFM"
+    )
 
 
     

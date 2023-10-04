@@ -1,0 +1,13 @@
+{
+    "DETR Bacilli Detector": {
+        "name": "detr_resnet50",
+        "model": "models:/bacilli_detector/1",
+        "uri": "http://bacilli-detr-model:8000/predict"
+    },
+    "rCNN Sputum Detector v1": 
+        {
+            "name": "rcnn_MNasNet_2",
+            "model": "models:/sputum_detector/13",
+            "uri": "http://sputum-served-model:8000/predict"
+        }
+}

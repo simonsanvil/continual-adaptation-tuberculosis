@@ -18,18 +18,23 @@ class SputumDetectionModel:
         self.stride = stride
         self.verbose = verbose
     
-    def _predict_raw(self, img) -> Tuple[np.ndarray, np.ndarray]:
+    def _predict_raw(self, img, **kwargs) -> Tuple[np.ndarray, np.ndarray]:
         """predict the class of the image"""
-        img_cuts, coords = self._preprocess(img)
-        out = self.model.predict(img_cuts, verbose=self.verbose)
+        device = kwargs.pop("device", None)
+        img_cuts, coords = self._preprocess(img, **kwargs)
+        if device is not None:
+            with tf.device(device):
+                out = self.model.predict(img_cuts, verbose=self.verbose)
+        else:
+            out = self.model.predict(img_cuts, verbose=self.verbose)
         return out, coords
 
-    def _preprocess(self, img):
+    def _preprocess(self, img, *, reversed_img=True):
         """preprocess the image to make it ready to be predicted"""
-        scaled_img = self._scale_img(img)
-        coords = self.tile_coords(scaled_img)
-        cuts = self._get_chunks(scaled_img, coords)
-        return cuts, coords
+        scaled_img = self._scale_img(img)/255
+        coords, _, _ = self.tile_coords(scaled_img)
+        cuts = self._get_chunks(scaled_img, coords, reversed=reversed_img)
+        return cuts, coords.astype(np.uint16)
     
     # @keras.utils.register_keras_serializable(package='SputumDetectionModel')
     def _preprocess_fast(self, img):
@@ -52,28 +57,45 @@ class SputumDetectionModel:
         imout = img.copy()
         return imout
 
-    def tile_coords(self, img:np.array, kernel_size:Tuple[int, int]=None, stride: int=None):
+
+    def tile_coords(self, img:np.ndarray, kernel_size:Tuple[int, int]=None, stride: int=None):
         kernel_size = kernel_size or (self.chunk_size, self.chunk_size)
         stride = stride or self.stride
-        num_cols_tiles = (img.shape[1] // stride) + 1
-        num_rows_tiles = (img.shape[0] // stride) + 1
+        if isinstance(img, np.ndarray):
+            h, w = img.shape[:2]
+        else:
+            h, w = img[:2]
+        num_cols_tiles = (h // stride) + 1
+        num_rows_tiles = (w // stride) + 1
         inds = np.arange(num_cols_tiles * num_rows_tiles)
-        x = np.array((inds // num_cols_tiles) * stride)
-        y = np.array((inds % num_cols_tiles) * stride)
+        x = np.array((inds // num_cols_tiles) * stride, dtype=np.uint16)
+        y = np.array((inds % num_cols_tiles) * stride, dtype=np.uint16)
         coords = np.stack([x, y, x + kernel_size[0], y + kernel_size[1]], axis=1)
         # move coords outside the image to the edge
-        x_mask = coords[:,2] >= img.shape[0]
-        y_mask = coords[:,3] >= img.shape[1]
-        x_shift = coords[x_mask, [2]] % img.shape[0]
-        y_shift = coords[y_mask, [3]] % img.shape[1]
+        x_mask = coords[:,2] >= w
+        y_mask = coords[:,3] >= h
+        x_shift = coords[x_mask, [2]] % w
+        y_shift = coords[y_mask, [3]] % h
         coords[x_mask,0] = coords[x_mask,0] - x_shift
         coords[x_mask,2] = coords[x_mask,2] - x_shift
         coords[y_mask,1] = coords[y_mask,1] - y_shift
         coords[y_mask,3] = coords[y_mask,3] - y_shift
-        return coords
+        return coords, num_rows_tiles, num_cols_tiles
     
-    def _get_chunks(self, img, coords):
-        chunks = [img[x1:x2, y1:y2] for x1, y1, x2, y2 in coords]
+    def _get_chunks(self, img, coords, reversed=False, mask=None):
+        if mask is not None:
+            # get the chunks where the img is not fully black
+            # after applying the mask
+            masked_img = img * mask.reshape(*mask.shape, 1)
+            coords = [
+                (x1, y1, x2, y2)
+                for x1, y1, x2, y2 in coords
+                if masked_img[x1:x2, y1:y2].max() > 0
+            ]
+        if reversed:
+            chunks = [img[y1:y2, x1:x2] for x1, y1, x2, y2 in coords]
+        else:
+            chunks = [img[x1:x2, y1:y2] for x1, y1, x2, y2 in coords]
         return np.array(chunks)
 
     def _pad_img(self, img, kernel_size:Tuple[int,int]=None) -> np.ndarray:
@@ -123,7 +145,7 @@ class SputumDetectionModel:
         return cls(model, chunk_size, stride, verbose)
 
     @classmethod
-    def visualize_prediction(cls, img, bboxes, conf=None, merge_rects:bool=True, **kwargs):
+    def visualize_prediction(cls, img, bboxes, conf=None, merge_rects:bool=False, **kwargs):
         """
         Visualize the bounding boxes on the image predicted by the model
 
@@ -268,8 +290,12 @@ class SputumDetectionModel:
             return merged_rects
     
     def predict(
-            self, img, th:float=0.5, merge_rects:bool=True,
-            confidences=True
+            self, img, th:float=0.5, 
+            merge_rects:bool=True,
+            confidences=True,
+            report_center:bool=True,
+            verbose:bool=False,
+            **kwargs
         ) -> Union[Tuple[np.ndarray, np.ndarray], np.ndarray]:
         """
         predict the bounding boxes of the nodules in the image.
@@ -287,18 +313,28 @@ class SputumDetectionModel:
             whether to merge overlapping bounding boxes or not, by default True
         confidences : bool, optional
             whether to return the confidences of the bounding boxes or not, by default True
+
+        Returns
+        -------
+        Union[Tuple[np.ndarray, np.ndarray], np.ndarray]
+            the bounding boxes and their respective confidences (if `confidences=True`)
         """
-        logger.info("Predicting bounding boxes")
-        out, coords = self._predict_raw(img)
+        # logger.info("Predicting bounding boxes")
+        out, coords = self._predict_raw(img, **kwargs)
         rects = coords[out[:, 0] > th]
+        if report_center:
+            offset = (self.chunk_size / 2)//2
+            rects = rects + np.array([offset, offset, -offset, -offset])
         if len(rects) == 0:
             logger.info("No bounding boxes were found")
             return rects
         confs = out[out[:, 0] > th][:, 0]
-        logger.info(f"Predicted {len(rects)} potential rects")
+        if verbose:
+            logger.info(f"Predicted {len(rects)} potential rects")
         if merge_rects:
             rects, confs = self.merge_rects(rects, confidences=confs)
-        logger.info(f"A total of {len(rects)} bounding boxes were found")
+        if verbose:
+            logger.info(f"A total of {len(rects)} bounding boxes were found")
         if confidences:
             return rects, confs
         return rects

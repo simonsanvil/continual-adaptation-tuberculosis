@@ -14,6 +14,7 @@ services:
       - PROJECT_NAME=Sputum Detection Project
       - ANNOTATOR_EMAIL=simsanch@inf.uc3m.es
       - WORKING_DIR=/app/
+      - MODEL_INFO_PATH=/app/ml-models/config/model_info.json
     image: "labeling-platform:latest"
     container_name: labeling-platform
     build:
@@ -27,6 +28,7 @@ services:
     volumes:
         - ./data:/app/data
         - ./common_packages:/app/common_packages
+        - ./ml-models/config:/app/ml-models/config
     networks:
       - default
     command: >
@@ -69,6 +71,26 @@ services:
     command: "python inference.py --port 8000 --host 0.0.0.0"
     depends_on:
       - mlflow-server
+  bacilli-detr-model:
+    image: "bacilli-detr:latest"
+    container_name: bacilli-detr-model
+    build:
+      context: ./ml-models/bacilli_detr
+      dockerfile: Dockerfile
+    environment:
+      - SERVED_MODEL_PORT=8000
+    env_file:
+      - ml-models/bacilli_detr/.env
+    ports:
+      - "8889:8000"
+    expose:
+      - "8000"
+    working_dir: /usr/src/app/
+    volumes:
+      - ./bacili_detection:/usr/src/app/bacili_detection
+    command: "python app.py --port 8000 --host 0.0.0.0"
+    networks:
+      - default
   annotations-database:
     image: "postgres:14"
     container_name: annotations-database

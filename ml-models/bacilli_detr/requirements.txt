@@ -1,0 +1,9 @@
+torch
+pillow
+numpy
+torchvision
+fastapi 
+typer
+uvicorn
+packaging
+scipy
